@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frontends package &mdash; CoBeL-RL 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Interfaces package" href="CoBeLRL.interfaces.html" />
+    <link rel="prev" title="Unity_demo package" href="CoBeLRL.demo.unity_demo.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> CoBeL-RL
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">CoBeL-RL</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="CoBeLRL.html">CoBeLRL package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="CoBeLRL.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="CoBeLRL.agents.html">Agents package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CoBeLRL.analysis.html">Analysis package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CoBeLRL.demo.html">Demo package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Frontends package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CoBeLRL.interfaces.html">Interfaces package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CoBeLRL.memory_modules.html">Memory_modules package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CoBeLRL.spatial_representations.html">Spatial_representations package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CoBeLRL.html#module-CoBeLRL">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CoBeL-RL</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">CoBeL-RL</a> &raquo;</li>
+          <li><a href="CoBeLRL.html">CoBeLRL package</a> &raquo;</li>
+      <li>Frontends package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/CoBeLRL.frontends.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="frontends-package">
+<h1>Frontends package<a class="headerlink" href="#frontends-package" title="Permalink to this headline"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-CoBeLRL.frontends.frontends_blender">
+<span id="frontends-blender-module"></span><h2>Frontends_blender module<a class="headerlink" href="#module-CoBeLRL.frontends.frontends_blender" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CoBeLRL.frontends.frontends_blender.</span></span><span class="sig-name descname"><span class="pre">FrontendBlenderInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenarioName</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>The Blender interface class connects to the Blender environment and controls the flow of commands/data that goes
+to/comes from the Blender environment.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">scenarioName</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Inits Blender interface class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>scenarioName</strong> – the FULL path to the scenario that should be processed</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.getManuallyDefinedTopologyNodes">
+<span class="sig-name descname"><span class="pre">getManuallyDefinedTopologyNodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.getManuallyDefinedTopologyNodes" title="Permalink to this definition"></a></dt>
+<dd><p>This function reads all manually defined topology nodes from the environment (if such nodes are defined)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return manuallyDefinedTopologyNodes</dt>
+<dd class="field-even"><p>topology nodes to avoid</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.getManuallyDefinedTopologyEdges">
+<span class="sig-name descname"><span class="pre">getManuallyDefinedTopologyEdges</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.getManuallyDefinedTopologyEdges" title="Permalink to this definition"></a></dt>
+<dd><p>This function reads all manually defined topology edges from the environment (if such edges are defined).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return manuallyDefinedTopologyEdges</dt>
+<dd class="field-even"><p>topology edges to avoid</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.recvImage">
+<span class="sig-name descname"><span class="pre">recvImage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">s</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">imgSize</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.recvImage" title="Permalink to this definition"></a></dt>
+<dd><p>This function reads an image chunk from a socket.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>s</strong> – socket to read image from</p></li>
+<li><p><strong>imgSize</strong> – the size of the image to read</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return imgData</dt>
+<dd class="field-even"><p>image data</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.stepSimulation">
+<span class="sig-name descname"><span class="pre">stepSimulation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">velocityLinear</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">omega</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.stepSimulation" title="Permalink to this definition"></a></dt>
+<dd><p>This function propels the simulation. It uses physics to guide the agent/robot with linear and angular
+velocities.
+Note: linear and angular velocities can be set simultaneously to force the robot to go in curved paths</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>velocityLinear</strong> – the requested linear (translational) velocity of the agent/robot</p></li>
+<li><p><strong>omega</strong> – the requested rotational (angular) velocity of the agent/robot</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return timeData</dt>
+<dd class="field-even"><p>time data from telemetry</p>
+</dd>
+<dt class="field-odd">Return poseData</dt>
+<dd class="field-odd"><p>Robot’s/agent’s pose</p>
+</dd>
+<dt class="field-even">Return sensorData</dt>
+<dd class="field-even"><p>sensor data from telemetry</p>
+</dd>
+<dt class="field-odd">Return imageData</dt>
+<dd class="field-odd"><p>Constructed omnicam image from the single images</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.setTopology">
+<span class="sig-name descname"><span class="pre">setTopology</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topologyModule</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.setTopology" title="Permalink to this definition"></a></dt>
+<dd><p>This function supplies the interface with a valid topology module</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>topologyModule</strong> – the topologyModule to be supplied</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.step_simulation_without_physics">
+<span class="sig-name descname"><span class="pre">step_simulation_without_physics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newYaw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.step_simulation_without_physics" title="Permalink to this definition"></a></dt>
+<dd><p>This function propels the simulation. It uses teleportation to guide the agent/robot directly by means of
+global x,y,yaw values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>newX</strong> – the global x position to teleport to</p></li>
+<li><p><strong>newY</strong> – the global y position to teleport to</p></li>
+<li><p><strong>newYaw</strong> – the global yaw value to teleport to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return timeData</dt>
+<dd class="field-even"><p>time data from telemetry</p>
+</dd>
+<dt class="field-odd">Return poseData</dt>
+<dd class="field-odd"><p>Robot’s/agent’s pose</p>
+</dd>
+<dt class="field-even">Return sensorData</dt>
+<dd class="field-even"><p>sensor data from telemetry</p>
+</dd>
+<dt class="field-odd">Return imageData</dt>
+<dd class="field-odd"><p>Constructed omnicam image from the single images</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.actuateRobot">
+<span class="sig-name descname"><span class="pre">actuateRobot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actuatorCommand</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.actuateRobot" title="Permalink to this definition"></a></dt>
+<dd><p>This function actually actuates the agent/robot in the virtual environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>actuatorCommand</strong> – the command that is used in the actuation process</p>
+</dd>
+<dt class="field-even">Return timeData</dt>
+<dd class="field-even"><p>time data from telemetry</p>
+</dd>
+<dt class="field-odd">Return poseData</dt>
+<dd class="field-odd"><p>Robot’s/agent’s pose</p>
+</dd>
+<dt class="field-even">Return sensorData</dt>
+<dd class="field-even"><p>sensor data from telemetry</p>
+</dd>
+<dt class="field-odd">Return imageData</dt>
+<dd class="field-odd"><p>Constructed omnicam image from the single images</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.setXYYaw">
+<span class="sig-name descname"><span class="pre">setXYYaw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objectName</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pose</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.setXYYaw" title="Permalink to this definition"></a></dt>
+<dd><p>This function teleports the robot to a novel pose.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pose</strong> – the pose to teleport to</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.setIllumination">
+<span class="sig-name descname"><span class="pre">setIllumination</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">lightSource</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">color</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.setIllumination" title="Permalink to this definition"></a></dt>
+<dd><p>This function sets the color of a dedicated light source.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>lightSource</strong> – the name of the light source to change</p></li>
+<li><p><strong>color</strong> – the color of the light source (as [red,green,blue])</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.getLimits">
+<span class="sig-name descname"><span class="pre">getLimits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.getLimits" title="Permalink to this definition"></a></dt>
+<dd><p>This function returns the limits of the environmental perimeter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return minX, maxX, minY, maxY</dt>
+<dd class="field-even"><p>the minimum and maximum limits of the environment parameters in x,y coordinates</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.getWallGraph">
+<span class="sig-name descname"><span class="pre">getWallGraph</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.getWallGraph" title="Permalink to this definition"></a></dt>
+<dd><p>This function returns the limits of the environmental perimeter</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return safeZoneVertices</dt>
+<dd class="field-even"><p>environmental perimeter by means of wall vertices</p>
+</dd>
+<dt class="field-odd">Return safeZoneSegments</dt>
+<dd class="field-odd"><p>environmental perimeter by means of wall segments</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.stopBlender">
+<span class="sig-name descname"><span class="pre">stopBlender</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.FrontendBlenderInterface.stopBlender" title="Permalink to this definition"></a></dt>
+<dd><p>This function shuts down Blender.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.ImageInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CoBeLRL.frontends.frontends_blender.</span></span><span class="sig-name descname"><span class="pre">ImageInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">imageSet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'worldInfo/images.npy'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.ImageInterface" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>A very basic class for performing ABA renewal experiments from static image input. It is assumed that the agent sees
+in every node of a topology graph a static 360deg image of the environment. Herein, rotation of the agent is not
+enabled. This setup accelerates standard ABA renewal experiments, since the Blender rendering ‘overhead’ is not
+required. It is necessary that Blender is run prior to the application of this class, since the interface assumes
+a worldStruct data block in the ‘world’ directory of the experiment folder. This data is generated by a initial run
+of the getWorldInformation.py script in the experiment folder.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.ImageInterface.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">imageSet</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'worldInfo/images.npy'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.ImageInterface.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Inits Image Interface class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>imageSet</strong> – the image set used for different contexts A &amp; B</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.ImageInterface.setTopology">
+<span class="sig-name descname"><span class="pre">setTopology</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">topologyModule</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.ImageInterface.setTopology" title="Permalink to this definition"></a></dt>
+<dd><p>This function supplies the interface with a valid topology module.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>topologyModule</strong> – the topologyModule to be supplied</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.ImageInterface.getManuallyDefinedTopologyNodes">
+<span class="sig-name descname"><span class="pre">getManuallyDefinedTopologyNodes</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.ImageInterface.getManuallyDefinedTopologyNodes" title="Permalink to this definition"></a></dt>
+<dd><p>This function reads all manually defined topology nodes from the environment (if such nodes are defined)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return manuallyDefinedTopologyNodes</dt>
+<dd class="field-even"><p>returns manually defined topology nodes from the environment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.ImageInterface.getManuallyDefinedTopologyEdges">
+<span class="sig-name descname"><span class="pre">getManuallyDefinedTopologyEdges</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.ImageInterface.getManuallyDefinedTopologyEdges" title="Permalink to this definition"></a></dt>
+<dd><p>This function reads all manually defined topology edges from the environment (if such nodes are defined)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return manuallyDefinedTopologyNodes</dt>
+<dd class="field-even"><p>returns manually defined topology edges from the environment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.ImageInterface.step_simulation_without_physics">
+<span class="sig-name descname"><span class="pre">step_simulation_without_physics</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">newX</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newY</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newYaw</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.ImageInterface.step_simulation_without_physics" title="Permalink to this definition"></a></dt>
+<dd><p>This function propels the simulation. It uses teleportation to guide the agent/robot directly by
+means of global x,y,yaw values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>newX</strong> – the global x position to teleport to</p></li>
+<li><p><strong>newY</strong> – the global y position to teleport to</p></li>
+<li><p><strong>newYaw</strong> – the global yaw value to teleport to</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return timeData</dt>
+<dd class="field-even"><p>data acquired from the robot</p>
+</dd>
+<dt class="field-odd">Return poseData</dt>
+<dd class="field-odd"><p>data acquired from the robot</p>
+</dd>
+<dt class="field-even">Return sensorData</dt>
+<dd class="field-even"><p>data acquired from the robot</p>
+</dd>
+<dt class="field-odd">Return imageData</dt>
+<dd class="field-odd"><p>data acquired from the robot</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.ImageInterface.actuateRobot">
+<span class="sig-name descname"><span class="pre">actuateRobot</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">actuatorCommand</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.ImageInterface.actuateRobot" title="Permalink to this definition"></a></dt>
+<dd><p>This function actually actuates the agent/robot in the virtual environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>actuatorCommand</strong> – command used in the actuation process</p>
+</dd>
+<dt class="field-even">Return timeData</dt>
+<dd class="field-even"><p>data acquired from the robot</p>
+</dd>
+<dt class="field-odd">Return poseData</dt>
+<dd class="field-odd"><p>data acquired from the robot</p>
+</dd>
+<dt class="field-even">Return sensorData</dt>
+<dd class="field-even"><p>data acquired from the robot</p>
+</dd>
+<dt class="field-odd">Return imageData</dt>
+<dd class="field-odd"><p>data acquired from the robot</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.ImageInterface.setXYYaw">
+<span class="sig-name descname"><span class="pre">setXYYaw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">pose</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.ImageInterface.setXYYaw" title="Permalink to this definition"></a></dt>
+<dd><p>This function teleports the robot to a novel pose.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pose</strong> – the goal pose for the agent/robot to teleport to</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.ImageInterface.getLimits">
+<span class="sig-name descname"><span class="pre">getLimits</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.ImageInterface.getLimits" title="Permalink to this definition"></a></dt>
+<dd><p>This function gets and return the limits of the environmental perimeter.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return minX, maxX, minY, maxY</dt>
+<dd class="field-even"><p>the minimum and maximum limits of the environment parameters in x,y coordinates</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.frontends.frontends_blender.ImageInterface.getWallGraph">
+<span class="sig-name descname"><span class="pre">getWallGraph</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.frontends.frontends_blender.ImageInterface.getWallGraph" title="Permalink to this definition"></a></dt>
+<dd><p>This function gets and returns environmental perimeter by means of wall vertices/segments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return safeZoneVertices</dt>
+<dd class="field-even"><p>set of safe vertices</p>
+</dd>
+<dt class="field-odd">Return safeZoneSegments</dt>
+<dd class="field-odd"><p>set of safe segments</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-CoBeLRL.frontends">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-CoBeLRL.frontends" title="Permalink to this headline"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="CoBeLRL.demo.unity_demo.html" class="btn btn-neutral float-left" title="Unity_demo package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="CoBeLRL.interfaces.html" class="btn btn-neutral float-right" title="Interfaces package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, a.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

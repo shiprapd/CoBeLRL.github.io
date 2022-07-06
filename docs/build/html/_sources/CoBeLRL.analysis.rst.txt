@@ -1,0 +1,18 @@
+Analysis package
+========================
+
+Subpackages
+-----------
+
+.. toctree::
+   :maxdepth: 4
+
+   CoBeLRL.analysis.rl_monitoring
+
+Module contents
+---------------
+
+.. automodule:: CoBeLRL.analysis
+   :members:
+   :undoc-members:
+   :show-inheritance:

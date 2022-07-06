@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agents package &mdash; CoBeL-RL 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Analysis package" href="CoBeLRL.analysis.html" />
+    <link rel="prev" title="CoBeLRL package" href="CoBeLRL.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> CoBeL-RL
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">CoBeL-RL</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="CoBeLRL.html">CoBeLRL package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="CoBeLRL.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Agents package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CoBeLRL.analysis.html">Analysis package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CoBeLRL.demo.html">Demo package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CoBeLRL.frontends.html">Frontends package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CoBeLRL.interfaces.html">Interfaces package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CoBeLRL.memory_modules.html">Memory_modules package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CoBeLRL.spatial_representations.html">Spatial_representations package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CoBeLRL.html#module-CoBeLRL">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CoBeL-RL</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">CoBeL-RL</a> &raquo;</li>
+          <li><a href="CoBeLRL.html">CoBeLRL package</a> &raquo;</li>
+      <li>Agents package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/CoBeLRL.agents.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="agents-package">
+<h1>Agents package<a class="headerlink" href="#agents-package" title="Permalink to this headline"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-CoBeLRL.agents.dqn_agents">
+<span id="dqn-agents-module"></span><h2>Dqn_agents module<a class="headerlink" href="#module-CoBeLRL.agents.dqn_agents" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dqn_agents.DQNAgentBaseline">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CoBeLRL.agents.dqn_agents.</span></span><span class="sig-name descname"><span class="pre">DQNAgentBaseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memoryCapacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">processor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialBeginFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dqn_agents.DQNAgentBaseline" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This is a reinforcement learning class. It wraps all functionality required to set up a RL agent.
+This is the constructor method.  The sequential model is developed and
+the agent is constructed.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dqn_agents.DQNAgentBaseline.callbacks">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">callbacks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rlParent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialBeginFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dqn_agents.DQNAgentBaseline.callbacks" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">keras.callbacks.Callback</span></code></p>
+<p>This nested visualization class is required by ‘KERAS-RL’ to visualize the training success
+(by means of episode reward) at the end of each episode, and update the policy visualization.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dqn_agents.DQNAgentBaseline.callbacks.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rlParent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialBeginFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dqn_agents.DQNAgentBaseline.callbacks.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Inits nested visualization class is required by ‘KERAS-RL’ to visualize the training success
+(by means of episode reward) at the end of each episode, and update the policy visualization.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rlParent</strong> – The ACT_ReinforcementLearningModule that hosts this class</p></li>
+<li><p><strong>trialBeginFcn</strong> – The callback function called in the beginning of each trial, defined for more flexibility in scenario control</p></li>
+<li><p><strong>trialEndFcn</strong> – The callback function called at the end of each trial, defined for more flexibility in scenario control</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dqn_agents.DQNAgentBaseline.callbacks.on_episode_begin">
+<span class="sig-name descname"><span class="pre">on_episode_begin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dqn_agents.DQNAgentBaseline.callbacks.on_episode_begin" title="Permalink to this definition"></a></dt>
+<dd><p>The function is called whenever an episode starts,
+and updates the visual output in the plotted reward graphs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epoch</strong> – The number of passes of the dataset</p></li>
+<li><p><strong>logs</strong> – Log data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dqn_agents.DQNAgentBaseline.callbacks.on_episode_end">
+<span class="sig-name descname"><span class="pre">on_episode_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dqn_agents.DQNAgentBaseline.callbacks.on_episode_end" title="Permalink to this definition"></a></dt>
+<dd><p>The function is called whenever an episode ends, and updates the reward accumulator,
+simultaneously updating the visualization of the reward function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epoch</strong> – The number of passes of the dataset</p></li>
+<li><p><strong>logs</strong> – Log data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dqn_agents.DQNAgentBaseline.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memoryCapacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">processor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialBeginFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dqn_agents.DQNAgentBaseline.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Inits a reinforcement learning class. It wraps all functionality required to set up a RL agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interfaceOAI</strong> – The interface to the Open AI Gym environment</p></li>
+<li><p><strong>memoryCapacity</strong> – The capacity of the sequential memory used in the agent</p></li>
+<li><p><strong>epsilon</strong> – The epsilon value for the epsilon greedy policy</p></li>
+<li><p><strong>processor</strong> – Abstract base class for implementing processor</p></li>
+<li><p><strong>trialBeginFcn</strong> – The callback function called at the beginning of each trial, defined for more flexibility in scenario control</p></li>
+<li><p><strong>trialEndFcn</strong> – The callback function called at the end of each trial, defined for more flexibility in scenario control</p></li>
+<li><p><strong>lr</strong> – The learning rate with which the Q-function is updated.</p></li>
+<li><p><strong>network</strong> – The DNN to be used by the agent. If None, a dense DNN is created by default.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dqn_agents.DQNAgentBaseline.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">steps</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dqn_agents.DQNAgentBaseline.train" title="Permalink to this definition"></a></dt>
+<dd><p>This method is called to train the agent using the fit method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>steps</strong> – Maximum number of steps required to train the model.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-CoBeLRL.agents.dyna_dqn">
+<span id="dyna-dqn-module"></span><h2>Dyna_dqn module<a class="headerlink" href="#module-CoBeLRL.agents.dyna_dqn" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_dqn.DynaDQN">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CoBeLRL.agents.dyna_dqn.</span></span><span class="sig-name descname"><span class="pre">DynaDQN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_dqn.DynaDQN" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">agents.dyna_q_agent.AbstractDynaQAgent</span></code></p>
+<p>Implementation of a DQN agent using the Dyna-Q model.
+This agent uses the Dyna-Q agent’s memory module and then maps gridworld states to predefined observations.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_dqn.DynaDQN.callbacks">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">callbacks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rlParent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_dqn.DynaDQN.callbacks" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Callback class. Used for visualization and scenario control.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_dqn.DynaDQN.callbacks.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rlParent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_dqn.DynaDQN.callbacks.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Inits callback class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rlParent</strong> – Reference to the Dyna-Q agent.</p></li>
+<li><p><strong>trialEndFcn</strong> – Maximum number of experiences that will be stored by the memory module.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_dqn.DynaDQN.callbacks.on_episode_end">
+<span class="sig-name descname"><span class="pre">on_episode_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_dqn.DynaDQN.callbacks.on_episode_end" title="Permalink to this definition"></a></dt>
+<dd><p>This function is called whenever an episode ends, and updates the reward accumulator,
+simultaneously updating the visualization of the reward function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epoch</strong> – The number of passes of the dataset</p></li>
+<li><p><strong>logs</strong> – log data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_dqn.DynaDQN.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_dqn.DynaDQN.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Inits DQN agent using the Dyna-Q model</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interfaceOAI</strong> – The interface to the Open AI Gym environment.</p></li>
+<li><p><strong>epsilon</strong> – The epsilon value for the epsilon greedy policy.</p></li>
+<li><p><strong>beta</strong> – The temperature parameter used when applying the softmax function to the Q-values.</p></li>
+<li><p><strong>learningRate</strong> – The learning rate with which the Q-function is updated.</p></li>
+<li><p><strong>gamma</strong> – The discount factor used to compute the TD-error.</p></li>
+<li><p><strong>trialEndFcn</strong> – Callback function called at the end of each trial,
+defined for flexibility in scenario control.</p></li>
+<li><p><strong>observations</strong> – The set of observations that will be mapped to the gridworld states.</p></li>
+<li><p><strong>model</strong> – The DNN model to be used by the agent.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_dqn.DynaDQN.build_model">
+<span class="sig-name descname"><span class="pre">build_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_dqn.DynaDQN.build_model" title="Permalink to this definition"></a></dt>
+<dd><p>This function builds the DQN’s target and online models.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>model</strong> – The DNN model to be used by the agent. If None, a small dense DNN is created by default.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_dqn.DynaDQN.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOfTrials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxNumberOfSteps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replayBatchSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noReplay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_dqn.DynaDQN.train" title="Permalink to this definition"></a></dt>
+<dd><p>This function is called to train the agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>numberOfTrials</strong> – The number of trials the Dyna-Q agent is trained.</p></li>
+<li><p><strong>maxNumberOfSteps</strong> – The maximum number of steps per trial.</p></li>
+<li><p><strong>replayBatchSize</strong> – The number of random that will be replayed.</p></li>
+<li><p><strong>noReplay</strong> – If true, experiences are not replayed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_dqn.DynaDQN.replay">
+<span class="sig-name descname"><span class="pre">replay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">replayBatchSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_dqn.DynaDQN.replay" title="Permalink to this definition"></a></dt>
+<dd><p>This function replays experiences to update the Q-function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>replayBatchSize</strong> – The number of random that will be replayed.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_dqn.DynaDQN.update_Q">
+<span class="sig-name descname"><span class="pre">update_Q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experience</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_dqn.DynaDQN.update_Q" title="Permalink to this definition"></a></dt>
+<dd><p>This function is a dummy function and does nothing (implementation required by parent class).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>experience</strong> – The experience with which the Q-function will be updated.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_dqn.DynaDQN.retrieve_Q">
+<span class="sig-name descname"><span class="pre">retrieve_Q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_dqn.DynaDQN.retrieve_Q" title="Permalink to this definition"></a></dt>
+<dd><p>This function retrieves Q-values for a given state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state</strong> – The state for which Q-values should be retrieved.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Q-values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_dqn.DynaDQN.predict_on_batch">
+<span class="sig-name descname"><span class="pre">predict_on_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_dqn.DynaDQN.predict_on_batch" title="Permalink to this definition"></a></dt>
+<dd><p>This function retrieves Q-values for a batch of states.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>batch</strong> – The batch of states.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Q-values on batch of states</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-CoBeLRL.agents.dyna_q_agent">
+<span id="dyna-q-agent-module"></span><h2>Dyna_q_agent module<a class="headerlink" href="#module-CoBeLRL.agents.dyna_q_agent" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CoBeLRL.agents.dyna_q_agent.</span></span><span class="sig-name descname"><span class="pre">AbstractDynaQAgent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Implementation of a Dyna-Q agent.
+Q-function is represented as a static table.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Inits Dyna-Q agent class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interfaceOAI</strong> – The interface to the Open AI Gym environment.</p></li>
+<li><p><strong>epsilon</strong> – The epsilon value for the epsilon greedy policy.</p></li>
+<li><p><strong>learningRate</strong> – The learning rate with which the Q-function is updated.</p></li>
+<li><p><strong>gamma</strong> – The discount factor used to compute the TD-error.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent.replay">
+<span class="sig-name descname"><span class="pre">replay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">replayBatchSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent.replay" title="Permalink to this definition"></a></dt>
+<dd><p>This function replays experiences to update the Q-function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>replayBatchSize</strong> – The number of random that will be replayed.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent.select_action">
+<span class="sig-name descname"><span class="pre">select_action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent.select_action" title="Permalink to this definition"></a></dt>
+<dd><p>This function selects an action according to the Q-values of the current state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>state</strong> – The current state.</p></li>
+<li><p><strong>epsilon</strong> – The epsilon parameter used under greedy action selection.</p></li>
+<li><p><strong>beta</strong> – The temperature parameter used when applying the softmax function to the Q-values.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Action</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent.compute_action_mask">
+<span class="sig-name descname"><span class="pre">compute_action_mask</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent.compute_action_mask" title="Permalink to this definition"></a></dt>
+<dd><p>This function computes the action mask which prevents the selection of invalid actions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOfTrials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxNumberOfSteps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replayBatchSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noReplay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent.train" title="Permalink to this definition"></a></dt>
+<dd><p>This function is called to train the agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>numberOfTrials</strong> – The number of trials the Dyna-Q agent is trained.</p></li>
+<li><p><strong>maxNumberOfSteps</strong> – The maximum number of steps per trial.</p></li>
+<li><p><strong>replayBatchSize</strong> – The number of random that will be replayed.</p></li>
+<li><p><strong>noReplay</strong> – If true, experiences are not replayed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent.update_Q">
+<span class="sig-name descname"><span class="pre">update_Q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experience</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent.update_Q" title="Permalink to this definition"></a></dt>
+<dd><p>This function updates the Q-function with a given experience.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>experience</strong> – The experience with which the Q-function will be updated.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent.retrieve_Q">
+<span class="sig-name descname"><span class="pre">retrieve_Q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent.retrieve_Q" title="Permalink to this definition"></a></dt>
+<dd><p>This function retrieves Q-values for a given state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state</strong> – The state for which Q-values should be retrieved.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent.predict_on_batch">
+<span class="sig-name descname"><span class="pre">predict_on_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent.predict_on_batch" title="Permalink to this definition"></a></dt>
+<dd><p>This function retrieves Q-values for a batch of states.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>batch</strong> – The batch of states.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.DynaQAgent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CoBeLRL.agents.dyna_q_agent.</span></span><span class="sig-name descname"><span class="pre">DynaQAgent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.DynaQAgent" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent" title="CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent"><code class="xref py py-class docutils literal notranslate"><span class="pre">CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent</span></code></a></p>
+<p>Implementation of a Dyna-Q agent.
+Q-function is represented as a static table.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interfaceOAI</strong> – The interface to the Open AI Gym environment.</p></li>
+<li><p><strong>epsilon</strong> – The epsilon value for the epsilon greedy policy.</p></li>
+<li><p><strong>learningRate</strong> – The learning rate with which the Q-function is updated.</p></li>
+<li><p><strong>gamma</strong> – The discount factor used to compute the TD-error.</p></li>
+<li><p><strong>trialEndFcn</strong> – The callback function called at the end of each trial, defined for more flexibility in scenario control.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+<dl class="py class">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.DynaQAgent.callbacks">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">callbacks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rlParent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.DynaQAgent.callbacks" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Callback class. Used for visualization and scenario control.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.DynaQAgent.callbacks.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rlParent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.DynaQAgent.callbacks.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Inits Callback constructor method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rlParent</strong> – Reference to the Dyna-Q agent.</p></li>
+<li><p><strong>trialEndFcn</strong> – Maximum number of experiences that will be stored by the memory module.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.DynaQAgent.callbacks.on_episode_end">
+<span class="sig-name descname"><span class="pre">on_episode_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.DynaQAgent.callbacks.on_episode_end" title="Permalink to this definition"></a></dt>
+<dd><p>The following function is called whenever an episode ends, and updates the reward accumulator,
+simultaneously updating the visualization of the reward function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epoch</strong> – Reference to the Dyna-Q agent.</p></li>
+<li><p><strong>logs</strong> – Maximum number of experiences that will be stored by the memory module.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.DynaQAgent.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.DynaQAgent.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>This is the constructor method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interfaceOAI</strong> – The interface to the Open AI Gym environment.</p></li>
+<li><p><strong>epsilon</strong> – The epsilon value for the epsilon greedy policy.</p></li>
+<li><p><strong>learningRate</strong> – The learning rate with which the Q-function is updated.</p></li>
+<li><p><strong>gamma</strong> – The discount factor used to compute the TD-error.</p></li>
+<li><p><strong>trialEndFcn</strong> – The callback function called at the end of each trial, defined for more flexibility in scenario control.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.DynaQAgent.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOfTrials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxNumberOfSteps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replayBatchSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noReplay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.DynaQAgent.train" title="Permalink to this definition"></a></dt>
+<dd><p>This function is called to train the agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>numberOfTrials</strong> – The number of trials the Dyna-Q agent is trained.</p></li>
+<li><p><strong>maxNumberOfSteps</strong> – The maximum number of steps per trial.</p></li>
+<li><p><strong>replayBatchSize</strong> – The number of random that will be replayed.</p></li>
+<li><p><strong>noReplay</strong> – If true, experiences are not replayed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.DynaQAgent.update_Q">
+<span class="sig-name descname"><span class="pre">update_Q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experience</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.DynaQAgent.update_Q" title="Permalink to this definition"></a></dt>
+<dd><p>This function updates the Q-function with a given experience.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>experience</strong> – The experience with which the Q-function will be updated.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.DynaQAgent.retrieve_Q">
+<span class="sig-name descname"><span class="pre">retrieve_Q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.DynaQAgent.retrieve_Q" title="Permalink to this definition"></a></dt>
+<dd><p>This function retrieves Q-values for a given state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state</strong> – The state for which Q-values should be retrieved.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Q-values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.DynaQAgent.predict_on_batch">
+<span class="sig-name descname"><span class="pre">predict_on_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.DynaQAgent.predict_on_batch" title="Permalink to this definition"></a></dt>
+<dd><p>This function retrieves Q-values for a batch of states.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>batch</strong> – The batch of states.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.PMAAgent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CoBeLRL.agents.dyna_q_agent.</span></span><span class="sig-name descname"><span class="pre">PMAAgent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gammaSR</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.PMAAgent" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent" title="CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent"><code class="xref py py-class docutils literal notranslate"><span class="pre">CoBeLRL.agents.dyna_q_agent.AbstractDynaQAgent</span></code></a></p>
+<p>Implementation of a Dyna-Q agent using the Prioritized Memory Access (PMA) method described by Mattar &amp; Daw (2019).</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.PMAAgent.callbacks">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">callbacks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rlParent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.PMAAgent.callbacks" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Callback class. Used for visualization and scenario control.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.PMAAgent.callbacks.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rlParent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.PMAAgent.callbacks.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Inits Callback class</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rlParent</strong> – Reference to the Dyna-Q agent.</p></li>
+<li><p><strong>trialEndFcn</strong> – Maximum number of experiences that will be stored by the memory module.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.PMAAgent.callbacks.on_episode_end">
+<span class="sig-name descname"><span class="pre">on_episode_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.PMAAgent.callbacks.on_episode_end" title="Permalink to this definition"></a></dt>
+<dd><p>The following function is called whenever an episode ends, and updates the reward accumulator,
+simultaneously updating the visualization of the reward function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epoch</strong> – no. of complete episodes</p></li>
+<li><p><strong>logs</strong> – Maximum number of experiences that will be stored by the memory module.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.PMAAgent.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gammaSR</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.PMAAgent.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Inits PMAgent class.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interfaceOAI</strong> – The interface to the Open AI Gym environment.</p></li>
+<li><p><strong>epsilon</strong> – The epsilon value for the epsilon greedy policy.</p></li>
+<li><p><strong>beta</strong> – The temperature parameter used when applying the softmax function to the Q-values.</p></li>
+<li><p><strong>learningRate</strong> – The learning rate with which the Q-function is updated.</p></li>
+<li><p><strong>gamma</strong> – The discount factor used to compute the TD-error.</p></li>
+<li><p><strong>trialEndFcn</strong> – The callback function called at the end of each trial, defined for more flexibility in
+scenario control.</p></li>
+<li><p><strong>gammaSR</strong> – The temperature parameter</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.PMAAgent.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOfTrials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxNumberOfSteps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replayBatchSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noReplay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.PMAAgent.train" title="Permalink to this definition"></a></dt>
+<dd><p>This function is called to train the agent.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>numberOfTrials</strong> – The number of trials the Dyna-Q agent is trained.</p></li>
+<li><p><strong>maxNumberOfSteps</strong> – The maximum number of steps per trial.</p></li>
+<li><p><strong>replayBatchSize</strong> – The number of random that will be replayed.</p></li>
+<li><p><strong>noReplay</strong> – If true, experiences are not replayed.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.PMAAgent.update_Q">
+<span class="sig-name descname"><span class="pre">update_Q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.PMAAgent.update_Q" title="Permalink to this definition"></a></dt>
+<dd><p>This function updates the Q-function with a given experience.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>update</strong> – The experience with which the Q-function will be updated.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.PMAAgent.retrieve_Q">
+<span class="sig-name descname"><span class="pre">retrieve_Q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.PMAAgent.retrieve_Q" title="Permalink to this definition"></a></dt>
+<dd><p>This function retrieves Q-values for a given state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>state</strong> – The state for which Q-values should be retrieved.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Q-values</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.agents.dyna_q_agent.PMAAgent.predict_on_batch">
+<span class="sig-name descname"><span class="pre">predict_on_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.agents.dyna_q_agent.PMAAgent.predict_on_batch" title="Permalink to this definition"></a></dt>
+<dd><p>This function retrieves Q-values for a batch of states.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>batch</strong> – The batch of states.</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>Q-values</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-CoBeLRL.agents">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-CoBeLRL.agents" title="Permalink to this headline"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="CoBeLRL.html" class="btn btn-neutral float-left" title="CoBeLRL package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="CoBeLRL.analysis.html" class="btn btn-neutral float-right" title="Analysis package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, a.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

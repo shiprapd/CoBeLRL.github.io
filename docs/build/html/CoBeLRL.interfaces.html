@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interfaces package &mdash; CoBeL-RL 1.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Memory_modules package" href="CoBeLRL.memory_modules.html" />
+    <link rel="prev" title="Frontends package" href="CoBeLRL.frontends.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> CoBeL-RL
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">CoBeL-RL</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="CoBeLRL.html">CoBeLRL package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="CoBeLRL.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="CoBeLRL.agents.html">Agents package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CoBeLRL.analysis.html">Analysis package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CoBeLRL.demo.html">Demo package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CoBeLRL.frontends.html">Frontends package</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Interfaces package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CoBeLRL.memory_modules.html">Memory_modules package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="CoBeLRL.spatial_representations.html">Spatial_representations package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="CoBeLRL.html#module-CoBeLRL">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CoBeL-RL</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">CoBeL-RL</a> &raquo;</li>
+          <li><a href="CoBeLRL.html">CoBeLRL package</a> &raquo;</li>
+      <li>Interfaces package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/CoBeLRL.interfaces.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="interfaces-package">
+<h1>Interfaces package<a class="headerlink" href="#interfaces-package" title="Permalink to this headline"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline"></a></h2>
+</section>
+<section id="module-CoBeLRL.interfaces.oai_gym_gridworlds">
+<span id="oai-gym-gridworlds-module"></span><h2>Oai_gym_gridworlds module<a class="headerlink" href="#module-CoBeLRL.interfaces.oai_gym_gridworlds" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_gridworlds.OAIGymInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CoBeLRL.interfaces.oai_gym_gridworlds.</span></span><span class="sig-name descname"><span class="pre">OAIGymInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">world</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withGUI</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">guiParent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rewardCallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_gridworlds.OAIGymInterface" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gym.core.Env</span></code></p>
+<p>Open AI interface class for use with gridworld environments.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_gridworlds.OAIGymInterface.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">world</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withGUI</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">guiParent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rewardCallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_gridworlds.OAIGymInterface.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Inits Open AI interface for use with gridworld environments.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>modules</strong> – Contains framework modules</p></li>
+<li><p><strong>world</strong> – The gridworld</p></li>
+<li><p><strong>withGUI</strong> – If true, observations and policy will be visualized</p></li>
+<li><p><strong>guiParent</strong> – The main window for visualization</p></li>
+<li><p><strong>rewardCallback</strong> – The callback function used to compute the reward</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_gridworlds.OAIGymInterface.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_gridworlds.OAIGymInterface.step" title="Permalink to this definition"></a></dt>
+<dd><p>AI Gym’s step function, executes the agent’s action and propels the simulation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>action</strong> – The action selected by the agent</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_gridworlds.OAIGymInterface.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_gridworlds.OAIGymInterface.reset" title="Permalink to this definition"></a></dt>
+<dd><p>AI Gym’s reset function, resets the environment and the agent’s state.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_gridworlds.OAIGymInterface.updateTransitions">
+<span class="sig-name descname"><span class="pre">updateTransitions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">invalidTransitions</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_gridworlds.OAIGymInterface.updateTransitions" title="Permalink to this definition"></a></dt>
+<dd><p>This function updates the gridworld’s transitions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>invalidTransitions</strong> – The gridworld’s invalid transitions as a list of 2-tuples</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_gridworlds.OAIGymInterface.initVisualization">
+<span class="sig-name descname"><span class="pre">initVisualization</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_gridworlds.OAIGymInterface.initVisualization" title="Permalink to this definition"></a></dt>
+<dd><p>This function initializes visualization if visualization enabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_gridworlds.OAIGymInterface.updateVisualization">
+<span class="sig-name descname"><span class="pre">updateVisualization</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_gridworlds.OAIGymInterface.updateVisualization" title="Permalink to this definition"></a></dt>
+<dd><p>This function updates visualization if visualization is enabled.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-CoBeLRL.interfaces.oai_gym_interface">
+<span id="oai-gym-interface-module"></span><h2>Oai_gym_interface module<a class="headerlink" href="#module-CoBeLRL.interfaces.oai_gym_interface" title="Permalink to this headline"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_interface.OAIGymInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CoBeLRL.interfaces.oai_gym_interface.</span></span><span class="sig-name descname"><span class="pre">OAIGymInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withGUI</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rewardCallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_interface.OAIGymInterface" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gym.core.Env</span></code></p>
+<p>This is the Open AI gym interface class. The interface wraps the control path and ensures communication between
+the agent and the environment. The class descends from gym.Env, and is designed to be minimalistic</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_interface.OAIGymInterface.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withGUI</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rewardCallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_interface.OAIGymInterface.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Inits Open AI gym interface class, this interface wraps the control path and ensures communication between
+the agent and the environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>modules</strong> – the dict of all available modules in the system</p></li>
+<li><p><strong>withGUI</strong> – if True, the module provides GUI control</p></li>
+<li><p><strong>rewardCallback</strong> – this callback function is invoked in the step routine in order to get the appropriate reward w.r.t. the experimental design</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_interface.OAIGymInterface.updateObservation">
+<span class="sig-name descname"><span class="pre">updateObservation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_interface.OAIGymInterface.updateObservation" title="Permalink to this definition"></a></dt>
+<dd><p>This function (slot) updates the observation provided by the environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>observation</strong> – the observation used to perform the update</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_interface.OAIGymInterface.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_interface.OAIGymInterface.step" title="Permalink to this definition"></a></dt>
+<dd><p>The step function that propels the simulation.
+This function is called by the .fit function of the RL agent whenever a novel action has been computed.
+The action is used to decide on the next topology node to run to, and step then triggers the control path
+(including ‘Blender’)by making use of direct calls and signal/slot methods.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>action</strong> – the action to be executed</p>
+</dd>
+<dt class="field-even">Return observation</dt>
+<dd class="field-even"><p>observation after executing action</p>
+</dd>
+<dt class="field-odd">Return reward</dt>
+<dd class="field-odd"><p>Reward for the action executed</p>
+</dd>
+<dt class="field-even">Return stopEpisode</dt>
+<dd class="field-even"><p>flag to topEpisode</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_interface.OAIGymInterface.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_interface.OAIGymInterface.reset" title="Permalink to this definition"></a></dt>
+<dd><p>This function restarts the RL agent’s learning cycle by initiating a new episode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return observation</dt>
+<dd class="field-even"><p>observation after resetting RL agent’s</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_interface.unity_decorater">
+<span class="sig-prename descclassname"><span class="pre">CoBeLRL.interfaces.oai_gym_interface.</span></span><span class="sig-name descname"><span class="pre">unity_decorater</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_interface.unity_decorater" title="Permalink to this definition"></a></dt>
+<dd><p>Wraps on internal errors raised by the unity python api results in more readable error messages.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Returns wrapper</dt>
+<dd class="field-even"><p>Error message</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_interface.get_cobel_path">
+<span class="sig-prename descclassname"><span class="pre">CoBeLRL.interfaces.oai_gym_interface.</span></span><span class="sig-name descname"><span class="pre">get_cobel_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_interface.get_cobel_path" title="Permalink to this definition"></a></dt>
+<dd><p>This function returns the cobel project path
+TODO:  move this to some kind of utility class?</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Return path</dt>
+<dd class="field-even"><p>returns the cobel project path</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_interface.get_env_path">
+<span class="sig-prename descclassname"><span class="pre">CoBeLRL.interfaces.oai_gym_interface.</span></span><span class="sig-name descname"><span class="pre">get_env_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_interface.get_env_path" title="Permalink to this definition"></a></dt>
+<dd><p>This function finds and returns the unity environment path.
+TODO move this to some kind of utility class?</p>
+<dl class="field-list simple">
+<dt class="field-odd">Param</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_interface.UnityInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">CoBeLRL.interfaces.oai_gym_interface.</span></span><span class="sig-name descname"><span class="pre">UnityInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scene_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_max_episode_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decision_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent_action_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'discrete'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gray_scale_images</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout_wait</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">performance_monitor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_gui</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_interface.UnityInterface" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">gym.core.Env</span></code></p>
+<p>Wrapper for Unity 3D with ML-agents class</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_interface.UnityInterface.EmptyClass">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EmptyClass</span></span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_interface.UnityInterface.EmptyClass" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This class is used as an info dictionary</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_interface.UnityInterface.UnityProcessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UnityProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env_agent_specs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent_action_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gray_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">performance_monitor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_interface.UnityInterface.UnityProcessor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">rl.core.Processor</span></code></p>
+<p>This is a class keras processor for the unity interface</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_interface.UnityInterface.UnityProcessor.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env_agent_specs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent_action_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gray_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">performance_monitor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_interface.UnityInterface.UnityProcessor.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Inits keras processor for the unity interface</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env_agent_specs</strong> – the group_spec object for the agent transmitted by ml agents env</p></li>
+<li><p><strong>agent_action_type</strong> – the agent_action_type string</p></li>
+<li><p><strong>use_gray_scale</strong> – set gray scale use to true/false</p></li>
+<li><p><strong>performance_monitor</strong> – for performance monitor</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_interface.UnityInterface.UnityProcessor.process_observation">
+<span class="sig-name descname"><span class="pre">process_observation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observation</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_interface.UnityInterface.UnityProcessor.process_observation" title="Permalink to this definition"></a></dt>
+<dd><p>Processes the observation as obtained from the environment for use in an agent and
+returns it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>observation</strong> – An observation object as obtained by the environment</p>
+</dd>
+<dt class="field-even">Return observation</dt>
+<dd class="field-even"><p>Observation obtained by the environment processed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_interface.UnityInterface.UnityProcessor.process_action">
+<span class="sig-name descname"><span class="pre">process_action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_interface.UnityInterface.UnityProcessor.process_action" title="Permalink to this definition"></a></dt>
+<dd><p>Processes an action predicted by an agent but before execution in an environment.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>action</strong> – Action given to the environment, data type: int</p>
+</dd>
+<dt class="field-even">Return action</dt>
+<dd class="field-even"><p>Processed action given to the environment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_interface.UnityInterface.UnityProcessor.process_reward">
+<span class="sig-name descname"><span class="pre">process_reward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reward</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_interface.UnityInterface.UnityProcessor.process_reward" title="Permalink to this definition"></a></dt>
+<dd><p>Processes the reward as obtained from the environment for use in an agent and
+returns it.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>reward</strong> – A reward as obtained by the environment, data type: float</p>
+</dd>
+<dt class="field-even">Return reward</dt>
+<dd class="field-even"><p>Reward obtained by the environment processed</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="CoBeLRL.interfaces.oai_gym_interface.UnityInterface.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scene_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_max_episode_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decision_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent_action_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'discrete'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gray_scale_images</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout_wait</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">performance_monitor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_gui</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#CoBeLRL.interfaces.oai_gym_interface.UnityInterface.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Inits a constructor to connects to a given environment executable or to the unity editor and acts as a gym for
+keras agents.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env_path</strong> – full path to compiled unity executable, if None mlagents waits for the editor
+to connect</p></li>
+<li><p><strong>modules</strong> – the old CoBeL-RL modules, (currently redundant)</p></li>
+<li><p><strong>seed</strong> – Random seed, keep at 42 for good luck</p></li>
+<li><p><strong>timeout_wait</strong> – Time until Unity is declared dead</p></li>
+<li><p><strong>side_channels</strong> – possible channels to talk with the academy</p></li>
+<li><p><strong>time_scale</strong> – Speed of the simulation</p></li>
+<li><p><strong>nb_max_episode_steps</strong> – the number of maximum steps per episode</p></li>
+<li><p><strong>decision_interval</strong> – the number of simulation steps before entering the next rl cycle</p></li>
+<li><p><strong>agent_action_type</strong> – the native action type of the agent</p></li>
+<li><p><strong>use_gray_scale_images</strong> – make the processor convert images to greyscale domain,
+this is required when working with convolutional models</p></li>
+<li><p><strong>performance_monitor</strong> – the monitor used for visualizing the learning process</p></li>
+<li><p><strong>with_gui</strong> – whether or not show the performance monitor and the environment gui</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-CoBeLRL.interfaces">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-CoBeLRL.interfaces" title="Permalink to this headline"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="CoBeLRL.frontends.html" class="btn btn-neutral float-left" title="Frontends package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="CoBeLRL.memory_modules.html" class="btn btn-neutral float-right" title="Memory_modules package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, a.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
