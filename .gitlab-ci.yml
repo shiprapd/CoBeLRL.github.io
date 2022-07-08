@@ -1,0 +1,24 @@
+image: ubuntu:18.04
+
+stages:
+  - deploy
+
+pages:
+  stage: deploy
+  script:
+    - pwd
+    - apt-get -y update
+    - apt-get -y upgrade
+    - apt-get install -y python3.6 python3.6-venv python3-wheel python-dev python3-dev python3.6-dev
+    - python3.6 -m venv cobel
+    - source cobel/bin/activate
+    - python --version
+    - pip install --upgrade pip wheel setuptools setuptools
+    - pip install -r requirements.txt
+    - pip install -U sphinx sphinx_rtd_theme
+    - export PYTHONPATH=/builds/shipra_prasad/RL/
+    #- sphinx-apidoc -o docs .
+    - sphinx-build -b html /builds/shipra_prasad/RL/docs/ public
+  artifacts:
+    paths:
+    - public

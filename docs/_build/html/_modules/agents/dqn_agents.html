@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>agents.dqn_agents &mdash; CoBeL_RL 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> CoBeL_RL
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">CoBeLRL</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CoBeL_RL</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>agents.dqn_agents</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for agents.dqn_agents</h1><div class="highlight"><pre>
+<span></span>
+
+
+<span class="kn">import</span> <span class="nn">numpy</span>     <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras</span> <span class="kn">import</span> <span class="n">callbacks</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.models</span> <span class="kn">import</span> <span class="n">Sequential</span><span class="p">,</span> <span class="n">Model</span><span class="p">,</span> <span class="n">model_from_json</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.layers</span> <span class="kn">import</span> <span class="n">Dense</span><span class="p">,</span> <span class="n">Activation</span><span class="p">,</span> <span class="n">Flatten</span><span class="p">,</span> <span class="n">Input</span>
+<span class="kn">from</span> <span class="nn">tensorflow.keras.optimizers</span> <span class="kn">import</span> <span class="n">Adam</span>
+<span class="kn">from</span> <span class="nn">rl.agents</span> <span class="kn">import</span> <span class="n">DQNAgent</span>
+<span class="kn">from</span> <span class="nn">rl.policy</span> <span class="kn">import</span> <span class="n">EpsGreedyQPolicy</span>
+<span class="kn">from</span> <span class="nn">rl.memory</span> <span class="kn">import</span> <span class="n">SequentialMemory</span>
+
+
+<span class="c1">### The reinforcement learing class. It wraps all functionality required to set up a RL agent.</span>
+<div class="viewcode-block" id="DQNAgentBaseline"><a class="viewcode-back" href="../../agents.html#agents.dqn_agents.DQNAgentBaseline">[docs]</a><span class="k">class</span> <span class="nc">DQNAgentBaseline</span><span class="p">():</span>
+    <span class="c1">### The nested visualization class that is required by &#39;KERAS-RL&#39; to visualize the training success (by means of episode reward)</span>
+    <span class="c1">### at the end of each episode, and update the policy visualization.</span>
+<div class="viewcode-block" id="DQNAgentBaseline.callbacks"><a class="viewcode-back" href="../../agents.html#agents.dqn_agents.DQNAgentBaseline.callbacks">[docs]</a>    <span class="k">class</span> <span class="nc">callbacks</span><span class="p">(</span><span class="n">callbacks</span><span class="o">.</span><span class="n">Callback</span><span class="p">):</span>
+
+        <span class="c1"># The constructor.</span>
+        <span class="c1">#</span>
+        <span class="c1"># rlParent:     the ACT_ReinforcementLearningModule that hosts this class</span>
+        <span class="c1"># trialBeginFcn:the callback function called in the beginning of each trial, defined for more flexibility in scenario control</span>
+        <span class="c1"># trialEndFcn:  the callback function called at the end of each trial, defined for more flexibility in scenario control</span>
+<div class="viewcode-block" id="DQNAgentBaseline.callbacks.__init__"><a class="viewcode-back" href="../../agents.html#agents.dqn_agents.DQNAgentBaseline.callbacks.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rlParent</span><span class="p">,</span> <span class="n">trialBeginFcn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trialEndFcn</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+            <span class="nb">super</span><span class="p">(</span><span class="n">DQNAgentBaseline</span><span class="o">.</span><span class="n">callbacks</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+
+            <span class="c1"># store the hosting class</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rlParent</span> <span class="o">=</span> <span class="n">rlParent</span>
+
+            <span class="c1"># store the trial end callback function</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trialBeginFcn</span> <span class="o">=</span> <span class="n">trialBeginFcn</span>
+
+            <span class="c1"># store the trial end callback function</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">trialEndFcn</span> <span class="o">=</span> <span class="n">trialEndFcn</span></div>
+
+        <span class="c1"># The following function is called whenever an epsisode starts,</span>
+        <span class="c1"># and updates the visual output in the plotted reward graphs.</span>
+<div class="viewcode-block" id="DQNAgentBaseline.callbacks.on_episode_begin"><a class="viewcode-back" href="../../agents.html#agents.dqn_agents.DQNAgentBaseline.callbacks.on_episode_begin">[docs]</a>        <span class="k">def</span> <span class="nf">on_episode_begin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">logs</span><span class="p">):</span>
+
+            <span class="c1"># retrieve the Open AI Gym interface</span>
+            <span class="n">interfaceOAI</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rlParent</span><span class="o">.</span><span class="n">interfaceOAI</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trialBeginFcn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">trialBeginFcn</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rlParent</span><span class="p">)</span></div>
+
+        <span class="c1"># The following function is called whenever an episode ends, and updates the reward accumulator,</span>
+        <span class="c1"># simultaneously updating the visualization of the reward function</span>
+<div class="viewcode-block" id="DQNAgentBaseline.callbacks.on_episode_end"><a class="viewcode-back" href="../../agents.html#agents.dqn_agents.DQNAgentBaseline.callbacks.on_episode_end">[docs]</a>        <span class="k">def</span> <span class="nf">on_episode_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epoch</span><span class="p">,</span> <span class="n">logs</span><span class="p">):</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">trialEndFcn</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">trialEndFcn</span><span class="p">(</span><span class="n">epoch</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rlParent</span><span class="p">,</span> <span class="n">logs</span><span class="p">)</span></div></div>
+
+    <span class="c1"># The constructor.</span>
+    <span class="c1">#</span>
+    <span class="c1"># guiParent:        the widget that shows necessary visualization</span>
+    <span class="c1"># interfaceOAI:     the interface to the Open AI Gym environment</span>
+    <span class="c1"># agentParams:      the parameters of the agent to be used, provided as a dictionary</span>
+    <span class="c1"># visualOutput:     true if the module has to visualize the results</span>
+    <span class="c1"># maxEpochs:        the maximum number of epochs to be logged</span>
+    <span class="c1"># memoryCapacity:   the capacity of the sequential memory used in the agent</span>
+    <span class="c1"># epsilon:          the epsilon value for the epsilon greedy policy</span>
+    <span class="c1"># trialBeginFcn:    the callback function called at the beginning of each trial, defined for more flexibility in scenario control</span>
+    <span class="c1"># trialEndFcn:      the callback function called at the end of each trial, defined for more flexibility in scenario control</span>
+<div class="viewcode-block" id="DQNAgentBaseline.__init__"><a class="viewcode-back" href="../../agents.html#agents.dqn_agents.DQNAgentBaseline.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interfaceOAI</span><span class="p">,</span> <span class="n">memoryCapacity</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span> <span class="n">processor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> 
+                 <span class="n">trialBeginFcn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">trialEndFcn</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">network</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+        <span class="c1"># store the Open AI Gym interface</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span> <span class="o">=</span> <span class="n">interfaceOAI</span>
+
+        <span class="c1"># prepare the model used in the reinforcement learner</span>
+
+        <span class="c1"># the number of discrete actions, retrieved from the Open AI Gym interface</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nb_actions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">n</span>
+        <span class="c1"># a sequential model is standardly used here, this model is subject to changes</span>
+        <span class="k">if</span> <span class="n">network</span> <span class="ow">is</span> <span class="kc">None</span> <span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">Sequential</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Flatten</span><span class="p">(</span><span class="n">input_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">observation_space</span><span class="o">.</span><span class="n">shape</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;tanh&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;tanh&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;tanh&#39;</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;tanh&#39;</span><span class="p">))</span>
+    
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">Dense</span><span class="p">(</span><span class="n">units</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_actions</span><span class="p">,</span> <span class="n">activation</span><span class="o">=</span><span class="s1">&#39;linear&#39;</span><span class="p">))</span>
+            
+        <span class="k">else</span> <span class="p">:</span> 
+            <span class="n">loaded_model_json</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">network</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="n">model_from_json</span><span class="p">(</span><span class="n">loaded_model_json</span><span class="p">)</span>        
+            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="n">summary</span><span class="p">())</span>
+
+        <span class="c1"># prepare the memory for the RL agent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">memory</span> <span class="o">=</span> <span class="n">SequentialMemory</span><span class="p">(</span><span class="n">limit</span><span class="o">=</span><span class="n">memoryCapacity</span><span class="p">,</span> <span class="n">window_length</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># define the available policies</span>
+        <span class="n">policyEpsGreedy</span> <span class="o">=</span> <span class="n">EpsGreedyQPolicy</span><span class="p">(</span><span class="n">epsilon</span><span class="p">)</span>
+        <span class="c1"># construct the agent</span>
+
+        <span class="c1"># Retrieve the agent&#39;s parameters from the agentParams dictionary</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent</span> <span class="o">=</span> <span class="n">DQNAgent</span><span class="p">(</span><span class="n">model</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="p">,</span> <span class="n">nb_actions</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_actions</span><span class="p">,</span> <span class="n">memory</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">memory</span><span class="p">,</span> <span class="n">nb_steps_warmup</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+                              <span class="n">enable_dueling_network</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">dueling_type</span><span class="o">=</span><span class="s1">&#39;avg&#39;</span><span class="p">,</span> <span class="n">target_model_update</span><span class="o">=</span><span class="mf">1e-2</span><span class="p">,</span>
+                              <span class="n">policy</span><span class="o">=</span><span class="n">policyEpsGreedy</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">processor</span><span class="o">=</span><span class="n">processor</span><span class="p">)</span>
+
+        <span class="c1"># compile the agent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">Adam</span><span class="p">(</span><span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">,</span> <span class="p">),</span> <span class="n">metrics</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;mse&#39;</span><span class="p">])</span>
+
+        <span class="c1"># set up the visualizer for the RL agent behavior/reward outcome</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">engagedCallbacks</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trialBeginFcn</span><span class="p">,</span> <span class="n">trialEndFcn</span><span class="p">)</span></div>
+
+    <span class="c1">### The following function is called to train the agent.</span>
+<div class="viewcode-block" id="DQNAgentBaseline.train"><a class="viewcode-back" href="../../agents.html#agents.dqn_agents.DQNAgentBaseline.train">[docs]</a>    <span class="k">def</span> <span class="nf">train</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">steps</span><span class="p">):</span>
+        <span class="c1"># call the fit method to start the RL learning process</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxSteps</span> <span class="o">=</span> <span class="n">steps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">agent</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="p">,</span> <span class="n">nb_steps</span><span class="o">=</span><span class="n">steps</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">engagedCallbacks</span><span class="p">],</span>
+                       <span class="n">nb_max_episode_steps</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">visualize</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span></div></div>
+
+
+
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Author.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

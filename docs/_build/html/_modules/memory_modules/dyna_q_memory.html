@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>memory_modules.dyna_q_memory &mdash; CoBeL_RL 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> CoBeL_RL
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">CoBeLRL</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CoBeL_RL</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>memory_modules.dyna_q_memory</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for memory_modules.dyna_q_memory</h1><div class="highlight"><pre>
+<span></span><span class="c1"># basic imports</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">linalg</span>
+
+
+<div class="viewcode-block" id="DynaQMemory"><a class="viewcode-back" href="../../memory_modules.html#memory_modules.dyna_q_memory.DynaQMemory">[docs]</a><span class="k">class</span> <span class="nc">DynaQMemory</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Memory module to be used with the Dyna-Q agent.</span>
+<span class="sd">    Experiences are stored as a static table.</span>
+<span class="sd">    </span>
+<span class="sd">    | **Args**</span>
+<span class="sd">    | numberOfStates:               The number of environmental states.</span>
+<span class="sd">    | numberOfActions:              The number of the agent&#39;s actions.</span>
+<span class="sd">    | learningRate:                 The learning rate with which experiences are updated.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+<div class="viewcode-block" id="DynaQMemory.__init__"><a class="viewcode-back" href="../../memory_modules.html#memory_modules.dyna_q_memory.DynaQMemory.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numberOfStates</span><span class="p">,</span> <span class="n">numberOfActions</span><span class="p">,</span> <span class="n">learningRate</span><span class="o">=</span><span class="mf">0.9</span><span class="p">):</span>
+        <span class="c1"># initialize variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learningRate</span> <span class="o">=</span> <span class="n">learningRate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numberOfStates</span> <span class="o">=</span> <span class="n">numberOfStates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numberOfActions</span> <span class="o">=</span> <span class="n">numberOfActions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">numberOfStates</span><span class="p">,</span> <span class="n">numberOfActions</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numberOfStates</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numberOfStates</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">numberOfActions</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">terminals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">numberOfStates</span><span class="p">,</span> <span class="n">numberOfActions</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="DynaQMemory.store"><a class="viewcode-back" href="../../memory_modules.html#memory_modules.dyna_q_memory.DynaQMemory.store">[docs]</a>    <span class="k">def</span> <span class="nf">store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experience</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function stores a given experience.</span>
+<span class="sd">        </span>
+<span class="sd">        | **Args**</span>
+<span class="sd">        | experience:                   The experience to be stored.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># update experience</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]][</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;action&#39;</span><span class="p">]]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learningRate</span> <span class="o">*</span> <span class="p">(</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;reward&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]][</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;action&#39;</span><span class="p">]])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]][</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;action&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">experience</span><span class="p">[</span><span class="s1">&#39;next_state&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">terminals</span><span class="p">[</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]][</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;action&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">experience</span><span class="p">[</span><span class="s1">&#39;terminal&#39;</span><span class="p">]</span></div>
+            
+<div class="viewcode-block" id="DynaQMemory.retrieve"><a class="viewcode-back" href="../../memory_modules.html#memory_modules.dyna_q_memory.DynaQMemory.retrieve">[docs]</a>    <span class="k">def</span> <span class="nf">retrieve</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function retrieves a specific experience.</span>
+<span class="sd">        </span>
+<span class="sd">        | **Args**</span>
+<span class="sd">        | state:                        The environmental state.</span>
+<span class="sd">        | action:                       The action selected.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="n">state</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span><span class="p">:</span> <span class="n">action</span><span class="p">,</span> <span class="s1">&#39;reward&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">state</span><span class="p">][</span><span class="n">action</span><span class="p">],</span>
+                <span class="s1">&#39;next_state&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">state</span><span class="p">][</span><span class="n">action</span><span class="p">],</span> <span class="s1">&#39;terminal&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">terminals</span><span class="p">[</span><span class="n">state</span><span class="p">][</span><span class="n">action</span><span class="p">]}</span></div>
+        
+<div class="viewcode-block" id="DynaQMemory.retrieve_batch"><a class="viewcode-back" href="../../memory_modules.html#memory_modules.dyna_q_memory.DynaQMemory.retrieve_batch">[docs]</a>    <span class="k">def</span> <span class="nf">retrieve_batch</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">numberOfExperiences</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function retrieves a number of random experiences.</span>
+<span class="sd">        </span>
+<span class="sd">        | **Args**</span>
+<span class="sd">        | numberOfExperiences:          The number of random experiences to be drawn.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># draw random experiences</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">numberOfStates</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">numberOfActions</span><span class="p">,</span> <span class="n">numberOfExperiences</span><span class="p">)</span>
+        <span class="c1"># determine indeces</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">unravel_index</span><span class="p">(</span><span class="n">idx</span><span class="p">,</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numberOfStates</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">numberOfActions</span><span class="p">)))</span>
+        <span class="c1"># build experience batch</span>
+        <span class="n">experiences</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">exp</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">numberOfExperiences</span><span class="p">):</span>
+            <span class="n">state</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="n">idx</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">exp</span><span class="p">],</span> <span class="n">idx</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="n">exp</span><span class="p">]</span>
+            <span class="n">experiences</span> <span class="o">+=</span> <span class="p">[{</span><span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="n">state</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span><span class="p">:</span> <span class="n">action</span><span class="p">,</span> <span class="s1">&#39;reward&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">state</span><span class="p">][</span><span class="n">action</span><span class="p">],</span>
+                             <span class="s1">&#39;next_state&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">state</span><span class="p">][</span><span class="n">action</span><span class="p">],</span> <span class="s1">&#39;terminal&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">terminals</span><span class="p">[</span><span class="n">state</span><span class="p">][</span><span class="n">action</span><span class="p">]}]</span>
+            
+        <span class="k">return</span> <span class="n">experiences</span></div></div>
+    
+    
+<div class="viewcode-block" id="PMAMemory"><a class="viewcode-back" href="../../memory_modules.html#memory_modules.dyna_q_memory.PMAMemory">[docs]</a><span class="k">class</span> <span class="nc">PMAMemory</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Memory module to be used with the Dyna-Q agent.</span>
+<span class="sd">    Experiences are stored as a static table.</span>
+<span class="sd">    </span>
+<span class="sd">    | **Args**</span>
+<span class="sd">    | numberOfStates:               The number of environmental states.</span>
+<span class="sd">    | numberOfActions:              The number of the agent&#39;s actions.</span>
+<span class="sd">    | learningRate:                 The learning rate with which experiences are updated.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+<div class="viewcode-block" id="PMAMemory.__init__"><a class="viewcode-back" href="../../memory_modules.html#memory_modules.dyna_q_memory.PMAMemory.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interfaceOAI</span><span class="p">,</span> <span class="n">rlAgent</span><span class="p">,</span> <span class="n">numberOfStates</span><span class="p">,</span> <span class="n">numberOfActions</span><span class="p">,</span> <span class="n">learningRate</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.9</span><span class="p">):</span>
+        <span class="c1"># initialize variables</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learningRate</span> <span class="o">=</span> <span class="n">learningRate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">learningRateT</span> <span class="o">=</span> <span class="mf">0.9</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numberOfStates</span> <span class="o">=</span> <span class="n">numberOfStates</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">numberOfActions</span> <span class="o">=</span> <span class="n">numberOfActions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minGain</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="o">-</span><span class="mi">6</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minGainMode</span> <span class="o">=</span> <span class="s1">&#39;original&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">equal_need</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">equal_gain</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ignore_barriers</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">allow_loops</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="c1"># initialize memory structures</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">numberOfStates</span><span class="p">,</span> <span class="n">numberOfActions</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">numberOfStates</span><span class="p">,</span> <span class="n">numberOfActions</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">terminals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">numberOfStates</span><span class="p">,</span> <span class="n">numberOfActions</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+        <span class="c1"># store the Open AI Gym interface</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span> <span class="o">=</span> <span class="n">interfaceOAI</span>
+        <span class="c1"># store reference to agent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rlParent</span> <span class="o">=</span> <span class="n">rlAgent</span>
+        <span class="c1"># compute state-state transition matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;sas&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">n</span>
+        <span class="c1"># compute successor representation</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+        <span class="c1"># determine transitions that should be ignored (i.e. those that lead into the same state)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_mask</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numberOfStates</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">numberOfActions</span><span class="p">))</span></div>
+
+        
+<div class="viewcode-block" id="PMAMemory.store"><a class="viewcode-back" href="../../memory_modules.html#memory_modules.dyna_q_memory.PMAMemory.store">[docs]</a>    <span class="k">def</span> <span class="nf">store</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">experience</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function stores a given experience.</span>
+<span class="sd">        </span>
+<span class="sd">        | **Args**</span>
+<span class="sd">        | experience:                   The experience to be stored.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># update experience</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]][</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;action&#39;</span><span class="p">]]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learningRate</span> <span class="o">*</span> <span class="p">(</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;reward&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]][</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;action&#39;</span><span class="p">]])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]][</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;action&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">experience</span><span class="p">[</span><span class="s1">&#39;next_state&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">terminals</span><span class="p">[</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]][</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;action&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">experience</span><span class="p">[</span><span class="s1">&#39;terminal&#39;</span><span class="p">]</span>
+        <span class="c1"># update T</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">learningRateT</span> <span class="o">*</span> <span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numberOfStates</span><span class="p">)</span> <span class="o">==</span> <span class="n">experience</span><span class="p">[</span><span class="s1">&#39;next_state&#39;</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">[</span><span class="n">experience</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]])</span></div>
+        
+<div class="viewcode-block" id="PMAMemory.replay"><a class="viewcode-back" href="../../memory_modules.html#memory_modules.dyna_q_memory.PMAMemory.replay">[docs]</a>    <span class="k">def</span> <span class="nf">replay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">replayLength</span><span class="p">,</span> <span class="n">current_state</span><span class="p">,</span> <span class="n">force_first</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function replays experiences.</span>
+<span class="sd">        </span>
+<span class="sd">        | **Args**</span>
+<span class="sd">        | replayLength:                 The number of experiences that will be replayed.</span>
+<span class="sd">        | current_state:                State at which replay should start.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">performed_updates</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">last_seq</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">update</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">replayLength</span><span class="p">):</span>
+            <span class="c1"># make list of 1-step backups</span>
+            <span class="n">updates</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numberOfStates</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">numberOfActions</span><span class="p">):</span>
+                <span class="n">s</span><span class="p">,</span> <span class="n">a</span> <span class="o">=</span> <span class="n">i</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">numberOfStates</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">numberOfStates</span><span class="p">)</span>
+                <span class="n">updates</span> <span class="o">+=</span> <span class="p">[[{</span><span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="n">s</span><span class="p">,</span> <span class="s1">&#39;action&#39;</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="s1">&#39;reward&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">rewards</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">a</span><span class="p">],</span> <span class="s1">&#39;next_state&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">a</span><span class="p">],</span> <span class="s1">&#39;terminal&#39;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">terminals</span><span class="p">[</span><span class="n">s</span><span class="p">,</span> <span class="n">a</span><span class="p">]}]]</span>
+            <span class="c1"># extend current update sequence</span>
+            <span class="n">extend</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">performed_updates</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># determine extending state</span>
+                <span class="n">extend</span> <span class="o">=</span> <span class="n">performed_updates</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;next_state&#39;</span><span class="p">]</span>
+                <span class="c1"># check for loop</span>
+                <span class="n">loop</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">for</span> <span class="n">step</span> <span class="ow">in</span> <span class="n">performed_updates</span><span class="p">[</span><span class="n">last_seq</span><span class="p">:]:</span>
+                    <span class="k">if</span> <span class="n">extend</span> <span class="o">==</span> <span class="n">step</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]:</span>
+                        <span class="n">loop</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="c1"># extend update</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">loop</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">allow_loops</span><span class="p">:</span>
+                    <span class="c1"># determine extending action which yields max future value</span>
+                    <span class="n">extending_action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionProbs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rlParent</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="n">extend</span><span class="p">])</span>
+                    <span class="n">extending_action</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numberOfActions</span><span class="p">),</span> <span class="n">p</span><span class="o">=</span><span class="n">extending_action</span><span class="p">)</span>
+                    <span class="c1"># determine extending step</span>
+                    <span class="n">extend</span> <span class="o">+=</span> <span class="n">extending_action</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">numberOfStates</span>
+                    <span class="c1">#updates[extend] = performed_updates[last_seq:] + updates[extend]</span>
+                    <span class="n">updates</span><span class="p">[</span><span class="n">extend</span><span class="p">]</span> <span class="o">=</span> <span class="n">performed_updates</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">:]</span> <span class="o">+</span> <span class="n">updates</span><span class="p">[</span><span class="n">extend</span><span class="p">]</span>
+            <span class="c1"># compute gain and need</span>
+            <span class="n">gain</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">computeGain</span><span class="p">(</span><span class="n">updates</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">equal_gain</span><span class="p">:</span>
+                <span class="n">gain</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">need</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">computeNeed</span><span class="p">(</span><span class="n">current_state</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">equal_need</span><span class="p">:</span>
+                <span class="n">need</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># determine backup with highest utility</span>
+            <span class="n">utility</span> <span class="o">=</span> <span class="n">gain</span> <span class="o">*</span> <span class="n">need</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ignore_barriers</span><span class="p">:</span>
+                <span class="n">utility</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_mask</span>
+            <span class="c1"># determine backup with highest utility</span>
+            <span class="n">ties</span> <span class="o">=</span> <span class="p">(</span><span class="n">utility</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">utility</span><span class="p">))</span>
+            <span class="n">utility_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numberOfStates</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">numberOfActions</span><span class="p">),</span> <span class="n">p</span><span class="o">=</span><span class="n">ties</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ties</span><span class="p">))</span>
+            <span class="c1"># force initial update</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">performed_updates</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">force_first</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">utility_max</span> <span class="o">=</span> <span class="n">force_first</span> <span class="o">+</span>  <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numberOfActions</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">numberOfStates</span>
+            <span class="c1"># perform update</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rlParent</span><span class="o">.</span><span class="n">update_Q</span><span class="p">(</span><span class="n">updates</span><span class="p">[</span><span class="n">utility_max</span><span class="p">])</span>
+            <span class="c1"># add update to list</span>
+            <span class="n">performed_updates</span> <span class="o">+=</span> <span class="p">[</span><span class="n">updates</span><span class="p">[</span><span class="n">utility_max</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span>
+            <span class="k">if</span> <span class="n">extend</span> <span class="o">!=</span> <span class="n">utility_max</span><span class="p">:</span>
+                <span class="n">last_seq</span> <span class="o">=</span> <span class="n">update</span>
+            
+        <span class="k">return</span> <span class="n">performed_updates</span></div>
+            
+<div class="viewcode-block" id="PMAMemory.computeGain"><a class="viewcode-back" href="../../memory_modules.html#memory_modules.dyna_q_memory.PMAMemory.computeGain">[docs]</a>    <span class="k">def</span> <span class="nf">computeGain</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">updates</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function computes the gain for each possible n-step backup in updates.</span>
+<span class="sd">        </span>
+<span class="sd">        | **Args**</span>
+<span class="sd">        | updates:                      A list of n-step updates.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">gains</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">update</span> <span class="ow">in</span> <span class="n">updates</span><span class="p">:</span>
+            <span class="n">gain</span> <span class="o">=</span> <span class="mf">0.</span>
+            <span class="c1"># expected future value</span>
+            <span class="n">future_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rlParent</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="n">update</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;next_state&#39;</span><span class="p">]])</span> <span class="o">*</span> <span class="n">update</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="s1">&#39;terminal&#39;</span><span class="p">]</span>
+            <span class="c1"># gain is accumulated over the whole trajectory</span>
+            <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">update</span><span class="p">):</span>
+                <span class="c1"># policy before update</span>
+                <span class="n">policy_before</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionProbs</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rlParent</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="n">step</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]])</span>
+                <span class="c1"># sum rewards over subsequent n-steps</span>
+                <span class="n">R</span> <span class="o">=</span> <span class="mf">0.</span>
+                <span class="k">for</span> <span class="n">following_steps</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">update</span><span class="p">)</span> <span class="o">-</span> <span class="n">s</span><span class="p">):</span>
+                    <span class="n">R</span> <span class="o">+=</span> <span class="n">update</span><span class="p">[</span><span class="n">s</span> <span class="o">+</span> <span class="n">following_steps</span><span class="p">][</span><span class="s1">&#39;reward&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">**</span> <span class="n">following_steps</span><span class="p">)</span>
+                <span class="c1"># compute new Q-value</span>
+                <span class="n">q_target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rlParent</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="n">step</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]])</span>
+                <span class="n">q_target</span><span class="p">[</span><span class="n">step</span><span class="p">[</span><span class="s1">&#39;action&#39;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">R</span> <span class="o">+</span> <span class="n">future_value</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rlParent</span><span class="o">.</span><span class="n">gamma</span> <span class="o">**</span> <span class="p">(</span><span class="n">following_steps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="n">q_new</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rlParent</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="n">step</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">rlParent</span><span class="o">.</span><span class="n">learningRate</span> <span class="o">*</span> <span class="p">(</span><span class="n">q_target</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rlParent</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="n">step</span><span class="p">[</span><span class="s1">&#39;state&#39;</span><span class="p">]])</span>
+                <span class="c1"># policy after update</span>
+                <span class="n">policy_after</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionProbs</span><span class="p">(</span><span class="n">q_new</span><span class="p">)</span>
+                <span class="c1"># compute gain</span>
+                <span class="n">step_gain</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">q_new</span> <span class="o">*</span> <span class="n">policy_after</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">q_new</span> <span class="o">*</span> <span class="n">policy_before</span><span class="p">)</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">minGainMode</span> <span class="o">==</span> <span class="s1">&#39;original&#39;</span><span class="p">:</span>
+                    <span class="n">step_gain</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">step_gain</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">minGain</span><span class="p">)</span>
+                <span class="c1"># add gain</span>
+                <span class="n">gain</span> <span class="o">+=</span> <span class="n">step_gain</span>
+            <span class="c1"># store gain for current update</span>
+            <span class="n">gains</span> <span class="o">+=</span> <span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">gain</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">minGain</span><span class="p">)]</span>
+        
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gains</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="PMAMemory.computeNeed"><a class="viewcode-back" href="../../memory_modules.html#memory_modules.dyna_q_memory.PMAMemory.computeNeed">[docs]</a>    <span class="k">def</span> <span class="nf">computeNeed</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">currentState</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function computes the need for each possible n-step backup in updates.</span>
+<span class="sd">        </span>
+<span class="sd">        | **Args**</span>
+<span class="sd">        | currentState:                 The state that the agent currently is in. </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># use standing distribution of the MDP for &#39;offline&#39; replay</span>
+        <span class="k">if</span> <span class="n">currentState</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># compute left eigenvectors</span>
+            <span class="n">eig</span><span class="p">,</span> <span class="n">vec</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">eig</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">best</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">eig</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+            
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">vec</span><span class="p">[:,</span><span class="n">best</span><span class="p">]</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">numberOfActions</span><span class="p">)</span>
+        <span class="c1"># use SR given the current state for &#39;awake&#39; replay</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SR</span><span class="p">[</span><span class="n">currentState</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">numberOfActions</span><span class="p">)</span></div>
+    
+<div class="viewcode-block" id="PMAMemory.updateSR"><a class="viewcode-back" href="../../memory_modules.html#memory_modules.dyna_q_memory.PMAMemory.updateSR">[docs]</a>    <span class="k">def</span> <span class="nf">updateSR</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function updates the SR given the current state-state transition matrix T. </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SR</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">T</span><span class="p">)</span></div>
+        
+<div class="viewcode-block" id="PMAMemory.updateMask"><a class="viewcode-back" href="../../memory_modules.html#memory_modules.dyna_q_memory.PMAMemory.updateMask">[docs]</a>    <span class="k">def</span> <span class="nf">updateMask</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function updates the update mask. </span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_mask</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="o">.</span><span class="n">flatten</span><span class="p">(</span><span class="n">order</span><span class="o">=</span><span class="s1">&#39;F&#39;</span><span class="p">)</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numberOfStates</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">numberOfActions</span><span class="p">))</span></div>
+    
+<div class="viewcode-block" id="PMAMemory.actionProbs"><a class="viewcode-back" href="../../memory_modules.html#memory_modules.dyna_q_memory.PMAMemory.actionProbs">[docs]</a>    <span class="k">def</span> <span class="nf">actionProbs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function computes the action probabilities given a set of Q-values.</span>
+<span class="sd">        </span>
+<span class="sd">        | **Args**</span>
+<span class="sd">        | q:                            The set of Q-values.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># assume greedy policy per default</span>
+        <span class="n">ties</span> <span class="o">=</span> <span class="p">(</span><span class="n">q</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">q</span><span class="p">))</span>
+        <span class="c1">#p = ties/np.sum(ties)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">numberOfActions</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rlParent</span><span class="o">.</span><span class="n">epsilon</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">numberOfActions</span><span class="p">)</span>
+        <span class="n">p</span><span class="p">[</span><span class="n">ties</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">rlParent</span><span class="o">.</span><span class="n">epsilon</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">ties</span><span class="p">)</span>
+        <span class="c1">#p = np.arange(self.numberOfActions) == np.argmax(q)</span>
+        <span class="c1"># softmax when &#39;on-policy&#39;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rlParent</span><span class="o">.</span><span class="n">policy</span> <span class="o">==</span> <span class="s1">&#39;softmax&#39;</span><span class="p">:</span>
+            <span class="c1"># catch all zero case</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">q</span> <span class="o">==</span> <span class="n">q</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="n">q</span><span class="o">.</span><span class="n">fill</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">q</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">rlParent</span><span class="o">.</span><span class="n">beta</span><span class="p">)</span>
+            <span class="n">p</span> <span class="o">/=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+            
+        <span class="k">return</span> <span class="n">p</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Author.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
