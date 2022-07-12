@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>memory_modules package &mdash; CoBeL_RL 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="memory_modules.memory_utils package" href="memory_modules.memory_utils.html" />
+    <link rel="prev" title="interfaces package" href="interfaces.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> CoBeL_RL
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">CoBeLRL</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="agents.html">agents package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="analysis.html">analysis package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="demo.html">demo package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environments.html">environments package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="frontends.html">frontends package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces.html">interfaces package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">memory_modules package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#subpackages">Subpackages</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="memory_modules.memory_utils.html">memory_modules.memory_utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-memory_modules.dyna_q_memory">memory_modules.dyna_q_memory module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-memory_modules">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html">misc package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="networks.html">networks package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="observations.html">observations package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spatial_representations.html">spatial_representations package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_tests.html">unit_tests package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CoBeL_RL</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">CoBeLRL</a> &raquo;</li>
+      <li>memory_modules package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/memory_modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="memory-modules-package">
+<h1>memory_modules package<a class="headerlink" href="#memory-modules-package" title="Permalink to this heading"></a></h1>
+<section id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this heading"></a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="memory_modules.memory_utils.html">memory_modules.memory_utils package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="memory_modules.memory_utils.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_modules.memory_utils.html#module-memory_modules.memory_utils.metrics">memory_modules.memory_utils.metrics module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_modules.memory_utils.html#module-memory_modules.memory_utils">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-memory_modules.dyna_q_memory">
+<span id="memory-modules-dyna-q-memory-module"></span><h2>memory_modules.dyna_q_memory module<a class="headerlink" href="#module-memory_modules.dyna_q_memory" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="memory_modules.dyna_q_memory.DynaQMemory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">memory_modules.dyna_q_memory.</span></span><span class="sig-name descname"><span class="pre">DynaQMemory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOfStates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numberOfActions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/memory_modules/dyna_q_memory.html#DynaQMemory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#memory_modules.dyna_q_memory.DynaQMemory" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Memory module to be used with the Dyna-Q agent.
+Experiences are stored as a static table.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">numberOfStates:               The number of environmental states.</div>
+<div class="line">numberOfActions:              The number of the agent’s actions.</div>
+<div class="line">learningRate:                 The learning rate with which experiences are updated.</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="memory_modules.dyna_q_memory.DynaQMemory.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOfStates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numberOfActions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/memory_modules/dyna_q_memory.html#DynaQMemory.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#memory_modules.dyna_q_memory.DynaQMemory.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="memory_modules.dyna_q_memory.DynaQMemory.store">
+<span class="sig-name descname"><span class="pre">store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experience</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/memory_modules/dyna_q_memory.html#DynaQMemory.store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#memory_modules.dyna_q_memory.DynaQMemory.store" title="Permalink to this definition"></a></dt>
+<dd><p>This function stores a given experience.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">experience:                   The experience to be stored.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="memory_modules.dyna_q_memory.DynaQMemory.retrieve">
+<span class="sig-name descname"><span class="pre">retrieve</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/memory_modules/dyna_q_memory.html#DynaQMemory.retrieve"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#memory_modules.dyna_q_memory.DynaQMemory.retrieve" title="Permalink to this definition"></a></dt>
+<dd><p>This function retrieves a specific experience.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">state:                        The environmental state.</div>
+<div class="line">action:                       The action selected.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="memory_modules.dyna_q_memory.DynaQMemory.retrieve_batch">
+<span class="sig-name descname"><span class="pre">retrieve_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOfExperiences</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/memory_modules/dyna_q_memory.html#DynaQMemory.retrieve_batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#memory_modules.dyna_q_memory.DynaQMemory.retrieve_batch" title="Permalink to this definition"></a></dt>
+<dd><p>This function retrieves a number of random experiences.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">numberOfExperiences:          The number of random experiences to be drawn.</div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="memory_modules.dyna_q_memory.PMAMemory">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">memory_modules.dyna_q_memory.</span></span><span class="sig-name descname"><span class="pre">PMAMemory</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rlAgent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numberOfStates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numberOfActions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/memory_modules/dyna_q_memory.html#PMAMemory"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#memory_modules.dyna_q_memory.PMAMemory" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Memory module to be used with the Dyna-Q agent.
+Experiences are stored as a static table.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">numberOfStates:               The number of environmental states.</div>
+<div class="line">numberOfActions:              The number of the agent’s actions.</div>
+<div class="line">learningRate:                 The learning rate with which experiences are updated.</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="memory_modules.dyna_q_memory.PMAMemory.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rlAgent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numberOfStates</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">numberOfActions</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/memory_modules/dyna_q_memory.html#PMAMemory.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#memory_modules.dyna_q_memory.PMAMemory.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="memory_modules.dyna_q_memory.PMAMemory.store">
+<span class="sig-name descname"><span class="pre">store</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experience</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/memory_modules/dyna_q_memory.html#PMAMemory.store"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#memory_modules.dyna_q_memory.PMAMemory.store" title="Permalink to this definition"></a></dt>
+<dd><p>This function stores a given experience.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">experience:                   The experience to be stored.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="memory_modules.dyna_q_memory.PMAMemory.replay">
+<span class="sig-name descname"><span class="pre">replay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">replayLength</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">current_state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_first</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/memory_modules/dyna_q_memory.html#PMAMemory.replay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#memory_modules.dyna_q_memory.PMAMemory.replay" title="Permalink to this definition"></a></dt>
+<dd><p>This function replays experiences.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">replayLength:                 The number of experiences that will be replayed.</div>
+<div class="line">current_state:                State at which replay should start.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="memory_modules.dyna_q_memory.PMAMemory.computeGain">
+<span class="sig-name descname"><span class="pre">computeGain</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">updates</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/memory_modules/dyna_q_memory.html#PMAMemory.computeGain"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#memory_modules.dyna_q_memory.PMAMemory.computeGain" title="Permalink to this definition"></a></dt>
+<dd><p>This function computes the gain for each possible n-step backup in updates.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">updates:                      A list of n-step updates.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="memory_modules.dyna_q_memory.PMAMemory.computeNeed">
+<span class="sig-name descname"><span class="pre">computeNeed</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">currentState</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/memory_modules/dyna_q_memory.html#PMAMemory.computeNeed"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#memory_modules.dyna_q_memory.PMAMemory.computeNeed" title="Permalink to this definition"></a></dt>
+<dd><p>This function computes the need for each possible n-step backup in updates.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">currentState:                 The state that the agent currently is in.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="memory_modules.dyna_q_memory.PMAMemory.updateSR">
+<span class="sig-name descname"><span class="pre">updateSR</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/memory_modules/dyna_q_memory.html#PMAMemory.updateSR"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#memory_modules.dyna_q_memory.PMAMemory.updateSR" title="Permalink to this definition"></a></dt>
+<dd><p>This function updates the SR given the current state-state transition matrix T.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="memory_modules.dyna_q_memory.PMAMemory.updateMask">
+<span class="sig-name descname"><span class="pre">updateMask</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/memory_modules/dyna_q_memory.html#PMAMemory.updateMask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#memory_modules.dyna_q_memory.PMAMemory.updateMask" title="Permalink to this definition"></a></dt>
+<dd><p>This function updates the update mask.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="memory_modules.dyna_q_memory.PMAMemory.actionProbs">
+<span class="sig-name descname"><span class="pre">actionProbs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">q</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/memory_modules/dyna_q_memory.html#PMAMemory.actionProbs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#memory_modules.dyna_q_memory.PMAMemory.actionProbs" title="Permalink to this definition"></a></dt>
+<dd><p>This function computes the action probabilities given a set of Q-values.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">q:                            The set of Q-values.</div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-memory_modules">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-memory_modules" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="interfaces.html" class="btn btn-neutral float-left" title="interfaces package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="memory_modules.memory_utils.html" class="btn btn-neutral float-right" title="memory_modules.memory_utils package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Author.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

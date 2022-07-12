@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>spatial_representations.topology_graphs.manual_topology_graph_with_rotation &mdash; CoBeL_RL 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> CoBeL_RL
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">CoBeLRL</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">CoBeL_RL</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>spatial_representations.topology_graphs.manual_topology_graph_with_rotation</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for spatial_representations.topology_graphs.manual_topology_graph_with_rotation</h1><div class="highlight"><pre>
+<span></span>
+
+
+
+
+<span class="kn">import</span> <span class="nn">PyQt5</span> <span class="k">as</span> <span class="nn">qt</span>
+<span class="kn">import</span> <span class="nn">pyqtgraph</span> <span class="k">as</span> <span class="nn">qg</span>
+<span class="kn">import</span> <span class="nn">pyqtgraph.functions</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">gym</span>
+
+<span class="kn">from</span> <span class="nn">PyQt5</span> <span class="kn">import</span> <span class="n">QtGui</span>
+<span class="kn">from</span> <span class="nn">.misc.topology_node</span> <span class="kn">import</span> <span class="n">TopologyNode</span>
+<span class="kn">from</span> <span class="nn">.misc.cog_arrow</span> <span class="kn">import</span> <span class="n">CogArrow</span>
+<span class="kn">from</span> <span class="nn">math</span> <span class="kn">import</span> <span class="n">atan2</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">norm</span>
+
+<span class="kn">from</span> <span class="nn">spatial_representations.spatial_representation</span> <span class="kn">import</span> <span class="n">SpatialRepresentation</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">random</span>
+
+
+
+<div class="viewcode-block" id="ManualTopologyGraphWithRotation"><a class="viewcode-back" href="../../../spatial_representations.topology_graphs.html#spatial_representations.topology_graphs.manual_topology_graph_with_rotation.ManualTopologyGraphWithRotation">[docs]</a><span class="k">class</span> <span class="nc">ManualTopologyGraphWithRotation</span><span class="p">(</span><span class="n">SpatialRepresentation</span><span class="p">):</span>
+    
+<div class="viewcode-block" id="ManualTopologyGraphWithRotation.__init__"><a class="viewcode-back" href="../../../spatial_representations.topology_graphs.html#spatial_representations.topology_graphs.manual_topology_graph_with_rotation.ManualTopologyGraphWithRotation.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modules</span><span class="p">,</span> <span class="n">graph_info</span><span class="p">):</span>
+        
+        <span class="c1"># call the base class init</span>
+        <span class="nb">super</span><span class="p">(</span><span class="n">ManualTopologyGraphWithRotation</span><span class="p">,</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        
+        
+        <span class="c1"># normally, the topology graph is not shown in gui_parent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visual_output</span><span class="o">=</span><span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gui_parent</span><span class="o">=</span><span class="kc">None</span>
+        
+        
+        <span class="c1">#store the graph parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">graph_info</span><span class="o">=</span><span class="n">graph_info</span>
+        
+        <span class="c1"># extract the world module</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="o">=</span><span class="n">modules</span>
+        
+        <span class="c1"># the world module is required here</span>
+        <span class="n">world_module</span><span class="o">=</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;world&#39;</span><span class="p">]</span>
+        
+        <span class="c1"># get the limits of the given environment</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">world_limits</span> <span class="o">=</span> <span class="n">world_module</span><span class="o">.</span><span class="n">getLimits</span><span class="p">()</span>
+        
+        <span class="c1"># retrieve all boundary information from the environment</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">world_nodes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">world_edges</span> <span class="o">=</span> <span class="n">world_module</span><span class="o">.</span><span class="n">getWallGraph</span><span class="p">()</span>
+        
+            
+        
+        <span class="c1"># inherent definitions for the topology graph</span>
+        
+        <span class="c1"># this is the node corresponding to the robot&#39;s actual position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">currentNode</span><span class="o">=-</span><span class="mi">1</span>
+        <span class="c1"># this is the node corresponding to the robot&#39;s next position</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="o">=-</span><span class="mi">1</span>
+        <span class="c1"># this list of topologyNode[s] stores all nodes of the graph</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">=</span><span class="p">[]</span>
+        <span class="c1"># this list of [int,int]-entries defines all edges (unique) which make up the graph&#39;s connectivity</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">=</span><span class="p">[]</span>
+        
+        
+        
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">cliqueSize</span><span class="o">=</span><span class="n">graph_info</span><span class="p">[</span><span class="s1">&#39;cliqueSize&#39;</span><span class="p">]</span>
+        <span class="c1"># set up a manually constructed topology graph</span>
+        
+        <span class="c1"># read topology structure from world module</span>
+        <span class="n">nodes</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">world_module</span><span class="o">.</span><span class="n">getManuallyDefinedTopologyNodes</span><span class="p">())</span>
+        <span class="n">nodes</span><span class="o">=</span><span class="n">nodes</span><span class="p">[</span><span class="n">nodes</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">argsort</span><span class="p">()]</span>
+        <span class="n">edges</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">world_module</span><span class="o">.</span><span class="n">getManuallyDefinedTopologyEdges</span><span class="p">())</span>
+        <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">[</span><span class="n">edges</span><span class="p">[:,</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">argsort</span><span class="p">()]</span>
+        
+        <span class="c1"># transfer the node points into the self.nodes list</span>
+        <span class="n">indexCounter</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">:</span>
+            <span class="c1"># create the corresponding node, where i is the running index of the mesh_points/corresponding nodes</span>
+            <span class="n">node</span><span class="o">=</span><span class="n">TopologyNode</span><span class="p">(</span><span class="n">indexCounter</span><span class="p">,</span><span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="nb">float</span><span class="p">(</span><span class="n">n</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="o">+</span><span class="p">[</span><span class="n">node</span><span class="p">]</span>
+            <span class="n">indexCounter</span><span class="o">+=</span><span class="mi">1</span>
+        
+        
+        <span class="c1"># fill in the self.edges list from the edges information</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="o">+</span><span class="p">[[</span><span class="nb">int</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]),</span><span class="nb">int</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="mi">2</span><span class="p">])]]</span>
+            
+            
+            
+        <span class="c1"># define a dedicated &#39;noneNode&#39; that acts as a placeholder for neighborhood construction</span>
+        <span class="n">noneNode</span><span class="o">=</span><span class="n">TopologyNode</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">)</span>
+        
+        <span class="c1"># comstruct the neighborhoods of each node in the graph</span>
+        <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+            <span class="c1"># first edge node</span>
+            <span class="n">a</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+            <span class="c1"># second edge node</span>
+            <span class="n">b</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span>
+            <span class="c1"># add node a to the neighborhood of node b, and vice versa</span>
+            <span class="n">a</span><span class="o">.</span><span class="n">neighbors</span><span class="o">=</span><span class="n">a</span><span class="o">.</span><span class="n">neighbors</span><span class="o">+</span><span class="p">[</span><span class="n">b</span><span class="p">]</span>
+            <span class="n">b</span><span class="o">.</span><span class="n">neighbors</span><span class="o">=</span><span class="n">b</span><span class="o">.</span><span class="n">neighbors</span><span class="o">+</span><span class="p">[</span><span class="n">a</span><span class="p">]</span>
+        
+        
+        <span class="c1"># it is possible that a node does not have the maximum possible number of neighbors, to stay consistent in RL, fill up the neighborhood</span>
+        <span class="c1"># with noneNode[s]:</span>
+        <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">node</span><span class="o">.</span><span class="n">neighbors</span><span class="p">)</span><span class="o">&lt;</span><span class="bp">self</span><span class="o">.</span><span class="n">cliqueSize</span><span class="p">:</span>
+                <span class="n">node</span><span class="o">.</span><span class="n">neighbors</span><span class="o">=</span><span class="n">node</span><span class="o">.</span><span class="n">neighbors</span><span class="o">+</span><span class="p">[</span><span class="n">noneNode</span><span class="p">]</span>
+        
+        <span class="c1"># assign start nodes</span>
+        <span class="k">for</span> <span class="n">nodeIndex</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_info</span><span class="p">[</span><span class="s1">&#39;startNodes&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">nodeIndex</span><span class="p">]</span><span class="o">.</span><span class="n">startNode</span><span class="o">=</span><span class="kc">True</span>
+            
+        <span class="c1"># assign goal nodes</span>
+        <span class="k">for</span> <span class="n">nodeIndex</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph_info</span><span class="p">[</span><span class="s1">&#39;goalNodes&#39;</span><span class="p">]:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="n">nodeIndex</span><span class="p">]</span><span class="o">.</span><span class="n">goalNode</span><span class="o">=</span><span class="kc">True</span>
+        
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">sample_state_space</span><span class="p">()</span></div>
+        
+
+
+
+<div class="viewcode-block" id="ManualTopologyGraphWithRotation.set_visual_debugging"><a class="viewcode-back" href="../../../spatial_representations.topology_graphs.html#spatial_representations.topology_graphs.manual_topology_graph_with_rotation.ManualTopologyGraphWithRotation.set_visual_debugging">[docs]</a>    <span class="k">def</span> <span class="nf">set_visual_debugging</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">visual_output</span><span class="p">,</span><span class="n">gui_parent</span><span class="p">):</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">gui_parent</span><span class="o">=</span><span class="n">gui_parent</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visual_output</span><span class="o">=</span><span class="n">visual_output</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initVisualElements</span><span class="p">()</span></div>
+        
+
+
+
+<div class="viewcode-block" id="ManualTopologyGraphWithRotation.initVisualElements"><a class="viewcode-back" href="../../../spatial_representations.topology_graphs.html#spatial_representations.topology_graphs.manual_topology_graph_with_rotation.ManualTopologyGraphWithRotation.initVisualElements">[docs]</a>    <span class="k">def</span> <span class="nf">initVisualElements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># do basic visualization</span>
+        <span class="c1"># iff visualOutput is set to True!</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">visual_output</span><span class="p">:</span>
+
+            <span class="c1"># add the graph plot to the GUI widget</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gui_parent</span><span class="o">.</span><span class="n">addPlot</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s1">&#39;Topology graph&#39;</span><span class="p">)</span>
+            <span class="c1"># set extension of the plot, lock aspect ratio</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">setXRange</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">world_limits</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">world_limits</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">setYRange</span><span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">world_limits</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">world_limits</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">setAspectLocked</span><span class="p">()</span>
+            
+            
+                
+            <span class="c1"># overlay the world&#39;s perimeter</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">perimeterGraph</span><span class="o">=</span><span class="n">qg</span><span class="o">.</span><span class="n">GraphItem</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">perimeterGraph</span><span class="p">)</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">perimeterGraph</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world_nodes</span><span class="p">),</span><span class="n">adj</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">world_edges</span><span class="p">),</span><span class="n">brush</span><span class="o">=</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">))</span>
+            
+            
+            
+            <span class="c1"># overlay the topology graph</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">topologyGraph</span><span class="o">=</span><span class="n">qg</span><span class="o">.</span><span class="n">GraphItem</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">topologyGraph</span><span class="p">)</span>
+            
+            <span class="c1"># set up a brushes array for visualization of the nodes</span>
+            <span class="c1"># normal nodes are grey</span>
+            <span class="n">symbolBrushes</span><span class="o">=</span><span class="p">[</span><span class="n">qg</span><span class="o">.</span><span class="n">mkBrush</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">,</span><span class="mi">128</span><span class="p">))]</span><span class="o">*</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">)</span>
+            
+            
+            <span class="c1"># set colors of normal and goal nodes</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+                
+                <span class="c1"># start nodes are green</span>
+                <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">startNode</span><span class="p">:</span>
+                    <span class="n">symbolBrushes</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">index</span><span class="p">]</span><span class="o">=</span><span class="n">qg</span><span class="o">.</span><span class="n">mkBrush</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mi">255</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+            
+                <span class="c1"># goal node is red</span>
+                <span class="k">if</span> <span class="n">node</span><span class="o">.</span><span class="n">goalNode</span><span class="p">:</span>
+                    <span class="n">symbolBrushes</span><span class="p">[</span><span class="n">node</span><span class="o">.</span><span class="n">index</span><span class="p">]</span><span class="o">=</span><span class="n">qg</span><span class="o">.</span><span class="n">mkBrush</span><span class="p">(</span><span class="n">color</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+        
+            <span class="c1"># construct appropriate arrays from the self.nodes and the self.edges information</span>
+            <span class="n">tempNodes</span><span class="o">=</span><span class="p">[]</span>
+            <span class="n">tempEdges</span><span class="o">=</span><span class="p">[]</span>
+            <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">:</span>
+                <span class="n">tempNodes</span><span class="o">=</span><span class="n">tempNodes</span><span class="o">+</span><span class="p">[[</span><span class="n">node</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">node</span><span class="o">.</span><span class="n">y</span><span class="p">]]</span>
+                
+            <span class="k">for</span> <span class="n">edge</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">edges</span><span class="p">:</span>
+                <span class="n">tempEdges</span><span class="o">=</span><span class="n">tempEdges</span><span class="o">+</span><span class="p">[[</span><span class="n">edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]]]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">topologyGraph</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">pos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tempNodes</span><span class="p">),</span><span class="n">adj</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">tempEdges</span><span class="p">),</span><span class="n">symbolBrush</span><span class="o">=</span><span class="n">symbolBrushes</span><span class="p">)</span>
+            
+            
+            <span class="c1"># eventually, overlay robot marker</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">posMarker</span><span class="o">=</span><span class="n">CogArrow</span><span class="p">(</span><span class="n">angle</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span><span class="n">headLen</span><span class="o">=</span><span class="mf">20.0</span><span class="p">,</span><span class="n">tipAngle</span><span class="o">=</span><span class="mf">25.0</span><span class="p">,</span><span class="n">tailLen</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span><span class="n">brush</span><span class="o">=</span><span class="p">(</span><span class="mi">255</span><span class="p">,</span><span class="mi">0</span><span class="p">,</span><span class="mi">0</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">addItem</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">posMarker</span><span class="p">)</span>
+            <span class="c1"># initial position to center, this has to be worked over later!</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">posMarker</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">)</span></div>
+            
+        
+<div class="viewcode-block" id="ManualTopologyGraphWithRotation.updateVisualElements"><a class="viewcode-back" href="../../../spatial_representations.topology_graphs.html#spatial_representations.topology_graphs.manual_topology_graph_with_rotation.ManualTopologyGraphWithRotation.updateVisualElements">[docs]</a>    <span class="k">def</span> <span class="nf">updateVisualElements</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># not currently used</span>
+        <span class="k">pass</span></div>
+    
+    
+    
+
+    <span class="c1"># This function updates the visual depiction of the agent(robot).</span>
+    <span class="c1"># </span>
+    <span class="c1"># pose: the agent&#39;s pose to visualize</span>
+<div class="viewcode-block" id="ManualTopologyGraphWithRotation.updateRobotPose"><a class="viewcode-back" href="../../../spatial_representations.topology_graphs.html#spatial_representations.topology_graphs.manual_topology_graph_with_rotation.ManualTopologyGraphWithRotation.updateRobotPose">[docs]</a>    <span class="k">def</span> <span class="nf">updateRobotPose</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pose</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">visual_output</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">posMarker</span><span class="o">.</span><span class="n">setData</span><span class="p">(</span><span class="n">pose</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">pose</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">pose</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span><span class="n">pose</span><span class="p">[</span><span class="mi">2</span><span class="p">])))</span></div>
+
+
+
+<div class="viewcode-block" id="ManualTopologyGraphWithRotation.sample_state_space"><a class="viewcode-back" href="../../../spatial_representations.topology_graphs.html#spatial_representations.topology_graphs.manual_topology_graph_with_rotation.ManualTopologyGraphWithRotation.sample_state_space">[docs]</a>    <span class="k">def</span> <span class="nf">sample_state_space</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># not currently used</span>
+        <span class="k">pass</span></div>
+
+
+
+
+
+<div class="viewcode-block" id="ManualTopologyGraphWithRotation.generate_behavior_from_action"><a class="viewcode-back" href="../../../spatial_representations.topology_graphs.html#spatial_representations.topology_graphs.manual_topology_graph_with_rotation.ManualTopologyGraphWithRotation.generate_behavior_from_action">[docs]</a>    <span class="k">def</span> <span class="nf">generate_behavior_from_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">action</span><span class="p">):</span>
+       
+        
+        <span class="c1"># the world module is required here</span>
+        <span class="n">world_module</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;world&#39;</span><span class="p">]</span>
+        <span class="n">nextNodePos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span><span class="mf">0.0</span><span class="p">])</span>
+        <span class="n">callback_value</span><span class="o">=</span><span class="nb">dict</span><span class="p">()</span>
+        <span class="c1"># if a standard action is performed, NOT a reset</span>
+        <span class="k">if</span> <span class="n">action</span><span class="o">!=</span><span class="s1">&#39;reset&#39;</span><span class="p">:</span>
+            
+            <span class="c1"># get current heading</span>
+            <span class="n">heading</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">world_module</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;poseData&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span><span class="n">world_module</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;poseData&#39;</span><span class="p">][</span><span class="mi">3</span><span class="p">]])</span>
+            <span class="n">heading</span><span class="o">=</span><span class="n">heading</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">heading</span><span class="p">)</span>
+            <span class="c1"># get directions of all edges</span>
+            <span class="n">actual_node</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">currentNode</span><span class="p">]</span>
+            <span class="n">neighbors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">currentNode</span><span class="p">]</span><span class="o">.</span><span class="n">neighbors</span>
+            
+            <span class="c1"># lists for edges</span>
+            <span class="n">left_edges</span><span class="o">=</span><span class="p">[]</span>
+            <span class="n">right_edges</span><span class="o">=</span><span class="p">[]</span>
+            <span class="n">forward_edge</span><span class="o">=</span><span class="p">[]</span>
+            
+            
+            <span class="c1"># find possible movement directions. Note: when a left edge is found, it is simultaneously stored as a right edge with huge turning angle, and vice versa. That way,</span>
+            <span class="c1"># the agent does not get stuck in situations where there is only a forward edge, and say, a left edge, and the action is &#39;right&#39;. In such a situation, the agent will just turn</span>
+            <span class="c1"># right using the huge &#39;right&#39; turning angle.</span>
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">index</span><span class="o">!=-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="n">actual_node_position</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">actual_node</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">actual_node</span><span class="o">.</span><span class="n">y</span><span class="p">])</span>
+                    
+                    <span class="n">neighbor_position</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">n</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">n</span><span class="o">.</span><span class="n">y</span><span class="p">])</span>
+                    <span class="n">vec_edge</span><span class="o">=</span><span class="n">neighbor_position</span><span class="o">-</span><span class="n">actual_node_position</span>
+                    <span class="n">vec_edge</span><span class="o">=</span><span class="n">vec_edge</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">vec_edge</span><span class="p">)</span>
+                    
+                    <span class="n">angle</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">heading</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">vec_edge</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">heading</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">vec_edge</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">heading</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">*</span><span class="n">vec_edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">+</span><span class="n">heading</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">*</span><span class="n">vec_edge</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+                    <span class="n">angle</span><span class="o">=</span><span class="n">angle</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="mf">180.0</span>
+                    
+                    
+                    <span class="k">if</span> <span class="n">angle</span><span class="o">&lt;-</span><span class="mf">1e-5</span><span class="p">:</span>
+                        <span class="n">right_edges</span><span class="o">+=</span><span class="p">[[</span><span class="n">n</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="n">vec_edge</span><span class="p">,</span><span class="n">angle</span><span class="p">]]</span>
+                        <span class="n">left_edges</span><span class="o">+=</span><span class="p">[[</span><span class="n">n</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="n">vec_edge</span><span class="p">,(</span><span class="mf">360.0</span><span class="o">+</span><span class="n">angle</span><span class="p">)]]</span>
+                
+                    <span class="k">if</span> <span class="n">angle</span><span class="o">&gt;</span><span class="mf">1e-5</span><span class="p">:</span>
+                        <span class="n">left_edges</span><span class="o">+=</span><span class="p">[[</span><span class="n">n</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="n">vec_edge</span><span class="p">,</span><span class="n">angle</span><span class="p">]]</span>
+                        <span class="n">right_edges</span><span class="o">+=</span><span class="p">[[</span><span class="n">n</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="n">vec_edge</span><span class="p">,</span><span class="o">-</span><span class="p">(</span><span class="mf">360.0</span><span class="o">-</span><span class="n">angle</span><span class="p">)]]</span>
+                    
+                    <span class="k">if</span> <span class="n">angle</span><span class="o">&lt;</span><span class="mf">1e-5</span> <span class="ow">and</span> <span class="n">angle</span><span class="o">&gt;-</span><span class="mf">1e-5</span><span class="p">:</span>
+                        <span class="n">forward_edge</span><span class="o">=</span><span class="p">[</span><span class="n">n</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="n">vec_edge</span><span class="p">,</span><span class="n">angle</span><span class="p">]</span>
+                        
+                 
+            
+            <span class="c1"># sort left and right edges in such a way that the smallest angular difference is placed in front</span>
+            <span class="n">left_edges</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">left_edges</span><span class="p">,</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">element</span><span class="p">:</span> <span class="n">element</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">reverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">right_edges</span><span class="o">=</span><span class="nb">sorted</span><span class="p">(</span><span class="n">right_edges</span><span class="p">,</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">element</span><span class="p">:</span> <span class="n">element</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            
+            <span class="c1"># store the current node as previous node</span>
+            <span class="n">previousNode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">currentNode</span>
+            
+            
+            <span class="c1"># with action given, the next node can be computed</span>
+            <span class="k">if</span> <span class="n">action</span><span class="o">==</span><span class="mi">0</span><span class="p">:</span>
+                
+                <span class="c1"># this is a forward movement</span>
+                <span class="n">angle</span><span class="o">=</span><span class="mf">180.0</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">heading</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">heading</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">forward_edge</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">:</span>
+                    <span class="c1"># there is a forward edge that the agent can use</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="o">=</span><span class="n">forward_edge</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                    
+                    <span class="n">nextNodePos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">])</span>
+                    
+            
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># no forward edge found, the agent has to wait for a rotation action</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">currentNode</span>
+                    <span class="n">nextNodePos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">])</span>
+                    
+                <span class="bp">self</span><span class="o">.</span><span class="n">updateRobotPose</span><span class="p">([</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">heading</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">heading</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;world&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">actuateRobot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">angle</span><span class="p">]))</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;world&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">actuateRobot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">angle</span><span class="p">]))</span>
+                
+                
+            <span class="k">if</span> <span class="n">action</span><span class="o">==</span><span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># this is a left turn movement</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">currentNode</span>
+                <span class="n">nextNodePos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">])</span>
+                    
+                <span class="n">angle</span><span class="o">=</span><span class="mf">180.0</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">left_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">left_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">updateRobotPose</span><span class="p">([</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">left_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">left_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;world&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">actuateRobot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">angle</span><span class="p">]))</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;world&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">actuateRobot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">angle</span><span class="p">]))</span>
+                
+            <span class="k">if</span> <span class="n">action</span><span class="o">==</span><span class="mi">2</span><span class="p">:</span>
+                <span class="c1"># this is a right turn movement</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">currentNode</span>
+                <span class="n">nextNodePos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">])</span>
+                <span class="n">angle</span><span class="o">=</span><span class="mf">180.0</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">right_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span><span class="n">right_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">updateRobotPose</span><span class="p">([</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">right_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span><span class="n">right_edges</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">][</span><span class="mi">1</span><span class="p">]])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;world&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">actuateRobot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">angle</span><span class="p">]))</span> 
+                <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;world&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">actuateRobot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">angle</span><span class="p">]))</span>
+            
+            <span class="c1"># update the observation</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;observation&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+            
+            <span class="c1"># make the current node the one the agent travelled to</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">currentNode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span>
+        
+            
+            <span class="c1"># here, next node is already set and the current node is set to this next node.</span>
+            <span class="n">callback_value</span><span class="p">[</span><span class="s1">&#39;currentNode&#39;</span><span class="p">]</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="p">]</span>
+            
+            
+        <span class="c1"># if a reset is performed</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># a random node is chosen to place the agent at (this node MUST NOT be the global goal node!)</span>
+            
+            <span class="n">nodes</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span>
+            <span class="n">nodes_selection</span><span class="o">=</span><span class="p">[</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nodes</span> <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">startNode</span><span class="o">==</span><span class="kc">True</span><span class="p">]</span>
+            
+            <span class="c1"># store the current node as previous node</span>
+            <span class="n">previousNode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">currentNode</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">nodes_selection</span><span class="p">)</span>
+            
+            <span class="n">nextNodePos</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="o">.</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nodes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="o">.</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">y</span><span class="p">])</span>
+            
+            <span class="c1"># from all heading directions available at the chosen node, select one randomly</span>
+            
+            <span class="bp">self</span><span class="o">.</span><span class="n">currentNode</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="o">.</span><span class="n">index</span>
+            <span class="n">neighbors</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="o">.</span><span class="n">neighbors</span>
+            
+            <span class="c1"># list for available neighbor directions</span>
+            <span class="n">directions</span><span class="o">=</span><span class="p">[]</span>
+            
+            <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">neighbors</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">index</span><span class="o">!=-</span><span class="mi">1</span><span class="p">:</span>
+                    <span class="c1"># only parse valid neighbors</span>
+                    <span class="n">next_node_position</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">nextNode</span><span class="o">.</span><span class="n">y</span><span class="p">])</span>
+                    <span class="n">neighbor_position</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">n</span><span class="o">.</span><span class="n">x</span><span class="p">,</span><span class="n">n</span><span class="o">.</span><span class="n">y</span><span class="p">])</span>
+                    <span class="n">vec_edge</span><span class="o">=</span><span class="n">neighbor_position</span><span class="o">-</span><span class="n">next_node_position</span>
+                    <span class="n">vec_edge</span><span class="o">=</span><span class="n">vec_edge</span><span class="o">/</span><span class="n">norm</span><span class="p">(</span><span class="n">vec_edge</span><span class="p">)</span>
+                    <span class="n">world_angle</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">vec_edge</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">vec_edge</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">directions</span><span class="o">+=</span><span class="p">[[</span><span class="n">n</span><span class="o">.</span><span class="n">index</span><span class="p">,</span><span class="n">vec_edge</span><span class="p">,</span><span class="n">world_angle</span><span class="p">]]</span>
+                    
+            <span class="c1"># select new heading randomly</span>
+            <span class="n">new_heading_selection</span><span class="o">=</span><span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">directions</span><span class="p">)</span>
+            <span class="n">new_heading_angle</span><span class="o">=</span><span class="n">new_heading_selection</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">new_heading_vector</span><span class="o">=</span><span class="n">new_heading_selection</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            
+            <span class="c1"># update the agents position and orientation (heading)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;world&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">actuateRobot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">new_heading_angle</span><span class="p">]))</span> 
+            <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;world&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">actuateRobot</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">new_heading_angle</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">updateRobotPose</span><span class="p">([</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">nextNodePos</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span><span class="n">new_heading_vector</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="n">new_heading_vector</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+            
+        
+            <span class="c1"># update the observation</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;observation&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+        
+        
+        
+        <span class="c1"># if possible try to update the visual debugging display</span>
+        <span class="c1"># TODO: previous version had a double call to processEvents(). Intended?</span>
+        <span class="c1"># was:</span>
+        <span class="c1">#if qt.QtGui.QApplication.instance() is not None:</span>
+        <span class="c1">#    qt.QtGui.QApplication.instance().processEvents()</span>
+        <span class="c1">#    qt.QtGui.QApplication.instance().processEvents()</span>
+
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">qt</span><span class="o">.</span><span class="n">QtGui</span><span class="p">,</span> <span class="s1">&#39;QApplication&#39;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">qt</span><span class="o">.</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">qt</span><span class="o">.</span><span class="n">QtGui</span><span class="o">.</span><span class="n">QApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">processEvents</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">qt</span><span class="o">.</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">qt</span><span class="o">.</span><span class="n">QtWidgets</span><span class="o">.</span><span class="n">QApplication</span><span class="o">.</span><span class="n">instance</span><span class="p">()</span><span class="o">.</span><span class="n">processEvents</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">callback_value</span></div>
+
+
+
+<div class="viewcode-block" id="ManualTopologyGraphWithRotation.get_action_space"><a class="viewcode-back" href="../../../spatial_representations.topology_graphs.html#spatial_representations.topology_graphs.manual_topology_graph_with_rotation.ManualTopologyGraphWithRotation.get_action_space">[docs]</a>    <span class="k">def</span> <span class="nf">get_action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># for this spatial representation type, there are three possible actions: forward, left, right</span>
+        <span class="k">return</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Discrete</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Author.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>interfaces package &mdash; CoBeL_RL 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="memory_modules package" href="memory_modules.html" />
+    <link rel="prev" title="frontends package" href="frontends.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> CoBeL_RL
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">CoBeLRL</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="agents.html">agents package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="analysis.html">analysis package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="demo.html">demo package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environments.html">environments package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="frontends.html">frontends package</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">interfaces package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-interfaces.oai_gym_gridworlds">interfaces.oai_gym_gridworlds module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-interfaces.oai_gym_interface">interfaces.oai_gym_interface module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-interfaces">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="memory_modules.html">memory_modules package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html">misc package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="networks.html">networks package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="observations.html">observations package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spatial_representations.html">spatial_representations package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_tests.html">unit_tests package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CoBeL_RL</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">CoBeLRL</a> &raquo;</li>
+      <li>interfaces package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/interfaces.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="interfaces-package">
+<h1>interfaces package<a class="headerlink" href="#interfaces-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-interfaces.oai_gym_gridworlds">
+<span id="interfaces-oai-gym-gridworlds-module"></span><h2>interfaces.oai_gym_gridworlds module<a class="headerlink" href="#module-interfaces.oai_gym_gridworlds" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="interfaces.oai_gym_gridworlds.OAIGymInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interfaces.oai_gym_gridworlds.</span></span><span class="sig-name descname"><span class="pre">OAIGymInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">world</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withGUI</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">guiParent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rewardCallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_gridworlds.html#OAIGymInterface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_gridworlds.OAIGymInterface" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Env</span></code></p>
+<p>Open AI interface for use with gridworld environments.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">modules:                      Contains framework modules.</div>
+<div class="line">world:                        The gridworld.</div>
+<div class="line">withGUI:                      If true, observations and policy will be visualized.</div>
+<div class="line">guiParent:                    The main window for visualization.</div>
+<div class="line">rewardCallback:               The callback function used to compute the reward.</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.oai_gym_gridworlds.OAIGymInterface.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">world</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withGUI</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">guiParent</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rewardCallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_gridworlds.html#OAIGymInterface.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_gridworlds.OAIGymInterface.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interfaces.oai_gym_gridworlds.OAIGymInterface.observation_space">
+<span class="sig-name descname"><span class="pre">observation_space</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Space</span><span class="p"><span class="pre">[</span></span><span class="pre">ObsType</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#interfaces.oai_gym_gridworlds.OAIGymInterface.observation_space" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interfaces.oai_gym_gridworlds.OAIGymInterface.action_space">
+<span class="sig-name descname"><span class="pre">action_space</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Space</span><span class="p"><span class="pre">[</span></span><span class="pre">ActType</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#interfaces.oai_gym_gridworlds.OAIGymInterface.action_space" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.oai_gym_gridworlds.OAIGymInterface.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_gridworlds.html#OAIGymInterface.step"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_gridworlds.OAIGymInterface.step" title="Permalink to this definition"></a></dt>
+<dd><p>AI Gym’s step function.
+Executes the agent’s action and propels the simulation.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">action:                       The action selected by the agent.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.oai_gym_gridworlds.OAIGymInterface.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_gridworlds.html#OAIGymInterface.reset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_gridworlds.OAIGymInterface.reset" title="Permalink to this definition"></a></dt>
+<dd><p>AI Gym’s reset function.
+Resets the environment and the agent’s state.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.oai_gym_gridworlds.OAIGymInterface.updateTransitions">
+<span class="sig-name descname"><span class="pre">updateTransitions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">invalidTransitions</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_gridworlds.html#OAIGymInterface.updateTransitions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_gridworlds.OAIGymInterface.updateTransitions" title="Permalink to this definition"></a></dt>
+<dd><p>This function updates the gridworld’s transitions.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">invalidTransitions:           The gridworld’s invalid transitions as a list of 2-tuples.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.oai_gym_gridworlds.OAIGymInterface.initVisualization">
+<span class="sig-name descname"><span class="pre">initVisualization</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_gridworlds.html#OAIGymInterface.initVisualization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_gridworlds.OAIGymInterface.initVisualization" title="Permalink to this definition"></a></dt>
+<dd><p>This function initializes visualization if visualization enabled.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.oai_gym_gridworlds.OAIGymInterface.updateVisualization">
+<span class="sig-name descname"><span class="pre">updateVisualization</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_gridworlds.html#OAIGymInterface.updateVisualization"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_gridworlds.OAIGymInterface.updateVisualization" title="Permalink to this definition"></a></dt>
+<dd><p>This function updates visualization if visualization uenabled.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-interfaces.oai_gym_interface">
+<span id="interfaces-oai-gym-interface-module"></span><h2>interfaces.oai_gym_interface module<a class="headerlink" href="#module-interfaces.oai_gym_interface" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.OAIGymInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interfaces.oai_gym_interface.</span></span><span class="sig-name descname"><span class="pre">OAIGymInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withGUI</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rewardCallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_interface.html#OAIGymInterface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_interface.OAIGymInterface" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Env</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.OAIGymInterface.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">modules</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">withGUI</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rewardCallback</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_interface.html#OAIGymInterface.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_interface.OAIGymInterface.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.OAIGymInterface.action_space">
+<span class="sig-name descname"><span class="pre">action_space</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Space</span><span class="p"><span class="pre">[</span></span><span class="pre">ActType</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#interfaces.oai_gym_interface.OAIGymInterface.action_space" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.OAIGymInterface.observation_space">
+<span class="sig-name descname"><span class="pre">observation_space</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Space</span><span class="p"><span class="pre">[</span></span><span class="pre">ObsType</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#interfaces.oai_gym_interface.OAIGymInterface.observation_space" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.OAIGymInterface.updateObservation">
+<span class="sig-name descname"><span class="pre">updateObservation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_interface.html#OAIGymInterface.updateObservation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_interface.OAIGymInterface.updateObservation" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.OAIGymInterface.step">
+<span class="sig-name descname"><span class="pre">step</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#interfaces.oai_gym_interface.OAIGymInterface.step" title="Permalink to this definition"></a></dt>
+<dd><p>Run one timestep of the environment’s dynamics.</p>
+<p>When end of episode is reached, you are responsible for calling <a class="reference internal" href="#interfaces.oai_gym_interface.OAIGymInterface.reset" title="interfaces.oai_gym_interface.OAIGymInterface.reset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reset()</span></code></a> to reset this environment’s state.
+Accepts an action and returns a tuple <cite>(observation, reward, done, info)</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>action</strong> (<em>ActType</em>) – an action provided by the agent</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>this will be an element of the environment’s <a class="reference internal" href="#interfaces.oai_gym_interface.OAIGymInterface.observation_space" title="interfaces.oai_gym_interface.OAIGymInterface.observation_space"><code class="xref py py-attr docutils literal notranslate"><span class="pre">observation_space</span></code></a>.</dt><dd><p>This may, for instance, be a numpy array containing the positions and velocities of certain objects.</p>
+</dd>
+</dl>
+<p>reward (float): The amount of reward returned as a result of taking the action.
+done (bool): A boolean value for if the episode has ended, in which case further <a class="reference internal" href="#interfaces.oai_gym_interface.OAIGymInterface.step" title="interfaces.oai_gym_interface.OAIGymInterface.step"><code class="xref py py-meth docutils literal notranslate"><span class="pre">step()</span></code></a> calls will return undefined results.</p>
+<blockquote>
+<div><p>A done signal may be emitted for different reasons: Maybe the task underlying the environment was solved successfully,
+a certain timelimit was exceeded, or the physics simulation has entered an invalid state.</p>
+</div></blockquote>
+<dl class="simple">
+<dt>info (dictionary): A dictionary that may contain additional information regarding the reason for a <code class="docutils literal notranslate"><span class="pre">done</span></code> signal.</dt><dd><p><cite>info</cite> contains auxiliary diagnostic information (helpful for debugging, learning, and logging).
+This might, for instance, contain: metrics that describe the agent’s performance state, variables that are
+hidden from observations, information that distinguishes truncation and termination or individual reward terms
+that are combined to produce the total reward</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>observation (object)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.OAIGymInterface.reset">
+<span class="sig-name descname"><span class="pre">reset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#interfaces.oai_gym_interface.OAIGymInterface.reset" title="Permalink to this definition"></a></dt>
+<dd><p>Resets the environment to an initial state and returns the initial observation.</p>
+<p>This method can reset the environment’s random number generator(s) if <code class="docutils literal notranslate"><span class="pre">seed</span></code> is an integer or
+if the environment has not yet initialized a random number generator.
+If the environment already has a random number generator and <a class="reference internal" href="#interfaces.oai_gym_interface.OAIGymInterface.reset" title="interfaces.oai_gym_interface.OAIGymInterface.reset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reset()</span></code></a> is called with <code class="docutils literal notranslate"><span class="pre">seed=None</span></code>,
+the RNG should not be reset. Moreover, <a class="reference internal" href="#interfaces.oai_gym_interface.OAIGymInterface.reset" title="interfaces.oai_gym_interface.OAIGymInterface.reset"><code class="xref py py-meth docutils literal notranslate"><span class="pre">reset()</span></code></a> should (in the typical use case) be called with an
+integer seed right after initialization and then never again.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seed</strong> (<em>optional int</em>) – The seed that is used to initialize the environment’s PRNG.
+If the environment does not already have a PRNG and <code class="docutils literal notranslate"><span class="pre">seed=None</span></code> (the default option) is passed,
+a seed will be chosen from some source of entropy (e.g. timestamp or /dev/urandom).
+However, if the environment already has a PRNG and <code class="docutils literal notranslate"><span class="pre">seed=None</span></code> is passed, the PRNG will <em>not</em> be reset.
+If you pass an integer, the PRNG will be reset even if it already exists.
+Usually, you want to pass an integer <em>right after the environment has been initialized and then never again</em>.
+Please refer to the minimal example above to see this paradigm in action.</p></li>
+<li><p><strong>return_info</strong> (<em>bool</em>) – If true, return additional information along with initial observation.
+This info should be analogous to the info returned in <a class="reference internal" href="#interfaces.oai_gym_interface.OAIGymInterface.step" title="interfaces.oai_gym_interface.OAIGymInterface.step"><code class="xref py py-meth docutils literal notranslate"><span class="pre">step()</span></code></a></p></li>
+<li><p><strong>options</strong> (<em>optional dict</em>) – Additional information to specify how the environment is reset (optional,
+depending on the specific environment)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><dl class="simple">
+<dt>Observation of the initial state. This will be an element of <a class="reference internal" href="#interfaces.oai_gym_interface.OAIGymInterface.observation_space" title="interfaces.oai_gym_interface.OAIGymInterface.observation_space"><code class="xref py py-attr docutils literal notranslate"><span class="pre">observation_space</span></code></a></dt><dd><p>(typically a numpy array) and is analogous to the observation returned by <a class="reference internal" href="#interfaces.oai_gym_interface.OAIGymInterface.step" title="interfaces.oai_gym_interface.OAIGymInterface.step"><code class="xref py py-meth docutils literal notranslate"><span class="pre">step()</span></code></a>.</p>
+</dd>
+<dt>info (optional dictionary): This will <em>only</em> be returned if <code class="docutils literal notranslate"><span class="pre">return_info=True</span></code> is passed.</dt><dd><p>It contains auxiliary information complementing <code class="docutils literal notranslate"><span class="pre">observation</span></code>. This dictionary should be analogous to
+the <code class="docutils literal notranslate"><span class="pre">info</span></code> returned by <a class="reference internal" href="#interfaces.oai_gym_interface.OAIGymInterface.step" title="interfaces.oai_gym_interface.OAIGymInterface.step"><code class="xref py py-meth docutils literal notranslate"><span class="pre">step()</span></code></a>.</p>
+</dd>
+</dl>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>observation (object)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.unity_decorater">
+<span class="sig-prename descclassname"><span class="pre">interfaces.oai_gym_interface.</span></span><span class="sig-name descname"><span class="pre">unity_decorater</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">func</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_interface.html#unity_decorater"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_interface.unity_decorater" title="Permalink to this definition"></a></dt>
+<dd><p>wraps on internal errors raised by the unity python api
+results in more readable error messages</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.get_cobel_path">
+<span class="sig-prename descclassname"><span class="pre">interfaces.oai_gym_interface.</span></span><span class="sig-name descname"><span class="pre">get_cobel_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_interface.html#get_cobel_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_interface.get_cobel_path" title="Permalink to this definition"></a></dt>
+<dd><p>returns the cobel project path
+TODO move this to some kind of utility class?</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.get_env_path">
+<span class="sig-prename descclassname"><span class="pre">interfaces.oai_gym_interface.</span></span><span class="sig-name descname"><span class="pre">get_env_path</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_interface.html#get_env_path"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_interface.get_env_path" title="Permalink to this definition"></a></dt>
+<dd><p>returns the unity env path
+TODO move this to some kind of utility class?</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.UnityInterface">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">interfaces.oai_gym_interface.</span></span><span class="sig-name descname"><span class="pre">UnityInterface</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scene_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_max_episode_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decision_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent_action_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'discrete'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gray_scale_images</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout_wait</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">performance_monitor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_gui</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_interface.html#UnityInterface"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_interface.UnityInterface" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Env</span></code></p>
+<p>Wrapper for Unity 3D with ML-agents</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.UnityInterface.EmptyClass">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">EmptyClass</span></span><a class="reference internal" href="_modules/interfaces/oai_gym_interface.html#UnityInterface.EmptyClass"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_interface.UnityInterface.EmptyClass" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>this class is used as an info dictionary</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.UnityInterface.UnityProcessor">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UnityProcessor</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env_agent_specs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent_action_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gray_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">performance_monitor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_interface.html#UnityInterface.UnityProcessor"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_interface.UnityInterface.UnityProcessor" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Processor</span></code></p>
+<p>keras processor for the unity interface</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.UnityInterface.UnityProcessor.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env_agent_specs</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent_action_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gray_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">performance_monitor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_interface.html#UnityInterface.UnityProcessor.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_interface.UnityInterface.UnityProcessor.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.UnityInterface.UnityProcessor.process_observation">
+<span class="sig-name descname"><span class="pre">process_observation</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">observation</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_interface.html#UnityInterface.UnityProcessor.process_observation"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_interface.UnityInterface.UnityProcessor.process_observation" title="Permalink to this definition"></a></dt>
+<dd><p>Processes the observation as obtained from the environment for use in an agent and
+returns it.
+# Arguments</p>
+<blockquote>
+<div><p>observation (object): An observation as obtained by the environment</p>
+</div></blockquote>
+<dl class="simple">
+<dt># Returns</dt><dd><p>Observation obtained by the environment processed</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.UnityInterface.UnityProcessor.process_action">
+<span class="sig-name descname"><span class="pre">process_action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">action</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_interface.html#UnityInterface.UnityProcessor.process_action"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_interface.UnityInterface.UnityProcessor.process_action" title="Permalink to this definition"></a></dt>
+<dd><p>Processes an action predicted by an agent but before execution in an environment.
+# Arguments</p>
+<blockquote>
+<div><p>action (int): Action given to the environment</p>
+</div></blockquote>
+<dl class="simple">
+<dt># Returns</dt><dd><p>Processed action given to the environment</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.UnityInterface.UnityProcessor.process_reward">
+<span class="sig-name descname"><span class="pre">process_reward</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reward</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_interface.html#UnityInterface.UnityProcessor.process_reward"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_interface.UnityInterface.UnityProcessor.process_reward" title="Permalink to this definition"></a></dt>
+<dd><p>Processes the reward as obtained from the environment for use in an agent and
+returns it.
+# Arguments</p>
+<blockquote>
+<div><p>reward (float): A reward as obtained by the environment</p>
+</div></blockquote>
+<dl class="simple">
+<dt># Returns</dt><dd><p>Reward obtained by the environment processed</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.UnityInterface.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">env_path</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scene_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">time_scale</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nb_max_episode_steps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">decision_interval</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">agent_action_type</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'discrete'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_gray_scale_images</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">modules</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">seed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">42</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">timeout_wait</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">60</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">side_channels</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">performance_monitor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">with_gui</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/interfaces/oai_gym_interface.html#UnityInterface.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#interfaces.oai_gym_interface.UnityInterface.__init__" title="Permalink to this definition"></a></dt>
+<dd><p>Constructor</p>
+<p>connects to a given environment executable or to the unity editor and acts as a gym for keras agents.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>env_path</strong> – full path to compiled unity executable, if None mlagents waits for the editor
+to connect.</p></li>
+<li><p><strong>modules</strong> – the old CoBeL-RL modules. Currently unnecessary.</p></li>
+<li><p><strong>seed</strong> – Random seed. Keep at 42 for good luck.</p></li>
+<li><p><strong>timeout_wait</strong> – Time until Unity is declared ded.</p></li>
+<li><p><strong>side_channels</strong> – possible channels to talk with the academy.</p></li>
+<li><p><strong>time_scale</strong> – Speed of the simulation.</p></li>
+<li><p><strong>nb_max_episode_steps</strong> – the number of maximum steps per episode.</p></li>
+<li><p><strong>decision_interval</strong> – the number of simulation steps before entering the next rl cycle.</p></li>
+<li><p><strong>agent_action_type</strong> – the native action type of the agent.</p></li>
+<li><p><strong>use_gray_scale_images</strong> – make the processor convert images to greyscale domain,
+this is required when working with convolutional models.</p></li>
+<li><p><strong>performance_monitor</strong> – the monitor used for visualizing the learning process.</p></li>
+<li><p><strong>with_gui</strong> – whether or not show the performance monitor and the environment gui.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.UnityInterface.observation_space">
+<span class="sig-name descname"><span class="pre">observation_space</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Space</span><span class="p"><span class="pre">[</span></span><span class="pre">ObsType</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#interfaces.oai_gym_interface.UnityInterface.observation_space" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="interfaces.oai_gym_interface.UnityInterface.action_space">
+<span class="sig-name descname"><span class="pre">action_space</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">Space</span><span class="p"><span class="pre">[</span></span><span class="pre">ActType</span><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#interfaces.oai_gym_interface.UnityInterface.action_space" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-interfaces">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-interfaces" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="frontends.html" class="btn btn-neutral float-left" title="frontends package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="memory_modules.html" class="btn btn-neutral float-right" title="memory_modules package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Author.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

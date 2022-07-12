@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>memory_modules.memory_utils.metrics &mdash; CoBeL_RL 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> CoBeL_RL
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">CoBeLRL</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">CoBeL_RL</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+      <li>memory_modules.memory_utils.metrics</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for memory_modules.memory_utils.metrics</h1><div class="highlight"><pre>
+<span></span><span class="c1"># basic imports</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<div class="viewcode-block" id="AbstractMetric"><a class="viewcode-back" href="../../../memory_modules.memory_utils.html#memory_modules.memory_utils.metrics.AbstractMetric">[docs]</a><span class="k">class</span> <span class="nc">AbstractMetric</span><span class="p">():</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Abstract metrics class.</span>
+<span class="sd">    </span>
+<span class="sd">    | **Args**</span>
+<span class="sd">    | interfaceOAI:                 The interface to the Open AI Gym environment.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+<div class="viewcode-block" id="AbstractMetric.__init__"><a class="viewcode-back" href="../../../memory_modules.memory_utils.html#memory_modules.memory_utils.metrics.AbstractMetric.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interfaceOAI</span><span class="p">):</span>
+        <span class="c1"># store the Open AI Gym interface</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span> <span class="o">=</span> <span class="n">interfaceOAI</span>        </div>
+    
+<div class="viewcode-block" id="AbstractMetric.updateTransitions"><a class="viewcode-back" href="../../../memory_modules.memory_utils.html#memory_modules.memory_utils.metrics.AbstractMetric.updateTransitions">[docs]</a>    <span class="k">def</span> <span class="nf">updateTransitions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function updates the metrics when changes in the environment occur.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s1">&#39;.updateTransitions() function not implemented!&#39;</span><span class="p">)</span></div></div>
+        
+<div class="viewcode-block" id="Euclidean"><a class="viewcode-back" href="../../../memory_modules.memory_utils.html#memory_modules.memory_utils.metrics.Euclidean">[docs]</a><span class="k">class</span> <span class="nc">Euclidean</span><span class="p">(</span><span class="n">AbstractMetric</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Euclidean metrics class.</span>
+<span class="sd">    </span>
+<span class="sd">    | **Args**</span>
+<span class="sd">    | interfaceOAI:                 The interface to the Open AI Gym environment.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+<div class="viewcode-block" id="Euclidean.__init__"><a class="viewcode-back" href="../../../memory_modules.memory_utils.html#memory_modules.memory_utils.metrics.Euclidean.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interfaceOAI</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">interfaceOAI</span><span class="p">)</span>
+        <span class="c1"># prepare similarity matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+        <span class="c1"># compute euclidean distances between all state pairs (exp(-distance) serves as the similarity measure)</span>
+        <span class="k">for</span> <span class="n">s1</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">s2</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+                <span class="n">distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">][</span><span class="n">s1</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;coordinates&#39;</span><span class="p">][</span><span class="n">s2</span><span class="p">])</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">[</span><span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">distance</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">[</span><span class="n">s2</span><span class="p">,</span> <span class="n">s1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">distance</span><span class="p">)</span></div>
+                
+<div class="viewcode-block" id="Euclidean.updateTransitions"><a class="viewcode-back" href="../../../memory_modules.memory_utils.html#memory_modules.memory_utils.metrics.Euclidean.updateTransitions">[docs]</a>    <span class="k">def</span> <span class="nf">updateTransitions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function updates the metric when changes in the environment occur.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">pass</span></div></div>
+    
+<div class="viewcode-block" id="SR"><a class="viewcode-back" href="../../../memory_modules.memory_utils.html#memory_modules.memory_utils.metrics.SR">[docs]</a><span class="k">class</span> <span class="nc">SR</span><span class="p">(</span><span class="n">AbstractMetric</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Successor Representation (SR) metrics class.</span>
+<span class="sd">    </span>
+<span class="sd">    | **Args**</span>
+<span class="sd">    | interfaceOAI:                 The interface to the Open AI Gym environment.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+<div class="viewcode-block" id="SR.__init__"><a class="viewcode-back" href="../../../memory_modules.memory_utils.html#memory_modules.memory_utils.metrics.SR.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interfaceOAI</span><span class="p">,</span> <span class="n">gamma</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">interfaceOAI</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
+        <span class="c1"># prepare similarity matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;sas&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">n</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">)</span></div>
+                
+<div class="viewcode-block" id="SR.updateTransitions"><a class="viewcode-back" href="../../../memory_modules.memory_utils.html#memory_modules.memory_utils.metrics.SR.updateTransitions">[docs]</a>    <span class="k">def</span> <span class="nf">updateTransitions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function updates the metric when changes in the environment occur.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;sas&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">n</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">D</span><span class="p">)</span></div></div>
+        
+<div class="viewcode-block" id="DR"><a class="viewcode-back" href="../../../memory_modules.memory_utils.html#memory_modules.memory_utils.metrics.DR">[docs]</a><span class="k">class</span> <span class="nc">DR</span><span class="p">(</span><span class="n">AbstractMetric</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Default Representation (DR) metrics class.</span>
+<span class="sd">    </span>
+<span class="sd">    | **Args**</span>
+<span class="sd">    | interfaceOAI:                 The interface to the Open AI Gym environment.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    
+<div class="viewcode-block" id="DR.__init__"><a class="viewcode-back" href="../../../memory_modules.memory_utils.html#memory_modules.memory_utils.metrics.DR.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interfaceOAI</span><span class="p">,</span> <span class="n">gamma</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">interfaceOAI</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
+        <span class="c1"># compute DR</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">buildDefaultTransitionMatrix</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">D0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T_default</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_default</span><span class="p">)</span>
+        <span class="c1"># compute new transition matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;sas&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">n</span>
+        <span class="c1"># prepare update matrix B</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;states&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;states&#39;</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;invalidTransitions&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># determine affected states</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;invalidTransitions&#39;</span><span class="p">])[:,</span><span class="mi">0</span><span class="p">])</span>
+            <span class="c1"># compute delta</span>
+            <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T_new</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_new</span>
+            <span class="n">L0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T_default</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_default</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">]</span> <span class="o">-</span> <span class="n">L0</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">]</span>
+            <span class="c1"># compute update matrix B</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">D0</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">D0</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">],</span> <span class="n">alpha</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">D0</span><span class="p">))</span>
+        <span class="c1"># update DR with B</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">D0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span></div>
+                
+<div class="viewcode-block" id="DR.updateTransitions"><a class="viewcode-back" href="../../../memory_modules.memory_utils.html#memory_modules.memory_utils.metrics.DR.updateTransitions">[docs]</a>    <span class="k">def</span> <span class="nf">updateTransitions</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function updates the metric when changes in the environment occur.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c1"># compute new transition matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;sas&#39;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">n</span>
+        <span class="c1"># prepare update matrix B</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;states&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;states&#39;</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;invalidTransitions&#39;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># determine affected states</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">states</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;invalidTransitions&#39;</span><span class="p">])[:,</span><span class="mi">0</span><span class="p">])</span>
+            <span class="c1"># compute delta</span>
+            <span class="n">L</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T_new</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_new</span>
+            <span class="n">L0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">T_default</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">T_default</span>
+            <span class="n">delta</span> <span class="o">=</span> <span class="n">L</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">]</span> <span class="o">-</span> <span class="n">L0</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">]</span>
+            <span class="c1"># compute update matrix B</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">D0</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">]))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">B</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">D0</span><span class="p">[:,</span> <span class="bp">self</span><span class="o">.</span><span class="n">states</span><span class="p">],</span> <span class="n">alpha</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">delta</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">D0</span><span class="p">))</span>
+        <span class="c1"># update DR with B</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">D0</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">B</span></div>
+        
+<div class="viewcode-block" id="DR.buildDefaultTransitionMatrix"><a class="viewcode-back" href="../../../memory_modules.memory_utils.html#memory_modules.memory_utils.metrics.DR.buildDefaultTransitionMatrix">[docs]</a>    <span class="k">def</span> <span class="nf">buildDefaultTransitionMatrix</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This function builds the default transition graph in an open field environment under a uniform policy.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">T_default</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;states&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;states&#39;</span><span class="p">]))</span>
+        <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;states&#39;</span><span class="p">]):</span>
+            <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">4</span><span class="p">):</span>
+                <span class="n">h</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">state</span><span class="o">/</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">])</span>
+                <span class="n">w</span> <span class="o">=</span> <span class="n">state</span> <span class="o">-</span> <span class="n">h</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span>
+                <span class="c1"># left</span>
+                <span class="k">if</span> <span class="n">action</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">w</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">w</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># up</span>
+                <span class="k">elif</span> <span class="n">action</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">h</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">h</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># right</span>
+                <span class="k">elif</span>  <span class="n">action</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+                    <span class="n">w</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">w</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># down</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">h</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">h</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="c1"># determine next state</span>
+                <span class="n">nextState</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">h</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">interfaceOAI</span><span class="o">.</span><span class="n">world</span><span class="p">[</span><span class="s1">&#39;width&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">w</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">T_default</span><span class="p">[</span><span class="n">state</span><span class="p">][</span><span class="n">nextState</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">0.25</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Author.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

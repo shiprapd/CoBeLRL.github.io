@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>interfaces.oai_gym_interface &mdash; CoBeL_RL 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> CoBeL_RL
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">CoBeLRL</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CoBeL_RL</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>interfaces.oai_gym_interface</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for interfaces.oai_gym_interface</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">gym</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">signal</span>
+<span class="kn">from</span> <span class="nn">gym</span> <span class="kn">import</span> <span class="n">spaces</span>
+<span class="kn">from</span> <span class="nn">mlagents_envs.exception</span> <span class="kn">import</span> <span class="n">UnityWorkerInUseException</span>
+<span class="kn">from</span> <span class="nn">mlagents_envs.side_channel.engine_configuration_channel</span> <span class="kn">import</span> <span class="n">EngineConfigurationChannel</span>
+<span class="kn">from</span> <span class="nn">mlagents_envs.environment</span> <span class="kn">import</span> <span class="n">UnityEnvironment</span>
+<span class="kn">from</span> <span class="nn">mlagents_envs.side_channel.float_properties_channel</span> <span class="kn">import</span> <span class="n">FloatPropertiesChannel</span>
+<span class="kn">from</span> <span class="nn">rl.core</span> <span class="kn">import</span> <span class="n">Processor</span>
+
+
+
+<span class="c1">### This is the Open AI gym interface class. The interface wraps the control path and ensures communication</span>
+<span class="c1">### between the agent and the environment. The class descends from gym.Env, and is designed to be minimalistic (currently!).</span>
+<div class="viewcode-block" id="OAIGymInterface"><a class="viewcode-back" href="../../interfaces.html#interfaces.oai_gym_interface.OAIGymInterface">[docs]</a><span class="k">class</span> <span class="nc">OAIGymInterface</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">):</span>
+
+    <span class="c1"># The constructor.</span>
+    <span class="c1"># modules:          the dict of all available modules in the system</span>
+    <span class="c1"># withGUI:          if True, the module provides GUI control</span>
+    <span class="c1"># rewardCallback:   this callback function is invoked in the step routine in order to get the appropriate reward w.r.t. the experimental design</span>
+
+<div class="viewcode-block" id="OAIGymInterface.__init__"><a class="viewcode-back" href="../../interfaces.html#interfaces.oai_gym_interface.OAIGymInterface.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">modules</span><span class="p">,</span> <span class="n">withGUI</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">rewardCallback</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="c1"># store the modules</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modules</span> <span class="o">=</span> <span class="n">modules</span>
+
+        <span class="c1"># store visual output variable</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">withGUI</span> <span class="o">=</span> <span class="n">withGUI</span>
+
+        <span class="c1"># memorize the reward callback function</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rewardCallback</span> <span class="o">=</span> <span class="n">rewardCallback</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">world</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;world&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observations</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;observation&#39;</span><span class="p">]</span>
+
+        <span class="c1"># second: action space</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span> <span class="o">=</span> <span class="n">modules</span><span class="p">[</span><span class="s1">&#39;spatial_representation&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">get_action_space</span><span class="p">()</span>
+
+        <span class="c1"># third: observation space</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span> <span class="o">=</span> <span class="n">modules</span><span class="p">[</span><span class="s1">&#39;observation&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">getObservationSpace</span><span class="p">()</span>
+
+        <span class="c1"># all OAI spaces have been initialized!</span>
+
+        <span class="c1"># this observation variable is filled by the OBS modules</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observation</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># required for the analysis of the agent&#39;s behavior</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">forbiddenZoneHit</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">finalNode</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="c1"># a variable that allows the OAI class to access the robotic agent class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rlAgent</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="c1"># This function (slot) updates the observation provided by the environment</span>
+    <span class="c1">#</span>
+    <span class="c1"># observation:  the observation used to perform the update</span>
+<div class="viewcode-block" id="OAIGymInterface.updateObservation"><a class="viewcode-back" href="../../interfaces.html#interfaces.oai_gym_interface.OAIGymInterface.updateObservation">[docs]</a>    <span class="k">def</span> <span class="nf">updateObservation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observation</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">observation</span> <span class="o">=</span> <span class="n">observation</span></div>
+
+    <span class="c1"># The step function that propels the simulation.</span>
+    <span class="c1"># This function is called by the .fit function of the RL agent whenever a novel action has been computed.</span>
+    <span class="c1"># The action is used to decide on the next topology node to run to, and step then triggers the control path (including &#39;Blender&#39;)</span>
+    <span class="c1"># by making use of direct calls and signal/slot methods.</span>
+    <span class="c1">#</span>
+    <span class="c1"># action:   the action to be executed</span>
+
+    <span class="k">def</span> <span class="nf">_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="n">callbackValue</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;spatial_representation&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">generate_behavior_from_action</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+        <span class="n">callbackValue</span><span class="p">[</span><span class="s1">&#39;rlAgent&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rlAgent</span>
+        <span class="n">callbackValue</span><span class="p">[</span><span class="s1">&#39;modules&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span>
+
+        <span class="n">reward</span><span class="p">,</span> <span class="n">stopEpisode</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rewardCallback</span><span class="p">(</span><span class="n">callbackValue</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;observation&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">stopEpisode</span><span class="p">,</span> <span class="p">{}</span>
+
+    <span class="c1"># This function restarts the RL agent&#39;s learning cycle by initiating a new episode.</span>
+    <span class="c1">#</span>
+    <span class="k">def</span> <span class="nf">_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;spatial_representation&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">generate_behavior_from_action</span><span class="p">(</span><span class="s1">&#39;reset&#39;</span><span class="p">)</span>
+
+        <span class="c1"># return the observation</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">modules</span><span class="p">[</span><span class="s1">&#39;observation&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">observation</span>
+    
+    <span class="c1">#aliasing for compatibility with multiple gym versions</span>
+    <span class="n">step</span>  <span class="o">=</span> <span class="n">_step</span>
+    <span class="n">reset</span> <span class="o">=</span> <span class="n">_reset</span></div>
+
+
+<div class="viewcode-block" id="unity_decorater"><a class="viewcode-back" href="../../interfaces.html#interfaces.oai_gym_interface.unity_decorater">[docs]</a><span class="k">def</span> <span class="nf">unity_decorater</span><span class="p">(</span><span class="n">func</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    wraps on internal errors raised by the unity python api</span>
+<span class="sd">    results in more readable error messages</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">func</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unity crashed. </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">wrapper</span></div>
+
+
+<div class="viewcode-block" id="get_cobel_path"><a class="viewcode-back" href="../../interfaces.html#interfaces.oai_gym_interface.get_cobel_path">[docs]</a><span class="k">def</span> <span class="nf">get_cobel_path</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    returns the cobel project path</span>
+<span class="sd">    TODO move this to some kind of utility class?</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">paths</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PYTHONPATH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pathsep</span><span class="p">)</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s1">&#39;CoBeL-RL&#39;</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
+            <span class="n">full_path</span> <span class="o">=</span> <span class="n">p</span>
+            <span class="n">base_folder</span> <span class="o">=</span> <span class="n">full_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span><span class="o">=</span><span class="s1">&#39;CoBeL-RL&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">path</span> <span class="o">=</span> <span class="n">base_folder</span> <span class="o">+</span> <span class="s1">&#39;CoBeL-RL&#39;</span>
+            <span class="k">break</span>
+    <span class="k">return</span> <span class="n">path</span></div>
+
+
+<div class="viewcode-block" id="get_env_path"><a class="viewcode-back" href="../../interfaces.html#interfaces.oai_gym_interface.get_env_path">[docs]</a><span class="k">def</span> <span class="nf">get_env_path</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    returns the unity env path</span>
+<span class="sd">    TODO move this to some kind of utility class?</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="s1">&#39;UNITY_ENVIRONMENT_EXECUTABLE&#39;</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;UNITY_ENVIRONMENT_EXECUTABLE&#39;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="UnityInterface"><a class="viewcode-back" href="../../interfaces.html#interfaces.oai_gym_interface.UnityInterface">[docs]</a><span class="k">class</span> <span class="nc">UnityInterface</span><span class="p">(</span><span class="n">gym</span><span class="o">.</span><span class="n">Env</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Wrapper for Unity 3D with ML-agents</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="UnityInterface.EmptyClass"><a class="viewcode-back" href="../../interfaces.html#interfaces.oai_gym_interface.UnityInterface.EmptyClass">[docs]</a>    <span class="k">class</span> <span class="nc">EmptyClass</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        this class is used as an info dictionary</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+<div class="viewcode-block" id="UnityInterface.UnityProcessor"><a class="viewcode-back" href="../../interfaces.html#interfaces.oai_gym_interface.UnityInterface.UnityProcessor">[docs]</a>    <span class="k">class</span> <span class="nc">UnityProcessor</span><span class="p">(</span><span class="n">Processor</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        keras processor for the unity interface</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="UnityInterface.UnityProcessor.__init__"><a class="viewcode-back" href="../../interfaces.html#interfaces.oai_gym_interface.UnityInterface.UnityProcessor.__init__">[docs]</a>        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env_agent_specs</span><span class="p">,</span>
+                     <span class="n">agent_action_type</span><span class="p">,</span>
+                     <span class="n">use_gray_scale</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                     <span class="n">performance_monitor</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">agent_action_type</span> <span class="o">=</span> <span class="n">agent_action_type</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gray_scale</span> <span class="o">=</span> <span class="n">use_gray_scale</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span> <span class="o">=</span> <span class="n">performance_monitor</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_observation_space</span><span class="p">(</span><span class="n">env_agent_specs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">action_shape</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_action_type</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_action_space</span><span class="p">(</span><span class="n">env_agent_specs</span><span class="p">,</span>
+                                                                                                 <span class="n">agent_action_type</span><span class="p">)</span></div>
+
+        <span class="k">def</span> <span class="nf">__get_observation_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env_agent_specs</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Extract the information about the observation space from ml-agents group_spec.</span>
+
+<span class="sd">            :return:                    observation space</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="c1"># list of the sensor observation shapes</span>
+            <span class="n">observation_shapes</span> <span class="o">=</span> <span class="n">env_agent_specs</span><span class="o">.</span><span class="n">observation_shapes</span>
+
+            <span class="c1"># this means we have multiple sensors attached</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">observation_shapes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+
+                <span class="c1"># so we calculate the size of the concatenated flattened sensors observations.</span>
+                <span class="n">observation_shape</span> <span class="o">=</span> <span class="p">(</span><span class="nb">sum</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="k">for</span> <span class="n">shape</span> <span class="ow">in</span> <span class="n">observation_shapes</span><span class="p">]),)</span>
+
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;&gt; Warning! multiple sensor observations are only supported when flattened.</span><span class="se">\n</span><span class="s2">&quot;</span>
+                      <span class="s2">&quot;&gt;&gt;&gt; flattening the observations!!!&quot;</span><span class="p">)</span>
+
+            <span class="k">else</span><span class="p">:</span>
+
+                <span class="c1"># select the single sensors observation shape</span>
+                <span class="n">observation_shape</span> <span class="o">=</span> <span class="n">observation_shapes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">observation_shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gray_scale</span><span class="p">:</span>
+                        <span class="n">observation_shape</span> <span class="o">=</span> <span class="n">observation_shape</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span>
+
+            <span class="n">observation_space</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">observation_shape</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">observation_space</span>
+
+        <span class="k">def</span> <span class="nf">__get_action_space</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env_agent_specs</span><span class="p">,</span> <span class="n">agent_action_type</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Extract the information&#39;s about the action space from ml-agents group_spec</span>
+
+<span class="sd">            :param env_agent_specs:     the group_spec object for the agent transmitted by ml agents env.</span>
+<span class="sd">            :param agent_action_type:   the agent_action_type string</span>
+<span class="sd">            :return:                    tuple (action_shape, action_space, action_type) used by CoBeL-RL.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="c1"># extract action specs.</span>
+            <span class="c1"># to get the action_shape. fetch the action_shape from the spec object.</span>
+            <span class="n">action_shape</span> <span class="o">=</span> <span class="n">env_agent_specs</span><span class="o">.</span><span class="n">action_shape</span>
+
+            <span class="c1"># get the action type by examining the action_type string of the spec object.</span>
+            <span class="n">action_type</span> <span class="o">=</span> <span class="s2">&quot;discrete&quot;</span> <span class="k">if</span> <span class="s1">&#39;DISCRETE&#39;</span> <span class="ow">in</span> <span class="nb">str</span><span class="p">(</span><span class="n">env_agent_specs</span><span class="o">.</span><span class="n">action_type</span><span class="p">)</span> <span class="k">else</span> <span class="s2">&quot;continuous&quot;</span>
+
+            <span class="c1"># instantiate the action space</span>
+            <span class="c1">#</span>
+            <span class="c1"># depends on the type of agent you are using and the action space of the environment.</span>
+            <span class="c1">#</span>
+            <span class="c1"># if you are using an agent with a natively discrete space like a DQNAgent, you are not able to run</span>
+            <span class="c1"># a continuous example. For compatibility reasons, we set up a mapping to discretize the continuous space.</span>
+            <span class="c1"># see: make_continuous</span>
+            <span class="c1">#</span>
+            <span class="c1"># we also need to process the action_space for discrete actions, since Unity uses branches to structure</span>
+            <span class="c1"># the actions.</span>
+            <span class="c1"># see: make_discrete</span>
+            <span class="c1">#</span>
+            <span class="k">if</span> <span class="n">action_type</span> <span class="o">==</span> <span class="s2">&quot;discrete&quot;</span> <span class="ow">and</span> <span class="n">agent_action_type</span> <span class="o">==</span> <span class="s2">&quot;discrete&quot;</span><span class="p">:</span>
+                <span class="c1"># Unity uses branches of discrete actions so we use all possible combinations as action_space.</span>
+                <span class="n">action_space</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Discrete</span><span class="p">(</span><span class="n">n</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">action_shape</span><span class="p">))</span>
+
+            <span class="k">elif</span> <span class="n">action_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span> <span class="ow">and</span> <span class="n">agent_action_type</span> <span class="o">==</span> <span class="s2">&quot;discrete&quot;</span><span class="p">:</span>
+                <span class="n">action_space</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">action_shape</span><span class="p">),</span> <span class="n">high</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">action_shape</span><span class="p">))</span>
+                <span class="c1"># continuous actions in Unity are bidirectional, so we double the action space.</span>
+                <span class="n">action_space</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">action_shape</span> <span class="o">*</span> <span class="mi">2</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;&gt; Warning!!! the environment requires a continuous action space</span><span class="se">\n</span><span class="s2">&quot;</span>
+                      <span class="s2">&quot;&gt;&gt;&gt; and you configured a discrete agent action space! You will not reach optimal precision!&quot;</span><span class="p">)</span>
+
+            <span class="k">elif</span> <span class="n">action_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span> <span class="ow">and</span> <span class="n">agent_action_type</span> <span class="o">==</span> <span class="s2">&quot;continuous&quot;</span><span class="p">:</span>
+                <span class="n">action_space</span> <span class="o">=</span> <span class="n">gym</span><span class="o">.</span><span class="n">spaces</span><span class="o">.</span><span class="n">Box</span><span class="p">(</span><span class="n">low</span><span class="o">=-</span><span class="mi">1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">action_shape</span><span class="p">),</span> <span class="n">high</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="n">action_shape</span><span class="p">))</span>
+                <span class="n">action_space</span><span class="o">.</span><span class="n">n</span> <span class="o">=</span> <span class="n">action_shape</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                    <span class="s1">&#39;This combination of action and agent type is not supported. Check the definitions&#39;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">action_space</span><span class="p">,</span> <span class="n">action_shape</span><span class="p">,</span> <span class="n">action_type</span>
+
+<div class="viewcode-block" id="UnityInterface.UnityProcessor.process_observation"><a class="viewcode-back" href="../../interfaces.html#interfaces.oai_gym_interface.UnityInterface.UnityProcessor.process_observation">[docs]</a>        <span class="k">def</span> <span class="nf">process_observation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observation</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Processes the observation as obtained from the environment for use in an agent and</span>
+<span class="sd">            returns it.</span>
+<span class="sd">            # Arguments</span>
+<span class="sd">                observation (object): An observation as obtained by the environment</span>
+<span class="sd">            # Returns</span>
+<span class="sd">                Observation obtained by the environment processed</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">observation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__process_observations</span><span class="p">(</span><span class="n">observation</span><span class="p">)</span>
+
+            <span class="c1"># WORKAROUND for extra observations:</span>
+            <span class="c1">#</span>
+            <span class="c1"># some unity envs send two observations when an agent is done with it&#39;s episode.</span>
+            <span class="c1">#</span>
+            <span class="c1"># Most envs have been modified to achieve that this is prevented,</span>
+            <span class="c1"># but some will still send two observations.</span>
+            <span class="c1">#</span>
+            <span class="c1"># by getting the observation at index 0, we get the last observation of the episode.</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">observation</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;double obs! expected: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1"> !=  received: </span><span class="si">{</span><span class="n">observation</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+                <span class="n">observation</span> <span class="o">=</span> <span class="n">observation</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span><span class="o">.</span><span class="n">display_processed_observation</span><span class="p">(</span><span class="n">observation</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">observation</span></div>
+
+<div class="viewcode-block" id="UnityInterface.UnityProcessor.process_action"><a class="viewcode-back" href="../../interfaces.html#interfaces.oai_gym_interface.UnityInterface.UnityProcessor.process_action">[docs]</a>        <span class="k">def</span> <span class="nf">process_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Processes an action predicted by an agent but before execution in an environment.</span>
+<span class="sd">            # Arguments</span>
+<span class="sd">                action (int): Action given to the environment</span>
+<span class="sd">            # Returns</span>
+<span class="sd">                Processed action given to the environment</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__process_action</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">action</span></div>
+
+<div class="viewcode-block" id="UnityInterface.UnityProcessor.process_reward"><a class="viewcode-back" href="../../interfaces.html#interfaces.oai_gym_interface.UnityInterface.UnityProcessor.process_reward">[docs]</a>        <span class="k">def</span> <span class="nf">process_reward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;Processes the reward as obtained from the environment for use in an agent and</span>
+<span class="sd">            returns it.</span>
+<span class="sd">            # Arguments</span>
+<span class="sd">                reward (float): A reward as obtained by the environment</span>
+<span class="sd">            # Returns</span>
+<span class="sd">                Reward obtained by the environment processed</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">return</span> <span class="n">reward</span></div>
+
+        <span class="k">def</span> <span class="nf">__process_observations</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">observations</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Format the received observation to work with cobel.</span>
+
+<span class="sd">            :param observations:    the sensor observations received from ml-agents</span>
+<span class="sd">            :return:                the formatted observation</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="c1"># this means we have multiple sensors attached</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="c1"># flatten all sensor observations into a single vector</span>
+                <span class="n">processed_observation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">ravel</span><span class="p">(</span><span class="n">o</span><span class="p">)</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">observations</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># use the single observation</span>
+                <span class="n">processed_observation</span> <span class="o">=</span> <span class="n">observations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+                <span class="c1"># apply when observation is an image</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">processed_observation</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">gray_scale</span><span class="p">:</span>
+                        <span class="n">processed_observation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__to_gray_scale_image</span><span class="p">(</span><span class="n">processed_observation</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">processed_observation</span>
+
+        <span class="k">def</span> <span class="nf">__to_gray_scale_image</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image_array</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            converts a 3D image array to a 2D grayscale image array</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">image_array</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">==</span> <span class="mi">3</span><span class="p">,</span> <span class="s1">&#39;provided image does not match the expected shape&#39;</span>
+            <span class="c1"># convert to greyscale</span>
+            <span class="n">gray_scale_image</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">image_array</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">3</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">image_array</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="c1"># adjust contrast</span>
+            <span class="n">contrast</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">gray_scale_image</span> <span class="o">=</span> <span class="n">contrast</span> <span class="o">*</span> <span class="p">(</span><span class="n">gray_scale_image</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.5</span>
+
+            <span class="k">return</span> <span class="n">gray_scale_image</span>
+
+        <span class="k">def</span> <span class="nf">__process_action</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            This is a wrapper for the action / agent_action_type logic.</span>
+
+<span class="sd">            :param action: the action received from the agent.</span>
+<span class="sd">            :return:       the action formatted for unity.</span>
+
+<span class="sd">            it&#39;s not possible to use a discrete agent like DQN with a</span>
+<span class="sd">            continuous env from out of the box. So for compatibility reasons,</span>
+<span class="sd">            we set up a mapping.</span>
+
+<span class="sd">            there are four possible combinations:</span>
+
+<span class="sd">            action_type = continuous, agent_action_type = discrete</span>
+<span class="sd">            -&gt; we map the discrete action to a continuous action</span>
+<span class="sd">            see: make_continuous</span>
+
+<span class="sd">            action_type = continuous, agent_action_type = continuous</span>
+<span class="sd">            -&gt; nothing to do, just wrap the action.</span>
+
+<span class="sd">            action_type = discrete, agent = discrete</span>
+<span class="sd">            -&gt; Unity uses branches to structure the actions,</span>
+<span class="sd">            so we map our one-hot-vector accordingly.</span>
+<span class="sd">            see: make_discrete</span>
+
+<span class="sd">            action_type = discrete, agent = continuous</span>
+<span class="sd">            -&gt; not supported at the moment.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="c1"># if action is a single int we wrap it in a list for compatibility</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
+                <span class="n">action</span> <span class="o">=</span> <span class="p">[</span><span class="n">action</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
+                <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_action_type</span> <span class="ow">is</span> <span class="s1">&#39;continuous&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;the agent_action_type is set to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_action_type</span><span class="si">}</span><span class="s1">&#39;</span> \
+                                                               <span class="sa">f</span><span class="s1">&#39;, but the action is </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">action</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s1">&#39;</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">action</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">):</span>
+                <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_action_type</span> <span class="ow">is</span> <span class="s1">&#39;discrete&#39;</span><span class="p">,</span> <span class="sa">f</span><span class="s1">&#39;the agent_action_type is set to </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">agent_action_type</span><span class="si">}</span><span class="s1">&#39;</span> \
+                                                             <span class="sa">f</span><span class="s1">&#39;, but the action is </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">action</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="si">}</span><span class="s1">&#39;</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_action_type</span> <span class="o">==</span> <span class="s1">&#39;continuous&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_action_type</span> <span class="o">==</span> <span class="s1">&#39;discrete&#39;</span><span class="p">:</span>
+                <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__to_continuous</span><span class="p">(</span><span class="n">action</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_action_type</span> <span class="o">==</span> <span class="s1">&#39;continuous&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_action_type</span> <span class="o">==</span> <span class="s1">&#39;continuous&#39;</span><span class="p">:</span>
+                <span class="n">action</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">action</span><span class="p">])</span>
+
+            <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">env_action_type</span> <span class="o">==</span> <span class="s1">&#39;discrete&#39;</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">agent_action_type</span> <span class="o">==</span> <span class="s1">&#39;discrete&#39;</span><span class="p">:</span>
+                <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__to_discrete</span><span class="p">(</span><span class="n">action</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+                    <span class="s1">&#39;This combination of action and agent type is not supported.&#39;</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">action</span>
+
+        <span class="k">def</span> <span class="nf">__to_continuous</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Takes an action represented by a positive integer and turns it into a representation suitable for continuous</span>
+<span class="sd">            unity environments.</span>
+
+<span class="sd">            :param action:   a positive value integer from 0 to N</span>
+<span class="sd">            :return:            an array with the correct format and range to be used by the ML-Agents framework</span>
+
+<span class="sd">            :Reason of existence: The DQN outputs values that are integers. However, the ML-agents framework takes as</span>
+<span class="sd">            inputs actions that also have negative values. Take for example an action space of 4 and an integer action id,</span>
+<span class="sd">            for example the DQN outputs action 0 from possible actions [0,1,2,3].</span>
+<span class="sd">            This would normally correspond to an one-hot array</span>
+<span class="sd">            a=[1,0,0,0]</span>
+<span class="sd">            But since the ML-agents framework makes use of negative values in continuous inputs, the correct array should be</span>
+<span class="sd">            a=[1,0]</span>
+<span class="sd">            (and for action 1 -&gt; [-1,0], for action 2 -&gt; [0,1], and for action 3 -&gt; [0,-1]</span>
+
+<span class="sd">            :High-level view of implementation: Take an integer alpha. If alpha is odd, it has a negative value. If it</span>
+<span class="sd">             is even, the value is positive. Its index in the actions array is alpha divided by two and rounded down.</span>
+
+<span class="sd">            :Future: This method will likely need to be extended, and perhaps moved inside the individual agent scripts</span>
+<span class="sd">            inside Unity. Also, if you can think of an easier way to do this, you should probably rewrite this function.</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="k">assert</span> <span class="n">action</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;This function assumes that actions are enumerated in the domain of positive integers.&#39;</span>
+            <span class="k">assert</span> <span class="nb">int</span><span class="p">(</span><span class="n">action</span><span class="p">)</span> <span class="o">==</span> <span class="n">action</span><span class="p">,</span> <span class="s1">&#39;Unexpected input. Expected integer, received </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">action</span><span class="p">))</span>
+
+            <span class="c1"># check if odd</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">action</span> <span class="o">%</span> <span class="mi">2</span>
+
+            <span class="c1"># spread range from 0,1 to 0,2</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="n">value</span> <span class="o">*</span> <span class="mi">2</span>
+
+            <span class="c1"># adjust range to -1, 1</span>
+            <span class="n">value</span> <span class="o">-=</span> <span class="mi">1</span>
+
+            <span class="c1"># flip signs so that evens corresponds to positive and odds corresponds to negative</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="o">-</span><span class="n">value</span>
+
+            <span class="c1"># get the correct bin by rounding down via the old python division</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">action</span> <span class="o">//</span> <span class="mi">2</span>
+
+            <span class="c1"># make new action</span>
+            <span class="n">new_action</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_shape</span><span class="p">)</span>
+
+            <span class="c1"># put the new action in the correct bin</span>
+            <span class="n">new_action</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
+
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">new_action</span><span class="p">])</span>
+
+        <span class="k">def</span> <span class="nf">__to_discrete</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+            <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">            Encodes positive one hot integer into Unity acceptable format</span>
+
+<span class="sd">            :param action:      a positive integer in the range of 0, N</span>
+<span class="sd">            :return:            correctly formatted action.</span>
+
+<span class="sd">            Adaptation to Unity branching system.</span>
+
+<span class="sd">            In Unity you can specify branches for an discrete actions.</span>
+<span class="sd">            f.e. a moving branch where you got the options</span>
+<span class="sd">            0 = stay, 1 = left, 2 = right</span>
+<span class="sd">            and maybe another action</span>
+<span class="sd">            0 = no jump, 1 = jump</span>
+
+<span class="sd">            but from our dqn agent we only get out a one hot vector.</span>
+
+<span class="sd">            in order to map this we set the action space to</span>
+<span class="sd">            the product of the action shape value.</span>
+<span class="sd">            f.e. action_shape = (3,2) in Unity =&gt; (1,6) one hot vector</span>
+<span class="sd">            by doing so we have all possible combinations of actions covered.</span>
+<span class="sd">            see get_action_specs</span>
+
+<span class="sd">            the last step is to map this one hot vector back to the branches.</span>
+<span class="sd">            for this we resize the one hot vector to the shape of the initial</span>
+<span class="sd">            action space ...</span>
+<span class="sd">            f.e. [0, 0, 1, 0, 0, 0] =&gt; [[0, 0], [1, 0], [0, 0]]]</span>
+<span class="sd">            and the calculate the indices where it is one.</span>
+<span class="sd">            in this case: x=1, y=0 and use them as the values for the branches.</span>
+
+<span class="sd">            the output is then [1, 0] corresponding to branch0 action1, branch1 action0</span>
+<span class="sd">            &quot;&quot;&quot;</span>
+
+            <span class="k">assert</span> <span class="n">action</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="s1">&#39;This function assumes that actions are enumerated in the domain of positive integers.&#39;</span>
+            <span class="k">assert</span> <span class="nb">int</span><span class="p">(</span><span class="n">action</span><span class="p">)</span> <span class="o">==</span> <span class="n">action</span><span class="p">,</span> <span class="s1">&#39;Unexpected input. Expected integer, received </span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">action</span><span class="p">))</span>
+
+            <span class="c1"># setup a one-hot vector with all possible combinations of actions.</span>
+            <span class="n">one_hot_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_space</span><span class="o">.</span><span class="n">n</span><span class="p">)</span>
+
+            <span class="c1"># set the chosen action to 1.</span>
+            <span class="n">one_hot_vector</span><span class="p">[</span><span class="n">action</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+            <span class="c1"># resize to be a branch matrix.</span>
+            <span class="n">one_hot_vector</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">action_shape</span><span class="p">)</span>
+
+            <span class="c1"># get the coordinate where the 1 was stored</span>
+            <span class="n">coordinates</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">one_hot_vector</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span>
+
+            <span class="c1"># store the coordinates as values in the branches.</span>
+            <span class="n">branches</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">arr</span> <span class="ow">in</span> <span class="n">coordinates</span><span class="p">:</span>
+                <span class="n">branches</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">arr</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="c1"># wrap and return.</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">branches</span><span class="p">])</span></div>
+
+<div class="viewcode-block" id="UnityInterface.__init__"><a class="viewcode-back" href="../../interfaces.html#interfaces.oai_gym_interface.UnityInterface.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">env_path</span><span class="p">,</span> <span class="n">scene_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">time_scale</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">nb_max_episode_steps</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">decision_interval</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+                 <span class="n">agent_action_type</span><span class="o">=</span><span class="s1">&#39;discrete&#39;</span><span class="p">,</span> <span class="n">use_gray_scale_images</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+                 <span class="n">modules</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">seed</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">timeout_wait</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">side_channels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+                 <span class="n">performance_monitor</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">with_gui</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Constructor</span>
+
+<span class="sd">        connects to a given environment executable or to the unity editor and acts as a gym for keras agents.</span>
+
+<span class="sd">        :param env_path:                full path to compiled unity executable, if None mlagents waits for the editor</span>
+<span class="sd">                                        to connect.</span>
+<span class="sd">        :param modules:                 the old CoBeL-RL modules. Currently unnecessary.</span>
+<span class="sd">        :param seed:                    Random seed. Keep at 42 for good luck.</span>
+<span class="sd">        :param timeout_wait:            Time until Unity is declared ded.</span>
+<span class="sd">        :param side_channels:           possible channels to talk with the academy.</span>
+<span class="sd">        :param time_scale:              Speed of the simulation.</span>
+<span class="sd">        :param nb_max_episode_steps:    the number of maximum steps per episode.</span>
+<span class="sd">        :param decision_interval:       the number of simulation steps before entering the next rl cycle.</span>
+<span class="sd">        :param agent_action_type:       the native action type of the agent.</span>
+<span class="sd">        :param use_gray_scale_images:   make the processor convert images to greyscale domain,</span>
+<span class="sd">                                        this is required when working with convolutional models.</span>
+<span class="sd">        :param performance_monitor:     the monitor used for visualizing the learning process.</span>
+<span class="sd">        :param with_gui:                whether or not show the performance monitor and the environment gui.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># storage for editor process</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">editor_process</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># setup side channels</span>
+        <span class="k">if</span> <span class="n">side_channels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">side_channels</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># setup engine channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">engine_configuration_channel</span> <span class="o">=</span> <span class="n">EngineConfigurationChannel</span><span class="p">()</span>
+
+        <span class="c1"># add engine config channel</span>
+        <span class="n">side_channels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">engine_configuration_channel</span><span class="p">)</span>
+
+        <span class="c1"># step parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env_configuration_channel</span> <span class="o">=</span> <span class="n">FloatPropertiesChannel</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env_configuration_channel</span><span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="s2">&quot;max_step&quot;</span><span class="p">,</span> <span class="n">nb_max_episode_steps</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env_configuration_channel</span><span class="o">.</span><span class="n">set_property</span><span class="p">(</span><span class="s2">&quot;decision_interval&quot;</span><span class="p">,</span> <span class="n">decision_interval</span><span class="p">)</span>
+
+        <span class="c1"># add env config channel</span>
+        <span class="n">side_channels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">env_configuration_channel</span><span class="p">)</span>
+
+        <span class="c1"># command line args</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># when env is an executable mlagents can load a given scene.</span>
+        <span class="k">if</span> <span class="n">scene_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">args</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;--mlagents-scene-name&quot;</span><span class="p">,</span> <span class="n">scene_name</span><span class="p">]</span>
+
+        <span class="c1"># when no env_path is given mlagents waits for a editor instance to connect on port 5004</span>
+        <span class="k">if</span> <span class="n">env_path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># set port to 5004</span>
+            <span class="n">worker_id</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&gt;&gt;&gt; waiting for editor &lt;&lt;&lt;&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># select random worker id.</span>
+            <span class="c1"># There is an issue in Linux where the worker id becomes available only after some time has passed since the</span>
+            <span class="c1"># last usage. In order to mitigate the issue, a (hopefully) new worker id is automatically selected unless</span>
+            <span class="c1"># specifically instructed not to.</span>
+            <span class="c1"># Implementation note: two consecutive samples between 0 and 1200 have an immediate 1/1200 chance of</span>
+            <span class="c1"># being the same. By using the modulo of unix time we arrive to that likelihood only after an hour, by when</span>
+            <span class="c1"># the port has hopefully been released.</span>
+            <span class="c1"># Additional notes: The ML-agents framework adds 5004 to the worker_id internally, so no need to worry about</span>
+            <span class="c1"># port collision with the OS.</span>
+            <span class="n">worker_id</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">())</span> <span class="o">%</span> <span class="mi">1200</span>
+
+        <span class="c1"># try to start the communicator</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="c1"># connect python to executable environment</span>
+            <span class="n">env</span> <span class="o">=</span> <span class="n">UnityEnvironment</span><span class="p">(</span><span class="n">file_name</span><span class="o">=</span><span class="n">env_path</span><span class="p">,</span> <span class="n">worker_id</span><span class="o">=</span><span class="n">worker_id</span><span class="p">,</span> <span class="n">seed</span><span class="o">=</span><span class="n">seed</span><span class="p">,</span> <span class="n">base_port</span><span class="o">=</span><span class="mi">5004</span><span class="p">,</span>
+                                   <span class="n">timeout_wait</span><span class="o">=</span><span class="n">timeout_wait</span><span class="p">,</span> <span class="n">side_channels</span><span class="o">=</span><span class="n">side_channels</span><span class="p">,</span> <span class="n">no_graphics</span><span class="o">=</span><span class="ow">not</span> <span class="n">with_gui</span><span class="p">,</span>
+                                   <span class="n">args</span><span class="o">=</span><span class="n">args</span><span class="p">)</span>
+
+            <span class="c1"># reset the environment</span>
+            <span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+            <span class="c1"># Set the time scale of the engine</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">engine_configuration_channel</span><span class="o">.</span><span class="n">set_configuration_parameters</span><span class="p">(</span><span class="n">time_scale</span><span class="o">=</span><span class="n">time_scale</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mi">400</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="mi">400</span><span class="p">)</span>
+
+            <span class="c1"># receive environment information from environment</span>
+            <span class="n">group_name</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get_agent_groups</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># get agent ID</span>
+            <span class="n">group_spec</span> <span class="o">=</span> <span class="n">env</span><span class="o">.</span><span class="n">get_agent_group_spec</span><span class="p">(</span><span class="n">group_name</span><span class="p">)</span>  <span class="c1"># get agent specifications</span>
+
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Specs received:&quot;</span><span class="p">,</span> <span class="n">group_spec</span><span class="p">)</span>
+
+            <span class="c1"># save environment variables</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">env</span> <span class="o">=</span> <span class="n">env</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">group_name</span> <span class="o">=</span> <span class="n">group_name</span>
+
+            <span class="c1"># setup processor</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">processor</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">UnityProcessor</span><span class="p">(</span><span class="n">env_agent_specs</span><span class="o">=</span><span class="n">group_spec</span><span class="p">,</span>
+                                                 <span class="n">agent_action_type</span><span class="o">=</span><span class="n">agent_action_type</span><span class="p">,</span>
+                                                 <span class="n">use_gray_scale</span><span class="o">=</span><span class="n">use_gray_scale_images</span><span class="p">,</span>
+                                                 <span class="n">performance_monitor</span><span class="o">=</span><span class="n">performance_monitor</span><span class="p">)</span>
+
+            <span class="c1"># get the spaces from processor</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">observation_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">processor</span><span class="o">.</span><span class="n">observation_space</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">action_space</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">processor</span><span class="o">.</span><span class="n">action_space</span>
+
+            <span class="c1"># plotting variables</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">n_step</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nb_episode</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nb_episode_steps</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cumulative_episode_reward</span> <span class="o">=</span> <span class="mi">0</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span> <span class="o">=</span> <span class="n">performance_monitor</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">with_gui</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span> <span class="o">=</span> <span class="kc">None</span>
+
+            <span class="c1"># initialize the observation plots with the original observation shapes</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span><span class="o">.</span><span class="n">instantiate_observation_plots</span><span class="p">(</span><span class="n">group_spec</span><span class="o">.</span><span class="n">observation_shapes</span><span class="p">)</span>
+
+        <span class="k">except</span> <span class="n">UnityWorkerInUseException</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;the desired port is still in use. please retry after a few seconds.&quot;</span><span class="p">)</span></div>
+
+    <span class="k">def</span> <span class="nf">_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Make the simulation move forward until the next decision is requested.</span>
+
+<span class="sd">        :param action:  integer corresponding to the index of a one-hot-vector that is one.</span>
+<span class="sd">        :return:        (observation, reward, done, info), necessary to function as a gym</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># step the env with the provided action.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__step_env</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+
+        <span class="c1"># accumulate steps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">n_step</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># get results</span>
+        <span class="c1"># at the moment only one agent in the environment is supported.</span>
+        <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_step_results</span><span class="p">()</span>
+
+        <span class="c1"># Instantiate info var</span>
+        <span class="c1"># This is currently unused, but required by gym/core.py. At some point, useful information could be stored here</span>
+        <span class="c1"># and passed to the callbacks to increase CoBeL-RL&#39;s interoperability with other ML frameworks</span>
+        <span class="n">info</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">EmptyClass</span><span class="p">()</span>
+        <span class="n">info</span><span class="o">.</span><span class="n">items</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="nb">iter</span><span class="p">({})</span>  <span class="c1"># don&#39;t ask why :/</span>
+
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        #### PLOT SECTION #####################################################</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># accumulate episode data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cumulative_episode_reward</span> <span class="o">+=</span> <span class="n">reward</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nb_episode_steps</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># update step plotting data</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span><span class="o">.</span><span class="n">set_step_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_step</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">done</span><span class="p">:</span>
+            <span class="c1"># accumulate episodes</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nb_episode</span> <span class="o">+=</span> <span class="mi">1</span>
+
+            <span class="c1"># plot learning data</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span><span class="o">.</span><span class="n">set_episode_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nb_episode</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nb_episode_steps</span><span class="p">,</span>
+                                                          <span class="bp">self</span><span class="o">.</span><span class="n">cumulative_episode_reward</span><span class="p">)</span>
+
+            <span class="c1"># reset episode data</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">cumulative_episode_reward</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">nb_episode_steps</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">nb_step</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">n_step</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">observation</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span><span class="p">,</span> <span class="n">info</span>
+
+    <span class="k">def</span> <span class="nf">_reset</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Resets the environment and returns the initial observation</span>
+
+<span class="sd">        :return: initial observation</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># resets the ml-agents academy.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">reset</span><span class="p">()</span>
+
+        <span class="c1"># get the initial observation from the env.</span>
+        <span class="n">observation</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__get_step_results</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span><span class="o">.</span><span class="n">set_step_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">n_step</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span><span class="o">.</span><span class="n">update</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="n">observation</span>
+
+    <span class="nd">@unity_decorater</span>
+    <span class="k">def</span> <span class="nf">_close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Closes the environment</span>
+
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__kill_editor_process</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__step_env</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wrapper for the step functionality of the Unity env.</span>
+<span class="sd">        We format the action, set it and step the env.</span>
+
+<span class="sd">        :param action:  the action provided by an agent.</span>
+<span class="sd">        :return:</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># display the action</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span><span class="o">.</span><span class="n">display_actions</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+
+        <span class="c1"># setup action in the Unity environment</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">set_actions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group_name</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
+
+        <span class="c1"># forward the simulation by a tick (and execute action)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">__get_step_results</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Wrapper for the get_step_result function of Unity.</span>
+<span class="sd">        We only use the first result of each type, since we only support one agent.</span>
+
+<span class="sd">        :return: tuple observation, reward, done</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># get the step result for our agent</span>
+        <span class="n">step_result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">get_step_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">group_name</span><span class="p">)</span>
+
+        <span class="c1"># get the sensor observations</span>
+        <span class="n">observations</span> <span class="o">=</span> <span class="n">step_result</span><span class="o">.</span><span class="n">obs</span>
+
+        <span class="c1"># remove the singleton dimensions</span>
+        <span class="n">observations</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">observations</span><span class="p">]</span>
+
+        <span class="c1"># this displays the sensor observations</span>
+        <span class="c1"># if multiple sensors are attached it displays a plot for each one.</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">performance_monitor</span><span class="o">.</span><span class="n">display_observations</span><span class="p">(</span><span class="n">observations</span><span class="p">)</span>
+
+        <span class="n">reward</span> <span class="o">=</span> <span class="n">step_result</span><span class="o">.</span><span class="n">reward</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">done</span> <span class="o">=</span> <span class="n">step_result</span><span class="o">.</span><span class="n">done</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">observations</span><span class="p">,</span> <span class="n">reward</span><span class="p">,</span> <span class="n">done</span>
+
+    <span class="k">def</span> <span class="nf">__start_editor_process</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resource_path</span><span class="p">,</span> <span class="n">scene_path</span><span class="p">,</span> <span class="n">scene_name</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        starts the unity editor by calling the executable at &#39;UNITY_EXECUTABLE_PATH&#39;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">resource_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="n">scene_path</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="k">assert</span> <span class="n">scene_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;&gt;&gt;&gt; starting editor process &lt;&lt;&lt;&quot;</span><span class="se">\n</span><span class="s1">Resources at: </span><span class="si">{</span><span class="n">resource_path</span><span class="si">}</span><span class="se">\n</span><span class="s1">Scene </span><span class="si">{</span><span class="n">scene_name</span><span class="si">}</span><span class="s1"> at: </span><span class="si">{</span><span class="n">scene_path</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">editor_process</span> <span class="o">=</span> <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span><span class="p">([</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;UNITY_EXECUTABLE_PATH&#39;</span><span class="p">],</span>
+                                                <span class="s1">&#39;-createProject&#39;</span><span class="p">,</span>
+                                                <span class="s1">&#39;/home/philip/dev/unity_folder/projects/temp&#39;</span><span class="p">,</span>
+                                                <span class="s1">&#39;-executeMethod&#39;</span><span class="p">,</span> <span class="s1">&#39;PackageImporter.Import&#39;</span><span class="p">,</span>
+                                                <span class="s1">&#39;-resourcePath&#39;</span><span class="p">,</span> <span class="n">resource_path</span><span class="p">,</span>
+                                                <span class="s1">&#39;-scenePath&#39;</span><span class="p">,</span> <span class="n">scene_path</span><span class="p">,</span>
+                                                <span class="s1">&#39;-sceneName&#39;</span><span class="p">,</span> <span class="n">scene_name</span><span class="p">])</span>
+
+    <span class="k">def</span> <span class="nf">__kill_editor_process</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        stops the editor process.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">editor_process</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">killpg</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">getpgid</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">editor_process</span><span class="o">.</span><span class="n">pid</span><span class="p">),</span> <span class="n">signal</span><span class="o">.</span><span class="n">SIGINT</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Author.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

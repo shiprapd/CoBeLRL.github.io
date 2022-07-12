@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>agents package &mdash; CoBeL_RL 1.0.0 documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="analysis package" href="analysis.html" />
+    <link rel="prev" title="CoBeLRL" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> CoBeL_RL
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">CoBeLRL</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">agents package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-agents.dqn_agents">agents.dqn_agents module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-agents.dyna_dqn">agents.dyna_dqn module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-agents.dyna_q_agent">agents.dyna_q_agent module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-agents">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="analysis.html">analysis package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="demo.html">demo package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="environments.html">environments package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="frontends.html">frontends package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="interfaces.html">interfaces package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="memory_modules.html">memory_modules package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="misc.html">misc package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="networks.html">networks package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="observations.html">observations package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="spatial_representations.html">spatial_representations package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_tests.html">unit_tests package</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">CoBeL_RL</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="modules.html">CoBeLRL</a> &raquo;</li>
+      <li>agents package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/agents.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="agents-package">
+<h1>agents package<a class="headerlink" href="#agents-package" title="Permalink to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this heading"></a></h2>
+</section>
+<section id="module-agents.dqn_agents">
+<span id="agents-dqn-agents-module"></span><h2>agents.dqn_agents module<a class="headerlink" href="#module-agents.dqn_agents" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="agents.dqn_agents.DQNAgentBaseline">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">agents.dqn_agents.</span></span><span class="sig-name descname"><span class="pre">DQNAgentBaseline</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memoryCapacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">processor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialBeginFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dqn_agents.html#DQNAgentBaseline"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dqn_agents.DQNAgentBaseline" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<dl class="py class">
+<dt class="sig sig-object py" id="agents.dqn_agents.DQNAgentBaseline.callbacks">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">callbacks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rlParent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialBeginFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dqn_agents.html#DQNAgentBaseline.callbacks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dqn_agents.DQNAgentBaseline.callbacks" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Callback</span></code></p>
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dqn_agents.DQNAgentBaseline.callbacks.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rlParent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialBeginFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dqn_agents.html#DQNAgentBaseline.callbacks.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dqn_agents.DQNAgentBaseline.callbacks.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dqn_agents.DQNAgentBaseline.callbacks.on_episode_begin">
+<span class="sig-name descname"><span class="pre">on_episode_begin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dqn_agents.html#DQNAgentBaseline.callbacks.on_episode_begin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dqn_agents.DQNAgentBaseline.callbacks.on_episode_begin" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dqn_agents.DQNAgentBaseline.callbacks.on_episode_end">
+<span class="sig-name descname"><span class="pre">on_episode_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dqn_agents.html#DQNAgentBaseline.callbacks.on_episode_end"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dqn_agents.DQNAgentBaseline.callbacks.on_episode_end" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dqn_agents.DQNAgentBaseline.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">memoryCapacity</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">10000</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">processor</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialBeginFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lr</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.001</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">network</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dqn_agents.html#DQNAgentBaseline.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dqn_agents.DQNAgentBaseline.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dqn_agents.DQNAgentBaseline.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">steps</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dqn_agents.html#DQNAgentBaseline.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dqn_agents.DQNAgentBaseline.train" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-agents.dyna_dqn">
+<span id="agents-dyna-dqn-module"></span><h2>agents.dyna_dqn module<a class="headerlink" href="#module-agents.dyna_dqn" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="agents.dyna_dqn.DynaDQN">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">agents.dyna_dqn.</span></span><span class="sig-name descname"><span class="pre">DynaDQN</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_dqn.html#DynaDQN"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_dqn.DynaDQN" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#agents.dyna_q_agent.AbstractDynaQAgent" title="agents.dyna_q_agent.AbstractDynaQAgent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractDynaQAgent</span></code></a></p>
+<p>Implementation of a DQN agent using the Dyna-Q model.
+This agent uses the Dyna-Q agent’s memory module and then maps gridworld states to predefined observations.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">interfaceOAI:                 The interface to the Open AI Gym environment.</div>
+<div class="line">epsilon:                      The epsilon value for the epsilon greedy policy.</div>
+<div class="line">learningRate:                 The learning rate with which the Q-function is updated.</div>
+<div class="line">gamma:                        The discount factor used to compute the TD-error.</div>
+<div class="line">trialEndFcn:                  The callback function called at the end of each trial, defined for more flexibility in scenario control.</div>
+<div class="line">observations:                 The set of observations that will be mapped to the gridworld states.</div>
+<div class="line">model:                        The DNN model to be used by the agent.</div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="agents.dyna_dqn.DynaDQN.callbacks">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">callbacks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rlParent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_dqn.html#DynaDQN.callbacks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_dqn.DynaDQN.callbacks" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Callback class. Used for visualization and scenario control.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">rlParent:                     Reference to the Dyna-Q agent.</div>
+<div class="line">trialEndFcn:                  Maximum number of experiences that will be stored by the memory module.</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_dqn.DynaDQN.callbacks.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rlParent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_dqn.html#DynaDQN.callbacks.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_dqn.DynaDQN.callbacks.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_dqn.DynaDQN.callbacks.on_episode_end">
+<span class="sig-name descname"><span class="pre">on_episode_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_dqn.html#DynaDQN.callbacks.on_episode_end"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_dqn.DynaDQN.callbacks.on_episode_end" title="Permalink to this definition"></a></dt>
+<dd><p>The following function is called whenever an episode ends, and updates the reward accumulator,
+simultaneously updating the visualization of the reward function.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">rlParent:                     Reference to the Dyna-Q agent.</div>
+<div class="line">trialEndFcn:                  Maximum number of experiences that will be stored by the memory module.</div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_dqn.DynaDQN.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">observations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_dqn.html#DynaDQN.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_dqn.DynaDQN.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_dqn.DynaDQN.build_model">
+<span class="sig-name descname"><span class="pre">build_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_dqn.html#DynaDQN.build_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_dqn.DynaDQN.build_model" title="Permalink to this definition"></a></dt>
+<dd><p>This function builds the DQN’s target and online models.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">model:                        The DNN model to be used by the agent. If None, a small dense DNN is created by default.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_dqn.DynaDQN.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOfTrials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxNumberOfSteps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replayBatchSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noReplay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_dqn.html#DynaDQN.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_dqn.DynaDQN.train" title="Permalink to this definition"></a></dt>
+<dd><p>This function is called to train the agent.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">numberOfTrials:               The number of trials the Dyna-Q agent is trained.</div>
+<div class="line">maxNumberOfSteps:             The maximum number of steps per trial.</div>
+<div class="line">replayBatchSize:              The number of random that will be replayed.</div>
+<div class="line">noReplay:                     If true, experiences are not replayed.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_dqn.DynaDQN.replay">
+<span class="sig-name descname"><span class="pre">replay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">replayBatchSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_dqn.html#DynaDQN.replay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_dqn.DynaDQN.replay" title="Permalink to this definition"></a></dt>
+<dd><p>This function replays experiences to update the Q-function.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">replayBatchSize:              The number of random that will be replayed.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_dqn.DynaDQN.update_Q">
+<span class="sig-name descname"><span class="pre">update_Q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experience</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_dqn.html#DynaDQN.update_Q"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_dqn.DynaDQN.update_Q" title="Permalink to this definition"></a></dt>
+<dd><p>This function is a dummy function and does nothing (implementation required by parent class).</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">experience:                   The experience with which the Q-function will be updated.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_dqn.DynaDQN.retrieve_Q">
+<span class="sig-name descname"><span class="pre">retrieve_Q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_dqn.html#DynaDQN.retrieve_Q"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_dqn.DynaDQN.retrieve_Q" title="Permalink to this definition"></a></dt>
+<dd><p>This function retrieves Q-values for a given state.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">state:                        The state for which Q-values should be retrieved.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_dqn.DynaDQN.predict_on_batch">
+<span class="sig-name descname"><span class="pre">predict_on_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_dqn.html#DynaDQN.predict_on_batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_dqn.DynaDQN.predict_on_batch" title="Permalink to this definition"></a></dt>
+<dd><p>This function retrieves Q-values for a batch of states.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">batch:                        The batch of states.</div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-agents.dyna_q_agent">
+<span id="agents-dyna-q-agent-module"></span><h2>agents.dyna_q_agent module<a class="headerlink" href="#module-agents.dyna_q_agent" title="Permalink to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.AbstractDynaQAgent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">agents.dyna_q_agent.</span></span><span class="sig-name descname"><span class="pre">AbstractDynaQAgent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#AbstractDynaQAgent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.AbstractDynaQAgent" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Implementation of a Dyna-Q agent.
+Q-function is represented as a static table.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">interfaceOAI:                 The interface to the Open AI Gym environment.</div>
+<div class="line">epsilon:                      The epsilon value for the epsilon greedy policy.</div>
+<div class="line">learningRate:                 The learning rate with which the Q-function is updated.</div>
+<div class="line">gamma:                        The discount factor used to compute the TD-error.</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.AbstractDynaQAgent.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#AbstractDynaQAgent.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.AbstractDynaQAgent.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.AbstractDynaQAgent.replay">
+<span class="sig-name descname"><span class="pre">replay</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">replayBatchSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">200</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#AbstractDynaQAgent.replay"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.AbstractDynaQAgent.replay" title="Permalink to this definition"></a></dt>
+<dd><p>This function replays experiences to update the Q-function.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">replayBatchSize:              The number of random that will be replayed.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.AbstractDynaQAgent.select_action">
+<span class="sig-name descname"><span class="pre">select_action</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#AbstractDynaQAgent.select_action"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.AbstractDynaQAgent.select_action" title="Permalink to this definition"></a></dt>
+<dd><p>This function selects an action according to the Q-values of the current state.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">state:                        The current state.</div>
+<div class="line">epsilon:                      The epsilon parameter used under greedy action selection.</div>
+<div class="line">beta:                         The temperature parameter used when applying the softmax function to the Q-values.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.AbstractDynaQAgent.compute_action_mask">
+<span class="sig-name descname"><span class="pre">compute_action_mask</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#AbstractDynaQAgent.compute_action_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.AbstractDynaQAgent.compute_action_mask" title="Permalink to this definition"></a></dt>
+<dd><p>This function computes the action mask which prevents the selection of invalid actions.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.AbstractDynaQAgent.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOfTrials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxNumberOfSteps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replayBatchSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noReplay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#AbstractDynaQAgent.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.AbstractDynaQAgent.train" title="Permalink to this definition"></a></dt>
+<dd><p>This function is called to train the agent.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">numberOfTrials:               The number of trials the Dyna-Q agent is trained.</div>
+<div class="line">maxNumberOfSteps:             The maximum number of steps per trial.</div>
+<div class="line">replayBatchSize:              The number of random that will be replayed.</div>
+<div class="line">noReplay:                     If true, experiences are not replayed.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.AbstractDynaQAgent.update_Q">
+<span class="sig-name descname"><span class="pre">update_Q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experience</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#AbstractDynaQAgent.update_Q"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.AbstractDynaQAgent.update_Q" title="Permalink to this definition"></a></dt>
+<dd><p>This function updates the Q-function with a given experience.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">experience:                   The experience with which the Q-function will be updated.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.AbstractDynaQAgent.retrieve_Q">
+<span class="sig-name descname"><span class="pre">retrieve_Q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#AbstractDynaQAgent.retrieve_Q"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.AbstractDynaQAgent.retrieve_Q" title="Permalink to this definition"></a></dt>
+<dd><p>This function retrieves Q-values for a given state.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">state:                        The state for which Q-values should be retrieved.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.AbstractDynaQAgent.predict_on_batch">
+<span class="sig-name descname"><span class="pre">predict_on_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#AbstractDynaQAgent.predict_on_batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.AbstractDynaQAgent.predict_on_batch" title="Permalink to this definition"></a></dt>
+<dd><p>This function retrieves Q-values for a batch of states.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">batch:                        The batch of states.</div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.DynaQAgent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">agents.dyna_q_agent.</span></span><span class="sig-name descname"><span class="pre">DynaQAgent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#DynaQAgent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.DynaQAgent" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#agents.dyna_q_agent.AbstractDynaQAgent" title="agents.dyna_q_agent.AbstractDynaQAgent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractDynaQAgent</span></code></a></p>
+<p>Implementation of a Dyna-Q agent.
+Q-function is represented as a static table.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">interfaceOAI:                 The interface to the Open AI Gym environment.</div>
+<div class="line">epsilon:                      The epsilon value for the epsilon greedy policy.</div>
+<div class="line">learningRate:                 The learning rate with which the Q-function is updated.</div>
+<div class="line">gamma:                        The discount factor used to compute the TD-error.</div>
+<div class="line">trialEndFcn:                  The callback function called at the end of each trial, defined for more flexibility in scenario control.</div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.DynaQAgent.callbacks">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">callbacks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rlParent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#DynaQAgent.callbacks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.DynaQAgent.callbacks" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Callback class. Used for visualization and scenario control.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">rlParent:                     Reference to the Dyna-Q agent.</div>
+<div class="line">trialEndFcn:                  Maximum number of experiences that will be stored by the memory module.</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.DynaQAgent.callbacks.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rlParent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#DynaQAgent.callbacks.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.DynaQAgent.callbacks.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.DynaQAgent.callbacks.on_episode_end">
+<span class="sig-name descname"><span class="pre">on_episode_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#DynaQAgent.callbacks.on_episode_end"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.DynaQAgent.callbacks.on_episode_end" title="Permalink to this definition"></a></dt>
+<dd><p>The following function is called whenever an episode ends, and updates the reward accumulator,
+simultaneously updating the visualization of the reward function.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">rlParent:                     Reference to the Dyna-Q agent.</div>
+<div class="line">trialEndFcn:                  Maximum number of experiences that will be stored by the memory module.</div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.DynaQAgent.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#DynaQAgent.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.DynaQAgent.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.DynaQAgent.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOfTrials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxNumberOfSteps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replayBatchSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noReplay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#DynaQAgent.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.DynaQAgent.train" title="Permalink to this definition"></a></dt>
+<dd><p>This function is called to train the agent.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">numberOfTrials:               The number of trials the Dyna-Q agent is trained.</div>
+<div class="line">maxNumberOfSteps:             The maximum number of steps per trial.</div>
+<div class="line">replayBatchSize:              The number of random that will be replayed.</div>
+<div class="line">noReplay:                     If true, experiences are not replayed.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.DynaQAgent.update_Q">
+<span class="sig-name descname"><span class="pre">update_Q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">experience</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#DynaQAgent.update_Q"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.DynaQAgent.update_Q" title="Permalink to this definition"></a></dt>
+<dd><p>This function updates the Q-function with a given experience.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">experience:                   The experience with which the Q-function will be updated.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.DynaQAgent.retrieve_Q">
+<span class="sig-name descname"><span class="pre">retrieve_Q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#DynaQAgent.retrieve_Q"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.DynaQAgent.retrieve_Q" title="Permalink to this definition"></a></dt>
+<dd><p>This function retrieves Q-values for a given state.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">state:                        The state for which Q-values should be retrieved.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.DynaQAgent.predict_on_batch">
+<span class="sig-name descname"><span class="pre">predict_on_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#DynaQAgent.predict_on_batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.DynaQAgent.predict_on_batch" title="Permalink to this definition"></a></dt>
+<dd><p>This function retrieves Q-values for a batch of states.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">batch:                        The batch of states.</div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.PMAAgent">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">agents.dyna_q_agent.</span></span><span class="sig-name descname"><span class="pre">PMAAgent</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gammaSR</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#PMAAgent"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.PMAAgent" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <a class="reference internal" href="#agents.dyna_q_agent.AbstractDynaQAgent" title="agents.dyna_q_agent.AbstractDynaQAgent"><code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractDynaQAgent</span></code></a></p>
+<p>Implementation of a Dyna-Q agent using the Prioritized Memory Access (PMA) method described by Mattar &amp; Daw (2019).</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">interfaceOAI:                 The interface to the Open AI Gym environment.</div>
+<div class="line">epsilon:                      The epsilon value for the epsilon greedy policy.</div>
+<div class="line">learningRate:                 The learning rate with which the Q-function is updated.</div>
+<div class="line">gamma:                        The discount factor used to compute the TD-error.</div>
+<div class="line">trialEndFcn:                  The callback function called at the end of each trial, defined for more flexibility in scenario control.</div>
+</div>
+<dl class="py class">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.PMAAgent.callbacks">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">callbacks</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rlParent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#PMAAgent.callbacks"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.PMAAgent.callbacks" title="Permalink to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Callback class. Used for visualization and scenario control.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">rlParent:                     Reference to the Dyna-Q agent.</div>
+<div class="line">trialEndFcn:                  Maximum number of experiences that will be stored by the memory module.</div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.PMAAgent.callbacks.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">rlParent</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#PMAAgent.callbacks.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.PMAAgent.callbacks.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.PMAAgent.callbacks.on_episode_end">
+<span class="sig-name descname"><span class="pre">on_episode_end</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">epoch</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#PMAAgent.callbacks.on_episode_end"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.PMAAgent.callbacks.on_episode_end" title="Permalink to this definition"></a></dt>
+<dd><p>The following function is called whenever an episode ends, and updates the reward accumulator,
+simultaneously updating the visualization of the reward function.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">rlParent:                     Reference to the Dyna-Q agent.</div>
+<div class="line">trialEndFcn:                  Maximum number of experiences that will be stored by the memory module.</div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.PMAAgent.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interfaceOAI</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epsilon</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">beta</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learningRate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.9</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gamma</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">trialEndFcn</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gammaSR</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.99</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#PMAAgent.__init__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.PMAAgent.__init__" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.PMAAgent.train">
+<span class="sig-name descname"><span class="pre">train</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">numberOfTrials</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">maxNumberOfSteps</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">replayBatchSize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noReplay</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#PMAAgent.train"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.PMAAgent.train" title="Permalink to this definition"></a></dt>
+<dd><p>This function is called to train the agent.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">numberOfTrials:               The number of trials the Dyna-Q agent is trained.</div>
+<div class="line">maxNumberOfSteps:             The maximum number of steps per trial.</div>
+<div class="line">replayBatchSize:              The number of random that will be replayed.</div>
+<div class="line">noReplay:                     If true, experiences are not replayed.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.PMAAgent.update_Q">
+<span class="sig-name descname"><span class="pre">update_Q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">update</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#PMAAgent.update_Q"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.PMAAgent.update_Q" title="Permalink to this definition"></a></dt>
+<dd><p>This function updates the Q-function with a given experience.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">experience:                   The experience with which the Q-function will be updated.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.PMAAgent.retrieve_Q">
+<span class="sig-name descname"><span class="pre">retrieve_Q</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">state</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#PMAAgent.retrieve_Q"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.PMAAgent.retrieve_Q" title="Permalink to this definition"></a></dt>
+<dd><p>This function retrieves Q-values for a given state.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">state:                        The state for which Q-values should be retrieved.</div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="agents.dyna_q_agent.PMAAgent.predict_on_batch">
+<span class="sig-name descname"><span class="pre">predict_on_batch</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">batch</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/agents/dyna_q_agent.html#PMAAgent.predict_on_batch"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#agents.dyna_q_agent.PMAAgent.predict_on_batch" title="Permalink to this definition"></a></dt>
+<dd><p>This function retrieves Q-values for a batch of states.</p>
+<div class="line-block">
+<div class="line"><strong>Args</strong></div>
+<div class="line">batch:                        The batch of states.</div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-agents">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-agents" title="Permalink to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="CoBeLRL" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="analysis.html" class="btn btn-neutral float-right" title="analysis package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Author.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

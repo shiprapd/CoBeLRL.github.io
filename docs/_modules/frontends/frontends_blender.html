@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>frontends.frontends_blender &mdash; CoBeL_RL 1.0.0 documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> CoBeL_RL
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">CoBeLRL</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">CoBeL_RL</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+      <li>frontends.frontends_blender</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for frontends.frontends_blender</h1><div class="highlight"><pre>
+<span></span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">subprocess</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<span class="kn">from</span> <span class="nn">shapely.geometry</span> <span class="kn">import</span> <span class="n">Polygon</span>
+
+
+<div class="viewcode-block" id="FrontendBlenderInterface"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.FrontendBlenderInterface">[docs]</a><span class="k">class</span> <span class="nc">FrontendBlenderInterface</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    The Blender interface class connects to the Blender environment and controls the flow of commands/data that goes</span>
+<span class="sd">    to/comes from the Blender environment.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="FrontendBlenderInterface.__init__"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.FrontendBlenderInterface.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">scenarioName</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        scenarioName: the FULL path to the scenario that should be processed</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;BLENDER_EXECUTABLE_PATH&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">BLENDER_EXECUTABLE</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span><span class="s1">&#39;blender&#39;</span>
+
+        <span class="n">paths</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;PYTHONPATH&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">pathsep</span><span class="p">)</span>
+        <span class="n">path</span><span class="o">=</span><span class="kc">None</span>
+
+        <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s1">&#39;CoBeLRL&#39;</span> <span class="ow">in</span> <span class="n">p</span><span class="p">:</span>
+                <span class="n">full_path</span> <span class="o">=</span> <span class="n">p</span>
+                <span class="n">base_folder</span> <span class="o">=</span> <span class="n">full_path</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">sep</span> <span class="o">=</span><span class="s1">&#39;CoBeLRL&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">path</span> <span class="o">=</span> <span class="n">base_folder</span> <span class="o">+</span><span class="s1">&#39;CoBeLRL&#39;</span>
+                <span class="k">break</span>
+
+        <span class="n">scenarioName</span> <span class="o">=</span> <span class="n">path</span> <span class="o">+</span> <span class="s1">&#39;/environments/environments_blender/&#39;</span> <span class="o">+</span> <span class="n">scenarioName</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+        <span class="n">subprocess</span><span class="o">.</span><span class="n">Popen</span> \
+            <span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">BLENDER_EXECUTABLE</span><span class="p">,</span> <span class="n">scenarioName</span><span class="p">,</span> <span class="s1">&#39;--window-border&#39;</span><span class="p">,</span> <span class="s1">&#39;--window-geometry&#39;</span><span class="p">,</span> <span class="s1">&#39;1320&#39;</span><span class="p">,</span> <span class="s1">&#39;480&#39;</span><span class="p">,</span> <span class="s1">&#39;600&#39;</span><span class="p">,</span> <span class="s1">&#39;600&#39;</span>
+            <span class="p">,</span> <span class="s1">&#39;--enable-autoexec&#39;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">videoSocket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataSocket</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_STREAM</span><span class="p">)</span>
+
+        <span class="c1"># wait for BlenderControl to start, this socket take care of command/data(limited amount) transmission</span>
+        <span class="n">BlenderControlAvailable</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">BlenderControlAvailable</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="s1">&#39;localhost&#39;</span> <span class="p">,</span><span class="mi">5000</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">setblocking</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">BlenderControlAvailable</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Blender control connection has been initiated.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">IPPROTO_TCP</span> <span class="p">,</span><span class="n">socket</span><span class="o">.</span><span class="n">TCP_NODELAY</span> <span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># wait for BlenderVideo to start, this socket transmits video data from Blender</span>
+        <span class="n">BlenderVideoAvailable</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">BlenderVideoAvailable</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">videoSocket</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="s1">&#39;localhost&#39;</span> <span class="p">,</span><span class="mi">5001</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">videoSocket</span><span class="o">.</span><span class="n">setblocking</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">BlenderVideoAvailable</span> <span class="o">=</span><span class="kc">True</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Blender video connection has been initiated.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">videoSocket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">IPPROTO_TCP</span> <span class="p">,</span><span class="n">socket</span><span class="o">.</span><span class="n">TCP_NODELAY</span> <span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># wait for BlenderData to start, this socket is currently legacy, can probably be removed in future</span>
+        <span class="c1"># system versions(?)</span>
+        <span class="n">BlenderDataAvailable</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="n">BlenderDataAvailable</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dataSocket</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="s1">&#39;localhost&#39;</span> <span class="p">,</span><span class="mi">5002</span><span class="p">))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">dataSocket</span><span class="o">.</span><span class="n">setblocking</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">BlenderDataAvailable</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="nb">print</span> <span class="p">(</span><span class="s1">&#39;Blender data connection has been initiated.&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dataSocket</span><span class="o">.</span><span class="n">setsockopt</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">IPPROTO_TCP</span> <span class="p">,</span><span class="n">socket</span><span class="o">.</span><span class="n">TCP_NODELAY</span> <span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># sockets are now open!</span>
+
+        <span class="c1"># get the maximum safe zone dimensions for the robot to move in</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;getSafeZoneDimensions&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="p">[</span><span class="n">minXStr</span> <span class="p">,</span><span class="n">minYStr</span> <span class="p">,</span><span class="n">minZStr</span> <span class="p">,</span><span class="n">maxXStr</span> <span class="p">,</span><span class="n">maxYStr</span> <span class="p">,</span><span class="n">maxZStr</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+
+        <span class="c1"># store the environment limits</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minX</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">minXStr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minY</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">minYStr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minZ</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">minZStr</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxX</span> <span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">maxXStr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxY</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">maxYStr</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxZ</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">maxZStr</span><span class="p">)</span>
+
+        <span class="c1"># get the safe zone layout for the robot to move in</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;getSafeZoneLayout&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;AKN&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="n">nrOfVertices</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+
+        <span class="c1"># temporary variables for extraction of the environment&#39;s perimeter</span>
+        <span class="n">vertexList</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">safeZoneSegmentList</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrOfVertices</span><span class="p">):</span>
+            <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+            <span class="n">xStr</span><span class="p">,</span> <span class="n">yStr</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">xStr</span><span class="p">)</span>
+            <span class="n">y</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">yStr</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;AKN&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+            <span class="c1"># update the vertex list</span>
+            <span class="n">vertexList</span> <span class="o">=</span> <span class="n">vertexList</span> <span class="o">+</span> <span class="p">[[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">]]</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">nrOfVertices</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c1"># update the segment list</span>
+            <span class="n">safeZoneSegmentList</span> <span class="o">+=</span> <span class="p">[[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]]</span>
+
+        <span class="c1"># convert the above lists to numpy arrays</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">safeZoneVertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">vertexList</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">safeZoneSegments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">safeZoneSegmentList</span><span class="p">)</span>
+
+        <span class="c1"># construct the safe polygon from the above lists</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">safeZonePolygon</span> <span class="o">=</span> <span class="n">Polygon</span><span class="p">(</span><span class="n">vertexList</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">100</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+        <span class="c1"># initial robot pose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">robotPose</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+
+        <span class="c1"># stores the actual goal position (coordinates of the goal node)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">goalPosition</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># indicator that flags arrival of the agent/robot at the actual goal node</span>
+        <span class="c1"># (this need NOT be the global goal node!).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">goalReached</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># a dict that stores environmental information in each time step</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;timeData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;poseData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;sensorData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;imageData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># propel the simulation for 10 timesteps to finish initialization of the simulation framework</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">step_simulation_without_physics</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FrontendBlenderInterface.getManuallyDefinedTopologyNodes"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.FrontendBlenderInterface.getManuallyDefinedTopologyNodes">[docs]</a>    <span class="k">def</span> <span class="nf">getManuallyDefinedTopologyNodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function reads all manually defined topology nodes from the environment (if such nodes are defined)</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        manuallyDefinedTopologyNodes: topology nodes to avoid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># get the forbidden zones&#39; layouts for the robot to avoid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;getManuallyDefinedTopologyNodes&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="n">nrOfNodesStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+        <span class="n">nrOfNodes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nrOfNodesStr</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Received </span><span class="si">%d</span><span class="s1"> manually defined topology nodes&#39;</span> <span class="o">%</span> <span class="n">nrOfNodes</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;AKN&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="n">manuallyDefinedTopologyNodes</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrOfNodes</span><span class="p">):</span>
+            <span class="n">nodeStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;reading manually defined node: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">nodeStr</span><span class="p">)</span>
+
+            <span class="n">nameStr</span><span class="p">,</span> <span class="n">xStr</span><span class="p">,</span> <span class="n">yStr</span><span class="p">,</span> <span class="n">typeStr</span> <span class="o">=</span> <span class="n">nodeStr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+            <span class="n">nodeName</span> <span class="o">=</span> <span class="n">nameStr</span>
+            <span class="n">nodeX</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">xStr</span><span class="p">)</span>
+            <span class="n">nodeY</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">yStr</span><span class="p">)</span>
+            <span class="n">nodeType</span> <span class="o">=</span> <span class="n">typeStr</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;AKN&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+
+            <span class="n">manuallyDefinedTopologyNodes</span> <span class="o">+=</span> <span class="p">[[</span><span class="n">nodeName</span><span class="p">,</span> <span class="n">nodeX</span><span class="p">,</span> <span class="n">nodeY</span><span class="p">,</span> <span class="n">nodeType</span><span class="p">]]</span>
+
+        <span class="c1"># wait for AKN</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">manuallyDefinedTopologyNodes</span></div>
+
+<div class="viewcode-block" id="FrontendBlenderInterface.getManuallyDefinedTopologyEdges"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.FrontendBlenderInterface.getManuallyDefinedTopologyEdges">[docs]</a>    <span class="k">def</span> <span class="nf">getManuallyDefinedTopologyEdges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function reads all manually defined topology edges from the environment (if such edges are defined)</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        manuallyDefinedTopologyEdges: topology edges to avoid</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># get the forbidden zones&#39; layouts for the robot to avoid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;getManuallyDefinedTopologyEdges&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+
+        <span class="n">nrOfEdgesStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="n">nrOfEdges</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nrOfEdgesStr</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Received </span><span class="si">%d</span><span class="s1"> manually defined topology edges&#39;</span> <span class="o">%</span> <span class="n">nrOfEdges</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;AKN&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+
+        <span class="n">manuallyDefinedTopologyEdges</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrOfEdges</span><span class="p">):</span>
+            <span class="n">edgeStr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;reading manually defined edge: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">edgeStr</span><span class="p">)</span>
+
+            <span class="n">nameStr</span><span class="p">,</span> <span class="n">firstStr</span><span class="p">,</span> <span class="n">secondStr</span> <span class="o">=</span> <span class="n">edgeStr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+            <span class="n">edgeName</span> <span class="o">=</span> <span class="n">nameStr</span>
+            <span class="n">first</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">firstStr</span><span class="p">)</span>
+            <span class="n">second</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">secondStr</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;AKN&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+
+            <span class="n">manuallyDefinedTopologyEdges</span> <span class="o">+=</span> <span class="p">[[</span><span class="n">edgeName</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">second</span><span class="p">]]</span>
+
+        <span class="c1"># wait for AKN</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">1000</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">manuallyDefinedTopologyEdges</span></div>
+
+<div class="viewcode-block" id="FrontendBlenderInterface.recvImage"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.FrontendBlenderInterface.recvImage">[docs]</a>    <span class="k">def</span> <span class="nf">recvImage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">s</span><span class="p">,</span> <span class="n">imgSize</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function reads an image chunk from a socket.</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        s:        socket to read image from</span>
+<span class="sd">        imgSize:  the size of the image to read</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        imgData :image data</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># define buffer</span>
+        <span class="n">imgData</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+
+        <span class="c1"># define byte &#39;counter&#39;</span>
+        <span class="n">receivedBytes</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># read the image in chunks</span>
+        <span class="k">while</span> <span class="n">receivedBytes</span> <span class="o">&lt;</span> <span class="n">imgSize</span><span class="p">:</span>
+
+            <span class="n">dataChunk</span> <span class="o">=</span> <span class="n">s</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="n">imgSize</span> <span class="o">-</span> <span class="n">receivedBytes</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dataChunk</span> <span class="o">==</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="n">receivedBytes</span> <span class="o">+=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dataChunk</span><span class="p">)</span>
+            <span class="n">imgData</span> <span class="o">+=</span> <span class="n">dataChunk</span>
+
+        <span class="c1"># return image data</span>
+        <span class="k">return</span> <span class="n">imgData</span></div>
+
+<div class="viewcode-block" id="FrontendBlenderInterface.stepSimulation"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.FrontendBlenderInterface.stepSimulation">[docs]</a>    <span class="k">def</span> <span class="nf">stepSimulation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">velocityLinear</span><span class="p">,</span> <span class="n">omega</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function propels the simulation. It uses physics to guide the agent/robot with linear and angular</span>
+<span class="sd">        velocities.</span>
+<span class="sd">        Note: linear and angular velocities can be set simultaneously to force the robot to go in curved paths</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        velocityLinear: the requested linear (translational) velocity of the agent/robot</span>
+<span class="sd">        omega: the requested rotational (angular) velocity of the agent/robot</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        timeData: time data from telemetry</span>
+<span class="sd">        poseData: Robot&#39;s/agent&#39;s pose</span>
+<span class="sd">        sensorData: sensor data from telemetry</span>
+<span class="sd">        imageData: Constructed omnicam image from the single images</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># the basic capture image size for the images taken by the robot&#39;s omnicam, the width of the omnicam image is actually 4*capAreaWidth</span>
+        <span class="n">capAreaWidth</span> <span class="o">=</span> <span class="mi">64</span>
+        <span class="n">capAreaHeight</span> <span class="o">=</span> <span class="mi">64</span>
+
+        <span class="c1"># from the linear/angular velocities, compute the left and right wheel velocities</span>
+        <span class="p">[</span><span class="n">velocityLeft</span><span class="p">,</span> <span class="n">velocityRight</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setRobotVelocities</span><span class="p">(</span><span class="n">velocityLinear</span><span class="p">,</span> <span class="n">omega</span><span class="p">)</span>
+
+        <span class="c1"># send the actuation command to the virtual robot/agent</span>
+        <span class="n">sendStr</span> <span class="o">=</span> <span class="s1">&#39;stepSimulation,</span><span class="si">%f</span><span class="s1">,</span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">velocityLeft</span><span class="p">,</span> <span class="n">velocityRight</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sendStr</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+
+        <span class="c1"># retrieve images from all cameras of the robot (front, left, right, back)</span>
+        <span class="n">imgFront</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recvImage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">videoSocket</span><span class="p">,</span> <span class="n">capAreaWidth</span> <span class="o">*</span> <span class="n">capAreaHeight</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">imgNPFront</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">imgFront</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">imgNPFront</span> <span class="o">=</span> <span class="n">imgNPFront</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">capAreaHeight</span><span class="p">,</span> <span class="n">capAreaWidth</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+        <span class="n">imgLeft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recvImage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">videoSocket</span><span class="p">,</span> <span class="n">capAreaWidth</span> <span class="o">*</span> <span class="n">capAreaHeight</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">imgNPLeft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">imgLeft</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">imgNPLeft</span> <span class="o">=</span> <span class="n">imgNPLeft</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">capAreaHeight</span><span class="p">,</span> <span class="n">capAreaWidth</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+        <span class="n">imgRight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recvImage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">videoSocket</span><span class="p">,</span> <span class="n">capAreaWidth</span> <span class="o">*</span> <span class="n">capAreaHeight</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">imgNPRight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">imgRight</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">imgNPRight</span> <span class="o">=</span> <span class="n">imgNPRight</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">capAreaHeight</span><span class="p">,</span> <span class="n">capAreaWidth</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+        <span class="n">imgBack</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recvImage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">videoSocket</span><span class="p">,</span> <span class="n">capAreaWidth</span> <span class="o">*</span> <span class="n">capAreaHeight</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">imgNPBack</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">imgBack</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">imgNPBack</span> <span class="o">=</span> <span class="n">imgNPBack</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">capAreaHeight</span><span class="p">,</span> <span class="n">capAreaWidth</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+        <span class="c1"># Construct the omnicam image from the single images.</span>
+        <span class="c1"># Note: the images are just &#39;stitched&#39; together, no distortion correction takes place (so far).</span>
+        <span class="n">imageData</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">imgNPFront</span><span class="p">,</span> <span class="n">imgNPRight</span><span class="p">,</span> <span class="n">imgNPBack</span><span class="p">,</span> <span class="n">imgNPLeft</span><span class="p">))</span>
+        <span class="c1"># center(?) the omnicam image</span>
+        <span class="n">imageData</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">imageData</span><span class="p">,</span> <span class="mi">96</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># extract RGB information channels</span>
+        <span class="n">imageData</span> <span class="o">=</span> <span class="n">imageData</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+
+        <span class="c1"># retrieve telemetry data from the virtual agent/robot</span>
+        <span class="n">telemetryDataString</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="p">[</span><span class="n">timeDataStr</span><span class="p">,</span> <span class="n">poseDataStr</span><span class="p">,</span> <span class="n">sensorDataStr</span><span class="p">]</span> <span class="o">=</span> <span class="n">telemetryDataString</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+
+        <span class="c1"># extract time data from telemetry</span>
+        <span class="n">timeData</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">timeDataStr</span><span class="p">)</span>
+
+        <span class="c1"># extract pose data from telemetry</span>
+        <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">]</span> <span class="o">=</span> <span class="n">poseDataStr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="n">poseData</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">nx</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">ny</span><span class="p">)]</span>
+
+        <span class="c1"># extract sensor data from telemetry</span>
+        <span class="p">[</span><span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">s3</span><span class="p">,</span> <span class="n">s4</span><span class="p">,</span> <span class="n">s5</span><span class="p">,</span> <span class="n">s6</span><span class="p">,</span> <span class="n">s7</span><span class="p">]</span> <span class="o">=</span> <span class="n">sensorDataStr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="n">sensorData</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">s0</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">s1</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">s2</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">s3</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">s4</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">s5</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">s6</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">s7</span><span class="p">)],</span>
+                              <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+
+        <span class="c1"># update robot&#39;s/agent&#39;s pose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">robotPose</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">poseData</span><span class="p">)</span>
+
+        <span class="c1"># update environmental information</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;timeData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">timeData</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;poseData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">poseData</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;sensorData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sensorData</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;imageData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">imageData</span>
+
+        <span class="c1"># return acquired data</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">timeData</span><span class="p">,</span> <span class="n">poseData</span><span class="p">,</span> <span class="n">sensorData</span><span class="p">,</span> <span class="n">imageData</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="FrontendBlenderInterface.setTopology"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.FrontendBlenderInterface.setTopology">[docs]</a>    <span class="k">def</span> <span class="nf">setTopology</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topologyModule</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function supplies the interface with a valid topology module.</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        param topologyModule: the topologyModule to be supplied</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topologyModule</span> <span class="o">=</span> <span class="n">topologyModule</span></div>
+
+<div class="viewcode-block" id="FrontendBlenderInterface.step_simulation_without_physics"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.FrontendBlenderInterface.step_simulation_without_physics">[docs]</a>    <span class="k">def</span> <span class="nf">step_simulation_without_physics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">newX</span><span class="p">,</span> <span class="n">newY</span><span class="p">,</span> <span class="n">newYaw</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function propels the simulation. It uses teleportation to guide the agent/robot directly by means of</span>
+<span class="sd">        global x,y,yaw values.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        -----------</span>
+<span class="sd">        x:       the global x position to teleport to</span>
+<span class="sd">        y:       the global y position to teleport to</span>
+<span class="sd">        yaw:     the global yaw value to teleport to</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        timeData: time data from telemetry</span>
+<span class="sd">        poseData: Robot&#39;s/agent&#39;s pose</span>
+<span class="sd">        sensorData: sensor data from telemetry</span>
+<span class="sd">        imageData: Constructed omnicam image from the single images</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># the basic capture image size for the images taken by the robot&#39;s omnicam, the width of the omnicam image is actually 4*capAreaWidth</span>
+        <span class="n">capAreaWidth</span> <span class="o">=</span> <span class="mi">64</span>
+        <span class="n">capAreaHeight</span> <span class="o">=</span> <span class="mi">64</span>
+
+        <span class="c1"># send the actuation command to the virtual robot/agent</span>
+        <span class="n">sendStr</span> <span class="o">=</span> <span class="s1">&#39;stepSimNoPhysics,</span><span class="si">%f</span><span class="s1">,</span><span class="si">%f</span><span class="s1">,</span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">newX</span><span class="p">,</span> <span class="n">newY</span><span class="p">,</span> <span class="n">newYaw</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sendStr</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+
+        <span class="c1"># retrieve images from all cameras of the robot (front, left, right, back)</span>
+        <span class="n">imgFront</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recvImage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">videoSocket</span><span class="p">,</span> <span class="n">capAreaWidth</span> <span class="o">*</span> <span class="n">capAreaHeight</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">imgNPFront</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">imgFront</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">imgNPFront</span> <span class="o">=</span> <span class="n">imgNPFront</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">capAreaHeight</span><span class="p">,</span> <span class="n">capAreaWidth</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+        <span class="n">imgLeft</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recvImage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">videoSocket</span><span class="p">,</span> <span class="n">capAreaWidth</span> <span class="o">*</span> <span class="n">capAreaHeight</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">imgNPLeft</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">imgLeft</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">imgNPLeft</span> <span class="o">=</span> <span class="n">imgNPLeft</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">capAreaHeight</span><span class="p">,</span> <span class="n">capAreaWidth</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+        <span class="n">imgRight</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recvImage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">videoSocket</span><span class="p">,</span> <span class="n">capAreaWidth</span> <span class="o">*</span> <span class="n">capAreaHeight</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">imgNPRight</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">imgRight</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">imgNPRight</span> <span class="o">=</span> <span class="n">imgNPRight</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">capAreaHeight</span><span class="p">,</span> <span class="n">capAreaWidth</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+        <span class="n">imgBack</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">recvImage</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">videoSocket</span><span class="p">,</span> <span class="n">capAreaWidth</span> <span class="o">*</span> <span class="n">capAreaHeight</span> <span class="o">*</span> <span class="mi">4</span><span class="p">)</span>
+        <span class="n">imgNPBack</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">fromstring</span><span class="p">(</span><span class="n">imgBack</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">imgNPBack</span> <span class="o">=</span> <span class="n">imgNPBack</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">capAreaHeight</span><span class="p">,</span> <span class="n">capAreaWidth</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+        <span class="c1"># Construct the omnicam image from the single images.</span>
+        <span class="c1"># Note: the images are just &#39;stitched&#39; together, no distortion correction takes place (so far).</span>
+        <span class="n">imageData</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hstack</span><span class="p">((</span><span class="n">imgNPFront</span><span class="p">,</span> <span class="n">imgNPRight</span><span class="p">,</span> <span class="n">imgNPBack</span><span class="p">,</span> <span class="n">imgNPLeft</span><span class="p">))</span>
+        <span class="c1"># center(?) the omnicam image</span>
+        <span class="n">imageData</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">imageData</span><span class="p">,</span> <span class="mi">96</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># extract RGB information channels</span>
+        <span class="n">imageData</span> <span class="o">=</span> <span class="n">imageData</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span>
+
+        <span class="c1"># retrieve telemetry data from the virtual agent/robot</span>
+        <span class="n">telemetryDataString</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">2000</span><span class="p">)</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">)</span>
+        <span class="p">[</span><span class="n">timeDataStr</span><span class="p">,</span> <span class="n">poseDataStr</span><span class="p">,</span> <span class="n">sensorDataStr</span><span class="p">]</span> <span class="o">=</span> <span class="n">telemetryDataString</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;:&#39;</span><span class="p">)</span>
+
+        <span class="c1"># extract time data from telemetry</span>
+        <span class="n">timeData</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">timeDataStr</span><span class="p">)</span>
+
+        <span class="c1"># extract pose data from telemetry</span>
+        <span class="p">[</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ny</span><span class="p">]</span> <span class="o">=</span> <span class="n">poseDataStr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="n">poseData</span> <span class="o">=</span> <span class="p">[</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">nx</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">ny</span><span class="p">)]</span>
+
+        <span class="c1"># extract sensor data from telemetry</span>
+        <span class="p">[</span><span class="n">s0</span><span class="p">,</span> <span class="n">s1</span><span class="p">,</span> <span class="n">s2</span><span class="p">,</span> <span class="n">s3</span><span class="p">,</span> <span class="n">s4</span><span class="p">,</span> <span class="n">s5</span><span class="p">,</span> <span class="n">s6</span><span class="p">,</span> <span class="n">s7</span><span class="p">]</span> <span class="o">=</span> <span class="n">sensorDataStr</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">)</span>
+        <span class="n">sensorData</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">float</span><span class="p">(</span><span class="n">s0</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">s1</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">s2</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">s3</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">s4</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">s5</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">s6</span><span class="p">),</span> <span class="nb">float</span><span class="p">(</span><span class="n">s7</span><span class="p">)],</span>
+                              <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+
+        <span class="c1"># update robot&#39;s/agent&#39;s pose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">robotPose</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">poseData</span><span class="p">)</span>
+
+        <span class="c1"># update environmental information</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;timeData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">timeData</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;poseData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">poseData</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;sensorData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sensorData</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;imageData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">imageData</span>
+
+        <span class="c1"># return acquired data</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">timeData</span><span class="p">,</span> <span class="n">poseData</span><span class="p">,</span> <span class="n">sensorData</span><span class="p">,</span> <span class="n">imageData</span><span class="p">]</span></div>
+
+<div class="viewcode-block" id="FrontendBlenderInterface.actuateRobot"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.FrontendBlenderInterface.actuateRobot">[docs]</a>    <span class="k">def</span> <span class="nf">actuateRobot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actuatorCommand</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function actually actuates the agent/robot in the virtual environment.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        actuatorCommand:  the command that is used in the actuation process</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        -------</span>
+<span class="sd">        timeData: time data from telemetry</span>
+<span class="sd">        poseData: Robot&#39;s/agent&#39;s pose</span>
+<span class="sd">        sensorData: sensor data from telemetry</span>
+<span class="sd">        imageData: Constructed omnicam image from the single images</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># if the actuator command has more than 2 array entries, this is a teleport command,</span>
+        <span class="c1"># and will cause a teleport jump of the agent/robot (no physics support)</span>
+        <span class="k">if</span> <span class="n">actuatorCommand</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="c1"># call the teleportation routine</span>
+            <span class="p">[</span><span class="n">timeData</span><span class="p">,</span> <span class="n">poseData</span><span class="p">,</span> <span class="n">sensorData</span><span class="p">,</span> <span class="n">imageData</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">step_simulation_without_physics</span><span class="p">(</span><span class="n">actuatorCommand</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                                                                               <span class="n">actuatorCommand</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                                                                               <span class="n">actuatorCommand</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+
+            <span class="c1"># flag if the robot reached the goal (should always be the case after a teleportation)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">goalPosition</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">poseData</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">goalPosition</span><span class="p">))</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">poseData</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">goalPosition</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">goalReached</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="c1"># return the data acquired from the robot/agent/environment</span>
+            <span class="k">return</span> <span class="n">timeData</span><span class="p">,</span> <span class="n">poseData</span><span class="p">,</span> <span class="n">sensorData</span><span class="p">,</span> <span class="n">imageData</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># otherwise, this is a standard motion command with physics support</span>
+            <span class="c1"># (the agent/robot approaches the goal by actuating the robot&#39;s/agent&#39;s wheels)</span>
+            <span class="p">[</span><span class="n">timeData</span><span class="p">,</span> <span class="n">poseData</span><span class="p">,</span> <span class="n">sensorData</span><span class="p">,</span> <span class="n">imageData</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stepSimulation</span><span class="p">(</span><span class="n">actuatorCommand</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">actuatorCommand</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="c1"># flag if the robot/agent reached the goal already</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">goalPosition</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">poseData</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">goalPosition</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">goalReached</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="c1"># return the data acquired from the robot/agent/environment</span>
+            <span class="k">return</span> <span class="n">timeData</span><span class="p">,</span> <span class="n">poseData</span><span class="p">,</span> <span class="n">sensorData</span><span class="p">,</span> <span class="n">imageData</span></div>
+
+<div class="viewcode-block" id="FrontendBlenderInterface.setXYYaw"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.FrontendBlenderInterface.setXYYaw">[docs]</a>    <span class="k">def</span> <span class="nf">setXYYaw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objectName</span><span class="p">,</span> <span class="n">pose</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function teleports the robot to a novel pose.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        pose: the pose to teleport to</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        -------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># send the request for teleportation to Blender</span>
+        <span class="n">poseStr</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%f</span><span class="s1">,</span><span class="si">%f</span><span class="s1">,</span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pose</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pose</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pose</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">sendStr</span> <span class="o">=</span> <span class="s1">&#39;setXYYaw,robotSupport,</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">poseStr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sendStr</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="c1"># wait for acknowledge from Blender</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FrontendBlenderInterface.setIllumination"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.FrontendBlenderInterface.setIllumination">[docs]</a>    <span class="k">def</span> <span class="nf">setIllumination</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lightSource</span><span class="p">,</span> <span class="n">color</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function sets the color of a dedicated light source.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        ----------</span>
+<span class="sd">        lightSource:     the name of the light source to change</span>
+<span class="sd">        color:           the color of the light source (as [red,green,blue])</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># send the request for illumination change to Blender</span>
+        <span class="n">illuminationStr</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%s</span><span class="s1">,</span><span class="si">%f</span><span class="s1">,</span><span class="si">%f</span><span class="s1">,</span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">lightSource</span><span class="p">,</span> <span class="n">color</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">color</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">color</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">sendStr</span> <span class="o">=</span> <span class="s1">&#39;setIllumination,</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">illuminationStr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sendStr</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="c1"># wait for acknowledge from Blender</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="FrontendBlenderInterface.getLimits"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.FrontendBlenderInterface.getLimits">[docs]</a>    <span class="k">def</span> <span class="nf">getLimits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function returns the limits of the environmental perimeter.</span>
+
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        minX, maxX, minY, maxY: the minimum and maximum limits of the environment parameters in x,y coordinates</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="bp">self</span><span class="o">.</span><span class="n">minX</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxX</span><span class="p">],</span>
+                         <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">minY</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxY</span><span class="p">]])</span></div>
+
+<div class="viewcode-block" id="FrontendBlenderInterface.getWallGraph"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.FrontendBlenderInterface.getWallGraph">[docs]</a>    <span class="k">def</span> <span class="nf">getWallGraph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function returns the limits of the environmental perimeter.</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        safeZoneVertices: environmental perimeter by means of wall vertices</span>
+<span class="sd">        safeZoneSegments: environmental perimeter by means of wall segments</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">safeZoneVertices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">safeZoneSegments</span></div>
+
+<div class="viewcode-block" id="FrontendBlenderInterface.stopBlender"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.FrontendBlenderInterface.stopBlender">[docs]</a>    <span class="k">def</span> <span class="nf">stopBlender</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        This function shuts down Blender.</span>
+<span class="sd">        Parameters:</span>
+<span class="sd">        -----------</span>
+<span class="sd">        None</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">        --------</span>
+<span class="sd">        None</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="s1">&#39;stopSimulation&#39;</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+
+        <span class="k">except</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">exc_info</span><span class="p">()[</span><span class="mi">1</span><span class="p">])</span></div></div>
+
+
+<span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">A very basic class for performing ABA renewal experiments from static image input. It is assumed that the agent sees in every node of a topology graph a static 360deg image of the environment.</span>
+<span class="sd">Herein, rotation of the agent is not enabled. This setup accellerates standard ABA renewal experiments, since the Blender rendering &#39;overhead&#39; is not reqired. It is necessary that Blender is run prior to</span>
+<span class="sd">the application of this class, since the interface assumes a worldStruct data block in the &#39;world&#39; directory of the experiment folder. This data is generated by a initial run of the getWorldInformation.py script in the experiment</span>
+<span class="sd">folder.</span>
+<span class="sd">&#39;&#39;&#39;</span>
+
+
+<div class="viewcode-block" id="ImageInterface"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.ImageInterface">[docs]</a><span class="k">class</span> <span class="nc">ImageInterface</span><span class="p">():</span>
+
+    <span class="c1">### Constructor</span>
+    <span class="c1">### </span>
+    <span class="c1">### imageSetContextA: the image set used for context A</span>
+    <span class="c1">### imageSetContextB: the image set used for context B</span>
+    <span class="c1">### </span>
+<div class="viewcode-block" id="ImageInterface.__init__"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.ImageInterface.__init__">[docs]</a>    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">imageSet</span><span class="o">=</span><span class="s1">&#39;worldInfo/images.npy&#39;</span><span class="p">):</span>
+
+        <span class="c1"># retrieve all image information from the &#39;worldInfo&#39; directory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">images</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">imageSet</span><span class="p">)</span>
+
+        <span class="n">safeZoneDimensions</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;worldInfo/safeZoneDimensions.npy&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minX</span> <span class="o">=</span> <span class="n">safeZoneDimensions</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minY</span> <span class="o">=</span> <span class="n">safeZoneDimensions</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">minZ</span> <span class="o">=</span> <span class="n">safeZoneDimensions</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxX</span> <span class="o">=</span> <span class="n">safeZoneDimensions</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxY</span> <span class="o">=</span> <span class="n">safeZoneDimensions</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxZ</span> <span class="o">=</span> <span class="n">safeZoneDimensions</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">safeZoneVertices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;worldInfo/safeZoneVertices.npy&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">safeZoneSegments</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;worldInfo/safeZoneSegments.npy&#39;</span><span class="p">)</span>
+
+        <span class="c1"># initial robot pose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">robotPose</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+
+        <span class="c1"># stores the actual goal position (coordinates of the goal node)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">goalPosition</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># indicator that flags arrival of the agent/robot at the actual goal node (this need NOT be the global goal node!)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">goalReached</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># a dict that stores environmental information in each time step</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;timeData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;poseData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;sensorData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;imageData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># this interface class requires a topologyModule</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topologyModule</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+    <span class="c1">### This function supplies the interface with a valid topology module</span>
+    <span class="c1">### </span>
+    <span class="c1">### topologyModule: the topologyModule to be supplied</span>
+<div class="viewcode-block" id="ImageInterface.setTopology"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.ImageInterface.setTopology">[docs]</a>    <span class="k">def</span> <span class="nf">setTopology</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">topologyModule</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">topologyModule</span> <span class="o">=</span> <span class="n">topologyModule</span></div>
+
+    <span class="c1">### This function reads all manually defined topology nodes from the environment (if such nodes are defined)</span>
+<div class="viewcode-block" id="ImageInterface.getManuallyDefinedTopologyNodes"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.ImageInterface.getManuallyDefinedTopologyNodes">[docs]</a>    <span class="k">def</span> <span class="nf">getManuallyDefinedTopologyNodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">manuallyDefinedTopologyNodes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;worldInfo/topologyNodes.npy&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">manuallyDefinedTopologyNodes</span></div>
+
+    <span class="c1">### This function reads all manually defined topology nodes from the environment (if such nodes are defined)</span>
+<div class="viewcode-block" id="ImageInterface.getManuallyDefinedTopologyEdges"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.ImageInterface.getManuallyDefinedTopologyEdges">[docs]</a>    <span class="k">def</span> <span class="nf">getManuallyDefinedTopologyEdges</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">manuallyDefinedTopologyEdges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;worldInfo/topologyEdges.npy&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">manuallyDefinedTopologyEdges</span></div>
+
+    <span class="c1"># This function propels the simulation. It uses teleportation to guide the agent/robot directly by means of global x,y,yaw values.</span>
+    <span class="c1"># </span>
+    <span class="c1"># x:       the global x position to teleport to</span>
+    <span class="c1"># y:       the global y position to teleport to</span>
+    <span class="c1"># yaw:     the global yaw value to teleport to</span>
+    <span class="c1"># </span>
+<div class="viewcode-block" id="ImageInterface.step_simulation_without_physics"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.ImageInterface.step_simulation_without_physics">[docs]</a>    <span class="k">def</span> <span class="nf">step_simulation_without_physics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">newX</span><span class="p">,</span> <span class="n">newY</span><span class="p">,</span> <span class="n">newYaw</span><span class="p">):</span>
+
+        <span class="c1"># update robot&#39;s/agent&#39;s pose</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">robotPose</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">newX</span><span class="p">,</span> <span class="n">newY</span><span class="p">,</span> <span class="n">newYaw</span><span class="p">])</span>
+
+        <span class="c1"># update environmental information</span>
+        <span class="c1"># propel the simulation time by 1/100 of a second (standard time step)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;timeData&#39;</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">0.01</span>
+        <span class="c1"># the position can be updated instantaneously</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;poseData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+            <span class="p">[</span><span class="n">newX</span><span class="p">,</span> <span class="n">newY</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">newYaw</span> <span class="o">/</span> <span class="mf">180.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">newYaw</span> <span class="o">/</span> <span class="mf">180.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)])</span>
+        <span class="c1"># there will be no need for sensor data in this interface class</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;sensorData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">])</span>
+
+        <span class="c1"># get the images from the &#39;worldInfo&#39; directory</span>
+
+        <span class="n">imageData</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">images</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">topologyModule</span><span class="o">.</span><span class="n">nextNode</span><span class="p">]</span>
+
+        <span class="c1"># the image data is read from the &#39;worldInfo&#39; directory</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;imageData&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">imageData</span>
+
+        <span class="c1"># return acquired data</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;timeData&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;poseData&#39;</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;sensorData&#39;</span><span class="p">],</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">envData</span><span class="p">[</span><span class="s1">&#39;imageData&#39;</span><span class="p">]]</span></div>
+
+    <span class="c1"># This function actually actuates the agent/robot in the virtual environment.</span>
+    <span class="c1"># </span>
+    <span class="c1"># actuatorCommand:  the command that is used in the actuation process</span>
+    <span class="c1"># </span>
+<div class="viewcode-block" id="ImageInterface.actuateRobot"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.ImageInterface.actuateRobot">[docs]</a>    <span class="k">def</span> <span class="nf">actuateRobot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actuatorCommand</span><span class="p">):</span>
+
+        <span class="c1"># if the actuator command has more than 2 array entries, this is a teleport command, and will cause a teleport jump of the agent/robot (no physics support)</span>
+        <span class="k">if</span> <span class="n">actuatorCommand</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="c1"># call the teleportation routine</span>
+            <span class="p">[</span><span class="n">timeData</span><span class="p">,</span> <span class="n">poseData</span><span class="p">,</span> <span class="n">sensorData</span><span class="p">,</span> <span class="n">imageData</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">step_simulation_without_physics</span><span class="p">(</span><span class="n">actuatorCommand</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                                                                                               <span class="n">actuatorCommand</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                                                                                               <span class="n">actuatorCommand</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+            <span class="c1"># flag if the robot reached the goal (should always be the case after a teleportation)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">goalPosition</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">poseData</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">goalPosition</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">goalReached</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="c1"># return the data acquired from the robot/agent/environment </span>
+            <span class="k">return</span> <span class="n">timeData</span><span class="p">,</span> <span class="n">poseData</span><span class="p">,</span> <span class="n">sensorData</span><span class="p">,</span> <span class="n">imageData</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># otherwise, this is a standard motion command with physics support (the agent/robot approaches the goal by actuating the robot&#39;s/agent&#39;s wheels)</span>
+            <span class="p">[</span><span class="n">timeData</span><span class="p">,</span> <span class="n">poseData</span><span class="p">,</span> <span class="n">sensorData</span><span class="p">,</span> <span class="n">imageData</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">stepSimulation</span><span class="p">(</span><span class="n">actuatorCommand</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">actuatorCommand</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+            <span class="c1"># flag if the robot/agent reached the goal already</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">goalPosition</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">poseData</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">goalPosition</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">0.01</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">goalReached</span> <span class="o">=</span> <span class="kc">True</span>
+
+            <span class="c1"># return the data acquired from the robot/agent/environment</span>
+            <span class="k">return</span> <span class="n">timeData</span><span class="p">,</span> <span class="n">poseData</span><span class="p">,</span> <span class="n">sensorData</span><span class="p">,</span> <span class="n">imageData</span></div>
+
+    <span class="c1"># This function teleports the robot to a novel pose.</span>
+    <span class="c1"># </span>
+    <span class="c1"># pose:     the pose to teleport to</span>
+<div class="viewcode-block" id="ImageInterface.setXYYaw"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.ImageInterface.setXYYaw">[docs]</a>    <span class="k">def</span> <span class="nf">setXYYaw</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">objectName</span><span class="p">,</span> <span class="n">pose</span><span class="p">):</span>
+
+        <span class="c1"># send the request for teleportation to Blender</span>
+        <span class="n">poseStr</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="si">%f</span><span class="s1">,</span><span class="si">%f</span><span class="s1">,</span><span class="si">%f</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">pose</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">pose</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">pose</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="n">sendStr</span> <span class="o">=</span> <span class="s1">&#39;setXYYaw,robotSupport,</span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">poseStr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">sendStr</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span>
+        <span class="c1"># wait for acknowledge from Blender</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">controlSocket</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">50</span><span class="p">)</span></div>
+
+    <span class="c1"># This function returns the limits of the environmental perimeter.</span>
+<div class="viewcode-block" id="ImageInterface.getLimits"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.ImageInterface.getLimits">[docs]</a>    <span class="k">def</span> <span class="nf">getLimits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="bp">self</span><span class="o">.</span><span class="n">minX</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxX</span><span class="p">],</span>
+                         <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">minY</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxY</span><span class="p">]])</span></div>
+
+    <span class="c1"># This function returns the environmental perimeter by means of wall vertices/segments.</span>
+<div class="viewcode-block" id="ImageInterface.getWallGraph"><a class="viewcode-back" href="../../frontends.html#frontends.frontends_blender.ImageInterface.getWallGraph">[docs]</a>    <span class="k">def</span> <span class="nf">getWallGraph</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">safeZoneVertices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">safeZoneSegments</span></div></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2022, Author.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
